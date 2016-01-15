@@ -1,20 +1,22 @@
 require_relative 'setup'
 describe Trip do
-  class DummyClass
-    def echo(message)
+  class Planet
+    def initialize(name)
+      @name = name
+    end
+
+    def echo message
       return message
     end
   end
 
   before do
-    @dummy_object = DummyClass.new
-    @trip   = Trip.new { @dummy_object.echo('ping') }
+    @planet = Planet.new 'earth'
+    @trip   = Trip.new { @planet.echo('ping') }
   end
 
   after do
-    unless @trip.finished?
-      @trip.stop
-    end
+    @trip.stop if not @trip.finished?
   end
 
   describe '#initialize' do
