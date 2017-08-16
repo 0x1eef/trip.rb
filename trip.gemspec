@@ -6,7 +6,7 @@ Gem::Specification.new do |g|
   g.authors	= ['1xAB Software']
   g.email       = '0xAB@protonmail.com'
   g.version     = Trip::VERSION
-  g.summary     = %q{Provides a concurrent tracer capable of suspending and resuming code as it is being traced.}
+  g.summary     = "Trip is a concurrent tracer capable of suspending and resuming code while it is being traced."
   g.description = g.summary
   g.licenses    = ['MIT']
   g.files	= `git ls-files`.split($/)
