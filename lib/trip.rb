@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Trip
   require 'thread'
   require_relative 'trip/event'
