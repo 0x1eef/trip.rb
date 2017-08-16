@@ -1,5 +1,6 @@
 __HEAD__
 
+  * Add magic frozen string comment to all lib/ files, for 2.3+
   * Remove "Trip#in_progress?".
   * Rename "Trip::Event#name" as "Trip::Event#type".
   * Rename "Trip::Event#method_name" as "Trip::Event#from_method"
