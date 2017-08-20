@@ -32,7 +32,7 @@ describe Trip do
 
     it 'returns nil with a false pause predicate' do
       @trip.pause_when { false }
-      assert_equal nil, @trip.start
+      assert_nil @trip.start
     end
 
     it 'raises Trip::InProgessError' do
@@ -105,7 +105,7 @@ describe Trip do
     end
 
     it 'returns nil' do
-      assert_equal nil, @trip.finished?
+      assert_nil @trip.finished?
     end
   end
 
@@ -117,7 +117,7 @@ describe Trip do
     end
 
     it 'returns nil' do
-      assert_equal nil, @trip.running?
+      assert_nil @trip.running?
     end
   end
 end
