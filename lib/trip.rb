@@ -14,7 +14,7 @@ class Trip
   SLEEP_STATE = 'sleep'
   END_STATE   = [nil, false]
   PAUSE_WHEN  = ->(event) do
-    Trip::Event.method_calls.include?(event.type) or Trip::Event.method_returns.include?(event.type)
+    event.c_call? or event.rb_call? or event.c_return? or event.rb_return?
   end
 
   #
