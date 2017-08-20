@@ -45,7 +45,7 @@ class Planet
 end
 
 trip = Trip.new { Planet.new('earth').echo }
-trip.pause_when { |event| event.type == 'call' }
+trip.pause_when { |event| event.rb_call? }
 event1 = trip.start   # returns a Trip::Event (for the method call of Planet#initialize)
 event2 = trip.resume  # returns a Trip::Event (for the method call of Planet#echo)
 event3 = trip.resume  # returns nil (thread exits)
