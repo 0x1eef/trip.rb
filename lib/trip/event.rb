@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Trip::Event < BasicObject
   Kernel = ::Kernel
-  Time = ::Time
   METHOD_CALLS = %w(call c-call).freeze
   METHOD_RETURNS = %w(return c-return).freeze
 
