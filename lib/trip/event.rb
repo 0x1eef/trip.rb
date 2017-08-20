@@ -24,6 +24,22 @@ class Trip::Event < BasicObject
     define_method(name) { @event[name] }
   end
 
+  def c_call?
+    @type == "c-call"
+  end
+
+  def rb_call?
+    @type == "call"
+  end
+
+  def c_return?
+    @type == "c-return"
+  end
+
+  def rb_return?
+    @type == "return"
+  end
+
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \
     "type='#{type}'" \
