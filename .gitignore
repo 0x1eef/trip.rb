@@ -5,6 +5,3 @@
 pkg/
 .bundle/
 Gemfile.lock
-proj.rb
-proj/
-.proj
