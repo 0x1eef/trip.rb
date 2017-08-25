@@ -109,6 +109,11 @@ Build gem from source:
     gem build trip.gemspec
     gem install trip*.gem
 
+### Contact
+
+For getting in touch, please contact me by [email](mailto:0xAB@protonmail.com).
+My name is .
+
 ### License
 
 [MIT](./LICENSE.txt).
