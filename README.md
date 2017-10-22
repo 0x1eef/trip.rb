@@ -111,8 +111,8 @@ Build gem from source:
 
 ### Contact
 
-For getting in touch, please contact me by [email](mailto:0xAB@protonmail.com).
-My name is Robert.
+For getting in touch, please contact me by [email](mailto:faisalgleason@protonmail.com).
+My name is Faisal.
 
 ### License
 
