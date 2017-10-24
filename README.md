@@ -109,11 +109,6 @@ Build gem from source:
     gem build trip.gemspec
     gem install trip*.gem
 
-### Contact
-
-For getting in touch, please contact me by [email](mailto:faisalgleason@protonmail.com).
-My name is 0x1eef.
-
 ### License
 
 [MIT](./LICENSE.txt).
