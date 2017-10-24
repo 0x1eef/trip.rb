@@ -99,12 +99,11 @@ end
 
 Bundler:
 
-    gem "trip", git: "https://gitlab.com/0xAB/trip.git"
-
+    gem "trip", git: "https://gitlab.com/0x1eef/trip.git"
 
 Build gem from source:
 
-    git clone https://gitlab.com/0xAB/trip
+    git clone https://gitlab.com/0x1eef/trip
     cd trip
     gem build trip.gemspec
     gem install trip*.gem
