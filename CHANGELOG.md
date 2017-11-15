@@ -1,5 +1,6 @@
-__HEAD__
+__v0.1.2__
 
+  * Publish on Rubygems.org as trip.rb
   * Add magic frozen string comment to all lib/ files, for 2.3+
   * Remove "Trip#in_progress?".
   * Rename "Trip::Event#name" as "Trip::Event#type".
