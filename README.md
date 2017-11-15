@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/r-obert/trip.svg?branch=master)](https://travis-ci.org/r-obert/trip)
+
 Mirrors:
 
 * [GitHub](https://github.com/r-obert/trip)
