@@ -3,7 +3,7 @@ Mirrors:
 * [GitHub](https://github.com/r-obert/trip)
 * [GitLab](https://gitlab.com/r-obert/trip)
 
-### Trip
+__Trip__
 
 Provides a concurrent tracer capable of suspending and resuming code as it
 is being traced. It yields control between two threads, usually the main
@@ -12,7 +12,7 @@ thread and a thread that Trip creates.
 Not suitable outside development environments because it is built on
 `Thread#set_trace_func`, which can be notoriously slow.
 
-### Examples
+__Examples__
 
 __1.__
 
@@ -95,7 +95,7 @@ rescue Trip::PauseError => e
 end
 ```
 
-### Install
+__Install__
 
 **NOTE:**
 
@@ -113,6 +113,6 @@ Build gem from source:
     gem build trip.gemspec
     gem install trip*.gem
 
-### License
+__License__
 
 [MIT](./LICENSE.txt).
