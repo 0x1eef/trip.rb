@@ -104,6 +104,10 @@ __Install__
 * Runs on Ruby 2.0 or later.
 * Probably doesn't work well on anything other than CRuby.
 
+Rubygems:
+
+	gem install trip.rb
+
 Bundler:
 
     gem "trip", git: "https://gitlab.com/0x1eef/trip.git"
