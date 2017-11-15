@@ -1,3 +1,8 @@
+Mirrors:
+
+* [GitHub](https://github.com/r-obert/trip)
+* [GitLab](https://gitlab.com/r-obert/trip)
+
 ### Trip
 
 Provides a concurrent tracer capable of suspending and resuming code as it
