@@ -10,5 +10,5 @@ Gem::Specification.new do |g|
   g.description = g.summary
   g.licenses    = ['MIT']
   g.files	= `git ls-files`.split($/)
-  g.required_ruby_version = '~> 2.1'
+  g.required_ruby_version = '~> 2.0'
 end
