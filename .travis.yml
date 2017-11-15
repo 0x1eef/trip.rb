@@ -1,0 +1,27 @@
+rvm:
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
+  - 2.4
+  - ruby-head
+
+install:
+  - ruby -S gem install bundler --version 1.15.4
+  - ruby -S bundle _1.15.4_ install --without docs
+
+script:
+  - ruby -S bundle _1.15.4_ exec rspec
+
+sudo: false
+
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+
+notifications:
+  irc: "irc.freenode.org#roberts-pry-plugins"
+
+branches:
+  only:
+    - master
