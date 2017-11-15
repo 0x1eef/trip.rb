@@ -101,7 +101,7 @@ __Install__
 
 **NOTE:**
 
-* Runs on Ruby 2.1 or later.
+* Runs on Ruby 2.0 or later.
 * Probably doesn't work well on anything other than CRuby.
 
 Bundler:
