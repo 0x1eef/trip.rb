@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/0x1eef/trip.svg?branch=master)](https://travis-ci.org/0x1eef/trip)
+
 Mirrors:
 
 * [GitHub](https://github.com/0x1eef/trip)
