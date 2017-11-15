@@ -11,7 +11,7 @@ install:
   - ruby -S bundle _1.15.4_ install --without docs
 
 script:
-  - ruby -S bundle _1.15.4_ exec rspec
+  - ruby -S rake
 
 sudo: false
 
