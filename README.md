@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/r-obert/trip.svg?branch=master)](https://travis-ci.org/r-obert/trip)
+[![Build Status](https://travis-ci.org/r-obert/trip.rb.svg?branch=master)](https://travis-ci.org/r-obert/trip.rb)
 
 Mirrors:
 
-* [GitHub](https://github.com/r-obert/trip)
-* [GitLab](https://gitlab.com/r-obert/trip)
+* [GitHub](https://github.com/r-obert/trip.rb)
+* [GitLab](https://gitlab.com/r-obert/trip.rb)
 
 __Trip__
 
@@ -110,11 +110,11 @@ Rubygems:
 
 Bundler:
 
-    gem "trip", git: "https://gitlab.com/r-obert/trip.git"
+    gem "trip.rb", git: "https://gitlab.com/r-obert/trip.rb.git"
 
 Build gem from source:
 
-    git clone https://gitlab.com/r-obert/trip
+    git clone https://gitlab.com/r-obert/trip.rb
     cd trip
     gem build trip.gemspec
     gem install trip*.gem
