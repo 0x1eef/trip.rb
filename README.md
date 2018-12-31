@@ -1,20 +1,19 @@
-[![Build Status](https://travis-ci.org/r-obert/trip.rb.svg?branch=master)](https://travis-ci.org/r-obert/trip.rb)
+# Trip.rb
 
-Mirrors:
+* [Introduction](#introduction)
+* [Examples](#examples)
+* [Install](#install)
+* [License](#license)
 
-* [GitHub](https://github.com/r-obert/trip.rb)
-* [GitLab](https://gitlab.com/r-obert/trip.rb)
+## <a id='introduction'>Introduction</a>
 
-__Trip__
-
-Provides a concurrent tracer capable of suspending and resuming code as it
-is being traced. It yields control between two threads, usually the main
+Trip is a concurrent tracer that can pause, resume and alter code while it is   
+being traced. The tracer yields control between two threads, typically the main    
 thread and a thread that Trip creates.
 
-Not suitable outside development environments because it is built on
-`Thread#set_trace_func`, which can be notoriously slow.
+Under the hood, Trip uses `Thread#set_trace_func`.
 
-__Examples__
+## <a id='examples'>Examples</a>
 
 __1.__
 
@@ -97,28 +96,10 @@ rescue Trip::PauseError => e
 end
 ```
 
-__Install__
+## <a id='install'>Install</a>
 
-**NOTE:**
+    gem install trip.rb
 
-* Runs on Ruby 2.0 or later.
-* Probably doesn't work well on anything other than CRuby.
+## <a id='license'>License</a>
 
-Rubygems:
-
-	gem install trip.rb
-
-Bundler:
-
-    gem "trip.rb", git: "https://gitlab.com/r-obert/trip.rb.git"
-
-Build gem from source:
-
-    git clone https://gitlab.com/r-obert/trip.rb
-    cd trip
-    gem build trip.gemspec
-    gem install trip*.gem
-
-__License__
-
-[MIT](./LICENSE.txt).
+This project uses the MIT license, see [LICENSE](./LICENSE.txt) for details.
