@@ -4,7 +4,7 @@ Gem::Specification.new do |g|
   g.name        = 'trip.rb'
   g.homepage    = 'https://github.com/rg-8/trip.rb'
   g.authors	= ['0x1eef']
-  g.email       = 'trebor8@protonmail.com'
+  g.email       = '0x1eef@protonmail.com'
   g.version     = Trip::VERSION
   g.summary     = <<-S
 Trip is a concurrent tracer that can pause, resume and alter code while it is
