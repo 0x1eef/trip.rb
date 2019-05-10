@@ -7,8 +7,8 @@
 
 ## <a id='introduction'>Introduction</a>
 
-Trip is a concurrent tracer that can pause, resume and alter code while it is 
-being traced. The tracer yields control between two threads, typically the main  
+Trip is a concurrent tracer that can pause, resume and alter code while it is
+being traced. The tracer yields control between two threads, typically the main
 thread and a thread that Trip creates.
 
 Under the hood, Trip uses `Thread#set_trace_func`.
