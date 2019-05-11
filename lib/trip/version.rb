@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 class Trip
-  VERSION = '0.1.2'
+  VERSION = '1.0.0'
 end
