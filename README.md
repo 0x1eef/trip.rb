@@ -1,4 +1,4 @@
-# Trip.rb
+# trip.rb
 
 * [Introduction](#introduction)
 * [Examples](#examples)
