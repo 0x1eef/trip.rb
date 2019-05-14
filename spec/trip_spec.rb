@@ -1,5 +1,5 @@
 require_relative 'setup'
-describe Trip do
+RSpec.describe Trip do
   class Planet
     def initialize(name)
       @name = name
@@ -10,114 +10,122 @@ describe Trip do
     end
   end
 
-  before do
-    @planet = Planet.new 'earth'
-    @trip   = Trip.new { @planet.echo('ping') }
-  end
+  let(:planet) do 
+    Planet.new 'earth'
+  end 
+
+  let(:trip) do 
+    Trip.new { planet.echo('ping') }
+  end 
 
   after do
-    @trip.stop if not @trip.finished?
+    trip.stop if not trip.finished?
   end
 
   describe '#initialize' do
     it 'raises an ArgumentError without a block' do
-      assert_raises(ArgumentError) { Trip.new }
+      expect {
+        Trip.new
+      }.to raise_error(ArgumentError)
     end
   end
 
   describe '#start' do
     it 'returns an instance of Trip::Event' do
-      assert Trip::Event === @trip.start
+      expect(Trip::Event === trip.start).to be(true)
     end
 
     it 'returns nil with a false pause predicate' do
-      @trip.pause_when { false }
-      assert_nil @trip.start
+      trip.pause_when { false }
+      expect(trip.start).to be(nil)
     end
 
     it 'raises Trip::InProgessError' do
-      @trip.start
-      assert_raises(Trip::InProgessError) { @trip.start }
+      trip.start
+      expect {
+        trip.start 
+      }.to raise_error(Trip::InProgessError)
     end
   end
 
   describe '#sleeping?' do
     it 'returns true' do
-      @trip.start
-      assert_equal true, @trip.sleeping?
+      trip.start
+      expect(trip.sleeping?).to be(true)
     end
 
     it 'returns false' do
-      @trip.start
-      @trip.resume while @trip.resume
-      assert_equal false, @trip.sleeping?
+      trip.start
+      trip.resume while trip.resume
+      expect(trip).to_not be_sleeping
     end
   end
 
   describe '#started?' do
     it 'returns true' do
-      @trip.start
-      assert_equal true, @trip.started?
+      trip.start
+      expect(trip).to be_started
     end
 
     it 'returns false' do
-      assert_equal false, @trip.started?
+      expect(trip).to_not be_started
     end
   end
 
   describe '#resume' do
     it 'raises Trip::NotStartedError' do
-      assert_raises(Trip::NotStartedError) { @trip.resume }
+      expect {
+        trip.resume
+      }.to raise_error(Trip::NotStartedError)
     end
   end
 
   describe '#pause_when' do
     it 'raises an ArgumentError' do
-      assert_raises(ArgumentError) { @trip.pause_when }
+      expect { trip.pause_when }.to raise_error(ArgumentError)
     end
 
     it 'accepts a block' do
-      assert_instance_of Proc, @trip.pause_when {}
+      expect(trip.pause_when {}.class).to eq(Proc)
     end
 
     it 'accepts an object who implements #call' do
       obj = Proc.new {}
-      assert_equal obj, @trip.pause_when(obj)
+      expect(trip.pause_when(obj)).to eq(obj)
     end
 
     it 'causes the raise of Trip::PauseError' do
-      @trip.pause_when { raise }
-      e = assert_raises(Trip::PauseError) { @trip.start }
-      assert_instance_of RuntimeError, e.cause
+      trip.pause_when { raise }
+      expect { trip.start }.to raise_error(Trip::PauseError)
     end
   end
 
   describe '#finished?' do
     it 'returns true' do
-      @trip.start
-      @trip.resume while @trip.resume
-      assert_equal true, @trip.finished?
+      trip.start
+      trip.resume while trip.resume
+      expect(trip).to be_finished
     end
 
     it 'returns false' do
-      @trip.start
-      assert_equal false, @trip.finished?
+      trip.start
+      expect(trip).to_not be_finished
     end
 
     it 'returns nil' do
-      assert_nil @trip.finished?
+      expect(trip.finished?).to be(nil)
     end
   end
 
   describe '#running?' do
     it 'returns false' do
-      @trip.start
-      @trip.resume while @trip.resume
-      assert_equal false, @trip.running?
+      trip.start
+      trip.resume while trip.resume
+      expect(trip).to_not be_running
     end
 
     it 'returns nil' do
-      assert_nil @trip.running?
+      expect(trip.running?).to be(nil)
     end
   end
 end
