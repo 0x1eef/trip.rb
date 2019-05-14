@@ -1,5 +1,5 @@
 require_relative 'setup'
-describe Trip::Event do
+RSpec.describe Trip::Event do
   class DummyClass
     def self.run(x,y)
       sum = x + y
@@ -18,13 +18,13 @@ describe Trip::Event do
     describe 'call and return of method implemented in Ruby' do
       it 'returns "call"' do
         event = trip.start
-        assert_equal 'call', event.type
+        expect(event.type).to eq('call')
       end
 
       it 'returns "return"' do
         trip.start
         event = trip.resume
-        assert_equal 'return', event.type
+        expect(event.type).to eq('return')
       end
     end
 
@@ -37,13 +37,13 @@ describe Trip::Event do
 
       it 'returns "c-call"' do
         event = trip.start
-        assert_equal 'c-call', event.type
+        expect(event.type).to eq('c-call')
       end
 
       it 'returns "c-return"' do
         trip.start
         event = trip.resume
-        assert_equal 'c-return', event.type
+        expect(event.type).to eq('c-return')
       end
     end
   end
@@ -51,56 +51,56 @@ describe Trip::Event do
   describe '#from_module' do
     it 'returns the Module from where an event originated' do
       event = trip.start
-      assert_equal DummyClass, event.from_module
+      expect(event.from_module).to eq(DummyClass)
     end
   end
 
   describe '#from_method' do
     it 'returns the type of the method where an event originated' do
       event = trip.start
-      assert_equal :run, event.from_method
+      expect(event.from_method).to eq(:run)
     end
   end
 
   describe '#file' do
     it 'returns __FILE__' do
       event = trip.start
-      assert_equal __FILE__, event.file
+      expect(event.file).to eq(__FILE__)
     end
   end
 
   describe '#lineno' do
     it 'returns __LINE__' do
       event = trip.start
-      assert_equal 4, event.lineno
+      expect(event.lineno).to eq(4)
     end
   end
 
   describe '#binding' do
     it 'returns a binding' do
       event = trip.start
-      assert_instance_of Binding, event.binding
+      expect(event.binding).to be_instance_of(Binding)
     end
 
     it 'changes value of "x"' do
       event = trip.start
       event.binding.eval('x = 4')
       event = trip.resume
-      assert_equal 9, event.binding.eval('sum')
+      expect(event.binding.eval('sum')).to eq(9)
     end
   end
 
   describe '#__binding__' do
     it 'returns a binding for instance of Trip::Event' do
       event = trip.start
-      assert_equal true, Trip::Event === event.__binding__.eval('self')
+      expect(Trip::Event === event.__binding__.eval('self')).to eq(true)
     end
   end
 
   describe '#inspect' do
     it 'returns a String' do
       event = trip.start
-      assert_instance_of(String, event.inspect)
+      expect(event.inspect).to be_instance_of(String)
     end
   end
 end
