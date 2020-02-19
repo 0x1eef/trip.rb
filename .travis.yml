@@ -18,9 +18,6 @@ matrix:
   allow_failures:
     - rvm: ruby-head
 
-notifications:
-  irc: "irc.freenode.org#roberts-pry-plugins"
-
 branches:
   only:
     - master
