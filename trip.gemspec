@@ -6,11 +6,22 @@ Gem::Specification.new do |g|
   g.authors	= ['Robert Gleeson']
   g.email       = '1xab@protonmail.com'
   g.version     = Trip::VERSION
-  g.summary     = <<-S
+
+  g.summary     = <<-SUMMARY
 Trip is a concurrent tracer that can pause, resume and alter code while it is
 being traced. Under the hood, Trip uses `Thread#set_trace_func`.
-S
-  g.description = g.summary
+SUMMARY
+
+  g.description = <<-DESCRIPTION
+Trip is a concurrent tracer that can pause, resume and alter code while it is
+running and being traced on a separate thread. Trip yields control between
+two threads, typically the main thread and a thread that Trip creates.
+
+Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
+dedicated to running and tracing a block of Ruby code. Control is yielded
+between the main thread and this new thread until the trace completes.
+DESCRIPTION
+
   g.licenses    = ['MIT']
   g.files	= `git ls-files`.split($/)
   g.required_ruby_version = '~> 2.0'
