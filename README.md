@@ -19,13 +19,16 @@ between the main thread and this new thread until the trace completes.
 
 __1.__
 
-The code being traced is paused on method call and method return events
-by default. The method calls or returns could originate from within methods
-implemented in C, and Ruby. It is possible to pause Trip when a method is
-implemented in either C or Ruby but the default is to catch both.
+By default the code being traced is paused on method call and return events
+from methods implemented in Ruby. Method call and return events could originate
+from methods implemented in either C or Ruby. Changing the default behavior and
+pausing the tracer on events from methods implemented in C is covered in
+example **2**.
 
 ```ruby
 def add(x,y)
+  # C method calls ignored by the tracer:
+  Kernel.puts x + y
 end
 
 trip = Trip.new { add(20,50) }
@@ -36,35 +39,24 @@ event3 = trip.resume # returns nil (thread exits)
 
 __2.__
 
-A Proc that returns true or false can be used to pause the tracer.
-It receives an instance of "Trip::Event" that can support the Proc
-when it is making a decision on whether or not it should pause the
-tracer by returning true, or to continue by returning false.
+A block that returns true or false can be used to pause the tracer and
+change the default behavior. It receives an instance of `Trip::Event` to
+utilize. For example to pause on method call and return events from methods
+implemented in C:
 
 ```ruby
-class Planet
-  def initialize(name)
-    @name = name
-  end
-
-  def echo
-    'ping'
-  end
-end
-
-trip = Trip.new { Planet.new('earth').echo }
-trip.pause_when { |event| event.rb_call? }
-event1 = trip.start   # returns a Trip::Event (for the method call of Planet#initialize)
-event2 = trip.resume  # returns a Trip::Event (for the method call of Planet#echo)
-event3 = trip.resume  # returns nil (thread exits)
+trip = Trip.new { Kernel.puts 1+6 }
+trip.pause_when { |event| event.c_call? || event.c_return? }
+event1 = trip.start # returns a Trip::Event (for a method call to a method implemented in C)
+trip.stop           # returns nil, thread exits
 ```
 
 __3.__
 
-"Trip::Event#binding" provides the option to eval code in the scope of where
-an event has happened. Changes to state like local variables can alter the
-outcome of code at runtime and while a trace is still in progress. Being able
-to do something like the example below is why I started to work on Trip.
+`Trip::Event#binding` returns a `Binding` object that provides access to the context
+of where an event occurred, it can be used to execute code in the same context
+through `Binding#eval` and this allows the surrounding environment to be changed
+while the tracer thread is suspended but the trace is still in progress:
 
 ```ruby
 def add(x,y)
@@ -81,18 +73,18 @@ trip.stop                     # returns nil, thread exits
 
 __4.__
 
-It is possible for "Trip#start" or "Trip#resume" to raise due to an internal error,
-or if the pause Proc raises an exception. "Trip::PauseError" is raised when
-the pause Proc raises an exception, and Trip::InternalError is raised
-for every other case. Both have Trip::Error as a superclass. The original cause of
-an exception is stored in "Trip::Error#cause" and it can be useful to see why
-Trip::PauseError or Trip::InternalError was raised.
+It's possible for `Trip#start` or `Trip#resume` to raise an error, either due
+to an internal Trip error (`Trip::InternalError`) or due to an error in the
+block given to `Trip#pause_when` (`Trip::PauseError`). In both cases,
+`Exception#cause` will return the exception that caused the error:
 
 ```ruby
 begin
   trip = Trip.new { puts 'Hello' }
   trip.pause_when { |event| raise RuntimeError, 'hello from readme.md' }
-  trip.start # this method will raise
+  trip.start # This method will raise
+rescue Trip::InternalError => e
+  # Won't be reached
 rescue Trip::PauseError => e
   p e.cause.message # => 'hello from readme.md'
 end
