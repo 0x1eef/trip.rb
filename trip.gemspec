@@ -14,8 +14,8 @@ SUMMARY
 
   g.description = <<-DESCRIPTION
 Trip is a concurrent tracer that can pause, resume and alter code while it is
-running and being traced on a separate thread. Trip yields control between
-two threads, typically the main thread and a thread that Trip creates.
+being traced. Trip yields control between two threads, typically the main thread
+and a thread that Trip creates.
 
 Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
 dedicated to running and tracing a block of Ruby code. Control is yielded
