@@ -1,5 +1,16 @@
 __v0.2.0__
 
+
+* Fix typo in constant name (`Trip::ProgessError` is now `Trip::ProgressError`).
+
+* Remove the methods `Trip::Event.{method_calls, method_returns}` and the
+  constants they used.
+
+* Improve / update API documentation for the `Trip` class.
+
+* Add API documentation for all `Trip::Event` methods.
+ Improves doc coverage for this class significantly, from 0 to close to 100.
+
 * By default pause the tracer when it encounters Ruby method call and
   return events (ie those not implemented in C). The call and return events from
   methods implemented in C are ignored by default, although they can still be
@@ -8,7 +19,7 @@ __v0.2.0__
   ```ruby
   trip = Trip.new { Kernel.puts 123 }
   trip.pause_when {|event| event.c_call? || event.c_return? }
-  event1 = trip.start 
+  event1 = trip.start
   ```
 
 __v0.1.2__

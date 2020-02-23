@@ -1,44 +1,95 @@
 # frozen_string_literal: true
 class Trip::Event < BasicObject
-  Kernel = ::Kernel
-  METHOD_CALLS = %w(call c-call).freeze
-  METHOD_RETURNS = %w(return c-return).freeze
-
-  def self.method_calls
-    METHOD_CALLS
-  end
-
-  def self.method_returns
-    METHOD_RETURNS
-  end
-
+  #
+  # @return [String]
+  #   Returns the type of event as reported by the `Thread#set_trace_func` API
+  #   (eg "c-call", "call", "c-return", "return", ...),
+  #
   attr_reader :type
 
+  #
+  # @api private
+  #
   def initialize(type, event)
     @type = type
     @event = event
   end
 
-  [:file, :lineno, :from_module, :from_method, :binding].each do |name|
-    define_method(name) { @event[name] }
+  #
+  # @return [String]
+  #   Returns the path to a file where an event occurred.
+  #
+  def file
+    @event[:file]
   end
 
+  #
+  # @return [Integer]
+  #   Returns the line number where an event occurred,
+  #
+  def lineno
+    @event[:lineno]
+  end
+
+  #
+  # @return [Module]
+  #   Returns the class or module where an event occurred.
+  #
+  def from_module
+    @event[:from_module]
+  end
+
+  #
+  # @return [Symbol]
+  #   Return the method name where an event occurred.
+  #
+  def from_method
+    @event[:from_method]
+  end
+
+  #
+  # @return [Binding]
+  #   Returns a Binding object in context of where an event occurred.
+  #
+  def binding
+    @event[:binding]
+  end
+
+  #
+  # @return [Boolean]
+  #   Returns true when an event is a method call by a method implemented in C.
+  #
   def c_call?
     @type == "c-call"
   end
 
+  #
+  # @return [Boolean]
+  #   Returns true when an event is a method call by a method implemented in Ruby.
+  #
   def rb_call?
     @type == "call"
   end
 
+  #
+  # @return [Boolean]
+  #   Returns true when an event is a method return from a method implemented in C.
+  #
   def c_return?
     @type == "c-return"
   end
 
+  #
+  # @return [Boolean]
+  #   Returns true when an event is a method return from a method implemented in Ruby.
+  #
   def rb_return?
     @type == "return"
   end
 
+  #
+  # @return [String]
+  #
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \
     "type='#{type}'" \
@@ -49,9 +100,9 @@ class Trip::Event < BasicObject
 
   #
   # @return [Binding]
-  #   Returns a binding for an instance of {Trip::Event}.
+  #   Returns a binding object in the context of an instance of {Trip::Event}.
   #
   def __binding__
-    Kernel.binding
+    ::Kernel.binding
   end
 end
