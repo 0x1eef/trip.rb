@@ -51,6 +51,8 @@ event1 = trip.start # returns a Trip::Event (for a method call to a method imple
 trip.stop           # returns nil, thread exits
 ```
 
+The latest API documentation for [Trip::Event](https://rubydoc.info/github/0x1eef/trip.rb/Trip/Event) may be helpful as well.
+
 __3.__
 
 `Trip::Event#binding` returns a `Binding` object that provides access to the context
