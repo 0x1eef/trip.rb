@@ -1,5 +1,10 @@
-__v1.1.0__
+__v1.1.1__
 
+* Fix formatting of API documentation written using Yard.
+  The `@tag` directives weren't being understood due to extra leading white
+  space.
+
+__v1.1.0__
 
 * Fix typo in constant name (`Trip::ProgessError` is now `Trip::ProgressError`).
 

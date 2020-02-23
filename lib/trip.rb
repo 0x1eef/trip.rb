@@ -24,11 +24,11 @@ class Trip
   PAUSE_WHEN  = ->(event) { event.rb_call? || event.rb_return? }
 
   #
-  #  @param [Proc] &block
-  #    A block of code to trace.
+  # @param [Proc] &block
+  #   A block of code to trace.
   #
-  #  @return [Trip]
-  #    Returns an instance of Trip, a concurrent tracer.
+  # @return [Trip]
+  #   Returns an instance of Trip, a concurrent tracer.
   #
   def initialize(&block)
     raise ArgumentError, "expected a block" unless block_given?
@@ -41,7 +41,7 @@ class Trip
 
   #
   # @param [Proc] callable
-  #   A block or an object who responds to `#call`.
+  #  A block or an object who responds to `#call`.
   #
   # @return [void]
   #
@@ -52,51 +52,51 @@ class Trip
   end
 
   #
-  #  @return [Boolean]
-  #    Returns true when the tracer has started.
-  #    (ie {#start} has been called).
+  # @return [Boolean]
+  #   Returns true when the tracer has started.
+  #   (ie {#start} has been called).
   #
   def started?
     @thread != nil
   end
 
   #
-  #  @return [Boolean]
-  #    Returns true when the tracer thread is running.
+  # @return [Boolean]
+  #   Returns true when the tracer thread is running.
   #
   def running?
     @thread and @thread.status == RUN_STATE
   end
 
   #
-  #  @return [Boolean]
-  #    Returns true when the tracer thread is sleeping.
+  # @return [Boolean]
+  #   Returns true when the tracer thread is sleeping.
   #
   def sleeping?
     @thread and @thread.status == SLEEP_STATE
   end
 
   #
-  #  @return [Boolean]
-  #    Returns true when the tracer thread has finished.
+  # @return [Boolean]
+  #   Returns true when the tracer thread has finished.
   #
   def finished?
     @thread and END_STATE.include?(@thread.status)
   end
 
   #
-  #  @raise [Trip::InProgessError]
-  #    When there's already a trace in progress that hasn't finished.
-  #    This could be raised by calling {#start} twice.
+  # @raise [Trip::InProgessError]
+  #   When there's already a trace in progress that hasn't finished.
+  #   This could be raised by calling {#start} twice.
   #
-  #  @raise [Trip::PauseError]
-  #    When an exception is raised by the block given to {#pause_when}.
+  # @raise [Trip::PauseError]
+  #   When an exception is raised by the block given to {#pause_when}.
   #
-  #  @raise [Trip::InternalError]
-  #    When an exception internal to Trip is raised.
+  # @raise [Trip::InternalError]
+  #   When an exception internal to Trip is raised.
   #
-  #  @return [Trip::Event, nil]
-  #    Returns an event, or nil
+  # @return [Trip::Event, nil]
+  #   Returns an event, or nil
   #
   def start
     raise InProgressError, "A trace is already in progress." \
@@ -112,15 +112,15 @@ class Trip
   end
 
   #
-  #  @raise [Trip::PauseError] (see #start)
+  # @raise [Trip::PauseError] (see #start)
   #
-  #  @raise [Trip::InternalError] (see #start)
+  # @raise [Trip::InternalError] (see #start)
   #
-  #  @raise [Trip::NotStartedError]
-  #    When {#start} has not been called.
+  # @raise [Trip::NotStartedError]
+  #   When {#start} has not been called.
   #
-  #  @return [Trip::Event, nil]
-  #    Returns an event or nil.
+  # @return [Trip::Event, nil]
+  #   Returns an event or nil.
   #
   def resume
     raise NotStartedError, "a trace hasn't started" unless started?
@@ -131,9 +131,9 @@ class Trip
   end
 
   #
-  #  Stops the tracer.
+  # Stops the tracer.
   #
-  #  @return [nil]
+  # @return [nil]
   #
   def stop
     if @thread

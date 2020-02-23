@@ -41,7 +41,7 @@ class Trip::Event < BasicObject
 
   #
   # @return [Symbol]
-  #   Return the method name where an event occurred.
+  #   Returns name of a method where an event occurred.
   #
   def from_method
     @event[:from_method]
