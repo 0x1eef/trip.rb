@@ -11,16 +11,16 @@ class Trip
   NotStartedError  = Class.new(Error)
   InProgressError = Class.new(Error)
 
-  # @api private
+  # @private
   RUN_STATE   = 'run'
 
-  # @api private
+  # @private
   SLEEP_STATE = 'sleep'
 
-  # @api private
+  # @private
   END_STATE   = [nil, false]
 
-  # @api private
+  # @private
   PAUSE_WHEN  = ->(event) { event.rb_call? || event.rb_return? }
 
   #
@@ -53,7 +53,7 @@ class Trip
 
   #
   #  @return [Boolean]
-  #    Returns true when the tracer has been started.
+  #    Returns true when the tracer has started.
   #    (ie {#start} has been called).
   #
   def started?
@@ -131,7 +131,9 @@ class Trip
   end
 
   #
-  #  @return [void]
+  #  Stops the tracer.
+  #
+  #  @return [nil]
   #
   def stop
     if @thread
