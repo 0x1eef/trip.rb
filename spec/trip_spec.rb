@@ -86,12 +86,14 @@ RSpec.describe Trip do
     end
 
     it 'accepts a block' do
-      expect(trip.pause_when {}.class).to eq(Proc)
+      expect(trip.pause_when {})
+      expect(trip.instance_variable_get(:@pause_when)).to be_instance_of(Proc)
     end
 
     it 'accepts an object who implements #call' do
       obj = Proc.new {}
-      expect(trip.pause_when(obj)).to eq(obj)
+      trip.pause_when(obj)
+      expect(trip.instance_variable_get(:@pause_when)).to eq(obj)
     end
 
     it 'causes the raise of Trip::PauseError' do

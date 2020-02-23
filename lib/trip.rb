@@ -40,15 +40,27 @@ class Trip
   end
 
   #
+  # Stores a block that decides when to pause the tracer.
+  #
   # @param [Proc] callable
-  #  A block or an object who responds to `#call`.
+  #   A block or an object that responds to `#call`.
   #
-  # @return [void]
+  # @raise [ArgumentError]
+  #   When the `callable` param is not given.
   #
+  # @return [nil]
+  #   Returns nil.
+  #
+  # @example
+  #   trip = Trip.new { Kernel.puts 1+1 }
+  #   trip.pause_when {|event| event.c_call? || event.c_return? }
+  #   event1 = trip.start
+  #   
   def pause_when(callable = nil, &block)
     pauser = callable || block
-    raise ArgumentError, "expected a block or an object who responds to call" unless pauser
+    raise ArgumentError, "Expected a block or an object that responds to call" unless pauser
     @pause_when = pauser
+    nil
   end
 
   #
@@ -85,6 +97,8 @@ class Trip
   end
 
   #
+  # Starts the tracer.
+  #
   # @raise [Trip::InProgessError]
   #   When there's already a trace in progress that hasn't finished.
   #   This could be raised by calling {#start} twice.
@@ -111,6 +125,8 @@ class Trip
     @queue.deq
   end
 
+  #
+  # Resumes the tracer.
   #
   # @raise [Trip::PauseError] (see #start)
   #

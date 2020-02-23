@@ -1,5 +1,7 @@
 __v1.1.1__
 
+* `Trip#pause_when` returns `nil`.
+
 * Fix formatting of API documentation written using Yard.
   The `@tag` directives weren't being understood due to extra leading white
   space.
