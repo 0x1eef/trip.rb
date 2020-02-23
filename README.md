@@ -19,11 +19,13 @@ between the main thread and this new thread until the trace completes.
 
 __1.__
 
-By default the code being traced is paused on method call and return events
+By default the code being traced is paused on call and return events
 from methods implemented in Ruby. Method call and return events could originate
-from methods implemented in either C or Ruby. Changing the default behavior and
-pausing the tracer on events from methods implemented in C is covered in
-example **2**.
+from methods implemented in either C or Ruby.
+
+Changing the default behavior and pausing the tracer when it encounters methods
+implemented in C is covered in the example after this one. This example shows
+pausing on call and return events from methods implemented in Ruby:
 
 ```ruby
 def add(x,y)
