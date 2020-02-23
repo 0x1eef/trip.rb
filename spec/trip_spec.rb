@@ -10,13 +10,13 @@ RSpec.describe Trip do
     end
   end
 
-  let(:planet) do 
+  let(:planet) do
     Planet.new 'earth'
-  end 
+  end
 
-  let(:trip) do 
+  let(:trip) do
     Trip.new { planet.echo('ping') }
-  end 
+  end
 
   after do
     trip.stop if not trip.finished?
@@ -40,11 +40,11 @@ RSpec.describe Trip do
       expect(trip.start).to be(nil)
     end
 
-    it 'raises Trip::InProgessError' do
+    it 'raises Trip::InProgressError' do
       trip.start
       expect {
-        trip.start 
-      }.to raise_error(Trip::InProgessError)
+        trip.start
+      }.to raise_error(Trip::InProgressError)
     end
   end
 
