@@ -1,4 +1,4 @@
-__v0.2.0__
+__v1.1.0__
 
 
 * Fix typo in constant name (`Trip::ProgessError` is now `Trip::ProgressError`).
