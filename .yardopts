@@ -1,4 +1,4 @@
--m markdown -M redcarpet
+-m markdown -M redcarpet --no-private
 -
 README.md
 LICENSE.txt
