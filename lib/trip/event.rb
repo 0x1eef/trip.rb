@@ -73,7 +73,7 @@ class Trip::Event < BasicObject
 
   #
   # @return [Boolean]
-  #   Returns true when an event is a method return from a method implemented in C.
+  #   Returns true when an event is a method return by a method implemented in C.
   #
   def c_return?
     @type == "c-return"
@@ -81,7 +81,7 @@ class Trip::Event < BasicObject
 
   #
   # @return [Boolean]
-  #   Returns true when an event is a method return from a method implemented in Ruby.
+  #   Returns true when an event is a method return by a method implemented in Ruby.
   #
   def rb_return?
     @type == "return"
