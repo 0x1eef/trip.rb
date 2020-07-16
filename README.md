@@ -1,5 +1,7 @@
 # trip.rb
 
+**Table of contents**
+
 * [Introduction](#introduction)
 * [Examples](#examples)
 * [Install](#install)
