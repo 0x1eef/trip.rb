@@ -4,7 +4,7 @@ Gem::Specification.new do |g|
   g.name        = 'trip.rb'
   g.homepage    = 'https://github.com/rg-3/trip.rb'
   g.authors	= ['Robert Gleeson']
-  g.email       = '1xab@protonmail.com'
+  g.email       = '1aab@protonmail.com'
   g.version     = Trip::VERSION
 
   g.summary     = <<-SUMMARY

@@ -1,12 +1,16 @@
-__v1.1.1__
+# CHANGELOG
 
-* `Trip#pause_when` returns `nil`.
+## HEAD
 
-* Fix formatting of API documentation written using Yard.
-  The `@tag` directives weren't being understood due to extra leading white
-  space.
+* gemspec: update email address.
 
-__v1.1.0__
+## v1.1.1
+
+* `Trip#pause_when` now returns `nil`.
+
+* Fix YARD docs.
+
+## v1.1.0
 
 * Fix typo in constant name (`Trip::ProgessError` is now `Trip::ProgressError`).
 
@@ -15,8 +19,7 @@ __v1.1.0__
 
 * Improve / update API documentation for the `Trip` class.
 
-* Add API documentation for all `Trip::Event` methods.
- Improves doc coverage for this class significantly, from 0 to close to 100.
+* Add API documentation for *all* `Trip::Event` methods.
 
 * By default pause the tracer when it encounters Ruby method call and
   return events (ie those not implemented in C). The call and return events from
@@ -26,10 +29,10 @@ __v1.1.0__
   ```ruby
   trip = Trip.new { Kernel.puts 123 }
   trip.pause_when {|event| event.c_call? || event.c_return? }
-  event1 = trip.start
+  event = trip.start
   ```
 
-__v0.1.2__
+## v0.1.2
 
   * Add magic frozen string comment to all `lib/` files (Riny 2.3+).
 
