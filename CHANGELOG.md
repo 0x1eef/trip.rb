@@ -2,6 +2,10 @@
 
 ## HEAD
 
+* Nothing yet.
+
+## v1.1.2
+
 * gemspec: update email address.
 
 ## v1.1.1

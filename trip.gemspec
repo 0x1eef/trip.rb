@@ -3,7 +3,7 @@ require 'trip'
 Gem::Specification.new do |g|
   g.name        = 'trip.rb'
   g.homepage    = 'https://github.com/0x1eef/trip.rb'
-  g.authors	= ['0x1eef']
+  g.authors	= ['rg']
   g.email       = ''
   g.version     = Trip::VERSION
 
