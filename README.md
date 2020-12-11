@@ -14,20 +14,14 @@ being traced. Trip yields control between two threads, typically the main thread
 and a thread that Trip creates.
 
 Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
-dedicated to running and tracing a block of Ruby code. Control is yielded
-between the main thread and this new thread until the trace completes.
+dedicated to running a block of Ruby code. Control is then yielded between 
+the calling thread and Trip's thread until the trace completes.
 
 ## <a id='examples'>Examples</a>
 
-__1.__
+**#1**
 
-By default the code being traced is paused on call and return events
-from methods implemented in Ruby. Method call and return events could originate
-from methods implemented in either C or Ruby.
-
-Changing the default behavior and pausing the tracer when it encounters methods
-implemented in C is covered in the example after this one. This example shows
-pausing on call and return events from methods implemented in Ruby:
+By default the tracer pauses upon method call and return events from Ruby methods:
 
 ```ruby
 def add(x,y)
@@ -41,12 +35,10 @@ event2 = trip.resume # returns a Trip::Event (for the method return of "#add")
 event3 = trip.resume # returns nil (thread exits)
 ```
 
-__2.__
+**#2**
 
-A block that returns true or false can be used to pause the tracer and
-change the default behavior. It receives an instance of `Trip::Event` to
-utilize. For example to pause on method call and return events from methods
-implemented in C:
+The predicate that decides when the tracer will pause can be customized to meet 
+your own criteria through `#pause_when`:
 
 ```ruby
 trip = Trip.new { Kernel.puts 1+6 }
@@ -55,14 +47,12 @@ event1 = trip.start # returns a Trip::Event (for a method call to a method imple
 trip.stop           # returns nil, thread exits
 ```
 
-The latest API documentation for [Trip::Event](https://rubydoc.info/github/0x1eef/trip.rb/Trip/Event) may be helpful as well.
-
-__3.__
+**#3**
 
 `Trip::Event#binding` returns a `Binding` object that provides access to the context
-of where an event occurred, it can be used to execute code in that same context
-through `Binding#eval` and this allows the surrounding environment to be changed
-while the tracer thread is suspended but the trace is still in progress:
+of where an event occurred. It can be used to run code in that same context through 
+`Binding#eval`. This allows the surrounding environment to be changed while the tracer 
+is paused:
 
 ```ruby
 def add(x,y)
@@ -75,25 +65,6 @@ event1.binding.eval('x = 4')  # returns 4 (also changes the value of 'x')
 event2 = trip.resume          # returns a Trip::Event (for the method return of add)
 event2.binding.eval('to_s')   # returns '4 + 3'
 trip.stop                     # returns nil, thread exits
-```
-
-__4.__
-
-It's possible for `Trip#start` or `Trip#resume` to raise an error, either due
-to an internal Trip error (`Trip::InternalError`) or due to an error in the
-block given to `Trip#pause_when` (`Trip::PauseError`). In both cases,
-`Exception#cause` will return the exception that caused the error:
-
-```ruby
-begin
-  trip = Trip.new { puts 'Hello' }
-  trip.pause_when { |event| raise RuntimeError, 'hello from readme.md' }
-  trip.start # This method will raise
-rescue Trip::InternalError => e
-  # Won't be reached
-rescue Trip::PauseError => e
-  p e.cause.message # => 'hello from readme.md'
-end
 ```
 
 ## <a id='install'>Install</a>
