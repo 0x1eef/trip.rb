@@ -1,8 +1,12 @@
 # CHANGELOG
 
-## HEAD
+## Next
 
-* Nothing yet.
+* Nothing so far.
+
+## v1.1.0
+
+* gemspec: add Ruby 3.0 support
 
 ## v1.1.2
 

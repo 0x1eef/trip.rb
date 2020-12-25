@@ -24,5 +24,5 @@ DESCRIPTION
 
   g.licenses    = ['MIT']
   g.files	= `git ls-files`.split($/)
-  g.required_ruby_version = '~> 2.0'
+  g.required_ruby_version = '>= 2.0'
 end
