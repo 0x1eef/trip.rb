@@ -4,7 +4,7 @@
 
 * Nothing so far.
 
-## v1.1.0
+## v1.2.0
 
 * gemspec: add Ruby 3.0 support
 
