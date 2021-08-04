@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## Next
+## current
 
-* Nothing so far.
+* Adopt standardrb as linter
+
+* Do not rescue Exception but instead rescue from StandardError,
+  ScriptError, SecurityError, SystemStackError.
 
 ## v1.2.0
 
