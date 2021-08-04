@@ -1,6 +1,7 @@
-require 'bundler/gem_tasks'
-desc 'Run the specs'
-task :spec do 
-  sh 'rspec spec/'
+require "bundler/gem_tasks"
+require "standard/rake"
+desc "Run the specs"
+task :spec do
+  sh "rspec spec/"
 end
 task default: :spec
