@@ -2,7 +2,7 @@ $LOAD_PATH << 'lib'
 require 'trip'
 Gem::Specification.new do |g|
   g.name        = 'trip.rb'
-  g.homepage    = 'https://github.com/rg-3/trip.rb'
+  g.homepage    = 'https://github.com/0x1eef/trip.rb'
   g.authors	= ['rg']
   g.email       = '1aab@protonmail.com'
   g.version     = Trip::VERSION

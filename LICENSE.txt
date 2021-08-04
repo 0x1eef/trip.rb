@@ -1,7 +1,8 @@
 MIT License
 
-Copyright 2020
-rg
+Copyright 2021
+Robert McIntyre
+https://github.com/0x1eef/trip.rb 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

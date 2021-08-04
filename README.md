@@ -19,9 +19,10 @@ the calling thread and Trip's thread until the trace completes.
 
 ## <a id='examples'>Examples</a>
 
-**#1**
+**1.**
 
-By default the tracer pauses upon method call and return events from Ruby methods:
+By default the tracer pauses on method call and method return events from methods 
+implemented in Ruby:
 
 ```ruby
 def add(x,y)
@@ -35,10 +36,11 @@ event2 = trip.resume # returns a Trip::Event (for the method return of "#add")
 event3 = trip.resume # returns nil (thread exits)
 ```
 
-**#2**
+**2.**
 
-The predicate that decides when the tracer will pause can be customized to meet 
-your own criteria through `#pause_when`:
+The logic for deciding when to pause the tracer can be customized using the 
+`#pause_when` method. It accepts a block that receives an event (`Trip::Event`)
+to help support making a decision on whether to pause the tracer or not:
 
 ```ruby
 trip = Trip.new { Kernel.puts 1+6 }
@@ -47,7 +49,7 @@ event1 = trip.start # returns a Trip::Event (for a method call to a method imple
 trip.stop           # returns nil, thread exits
 ```
 
-**#3**
+**3.**
 
 `Trip::Event#binding` returns a `Binding` object that provides access to the context
 of where an event occurred. It can be used to run code in that same context through 
@@ -73,4 +75,4 @@ trip.stop                     # returns nil, thread exits
 
 ## <a id='license'>License</a>
 
-This project uses the MIT license, see [LICENSE](./LICENSE.txt) for details.
+This project uses the MIT license - see [LICENSE.txt](./LICENSE.txt) for details.
