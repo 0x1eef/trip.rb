@@ -4,6 +4,6 @@
 *.rb#
 pkg/
 .bundle/
-Gemfile.lock
+*.lock
 .yardoc
 doc/
