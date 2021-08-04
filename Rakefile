@@ -1,6 +1,6 @@
 require 'bundler/gem_tasks'
 desc 'Run the specs'
 task :spec do 
-  sh 'bundle exec rspec'
+  sh 'rspec spec/'
 end
 task default: :spec
