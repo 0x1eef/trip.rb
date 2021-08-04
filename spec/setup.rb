@@ -1,2 +1,2 @@
-require 'rspec'
-require 'trip'
+require "rspec"
+require "trip"
