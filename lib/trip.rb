@@ -1,27 +1,34 @@
 # frozen_string_literal: true
 
 class Trip
-  require 'thread'
-  require_relative 'trip/event'
-  require_relative 'trip/version'
+  require_relative "trip/event"
+  require_relative "trip/version"
 
   Error = Class.new(RuntimeError)
   InternalError = Class.new(Error)
   PauseError = Class.new(Error)
-  NotStartedError  = Class.new(Error)
+  NotStartedError = Class.new(Error)
   InProgressError = Class.new(Error)
 
   # @private
-  RUN_STATE   = 'run'
+  RESCUABLE_EXCEPTIONS = [
+    StandardError,
+    ScriptError,
+    SecurityError,
+    SystemStackError
+  ]
 
   # @private
-  SLEEP_STATE = 'sleep'
+  RUN_STATE = "run"
 
   # @private
-  END_STATE   = [nil, false]
+  SLEEP_STATE = "sleep"
 
   # @private
-  PAUSE_WHEN  = ->(event) { event.rb_call? || event.rb_return? }
+  END_STATE = [nil, false]
+
+  # @private
+  PAUSE_WHEN = ->(event) { event.rb_call? || event.rb_return? }
 
   #
   # @param [Proc] &block
@@ -31,7 +38,7 @@ class Trip
   #   Returns an instance of Trip, a concurrent tracer.
   #
   def initialize(&block)
-    raise ArgumentError, "expected a block" unless block_given?
+    raise ArgumentError, "expected a block" unless block
     @thread = nil
     @block = block
     @queue = nil
@@ -55,7 +62,7 @@ class Trip
   #   trip = Trip.new { Kernel.puts 1+1 }
   #   trip.pause_when {|event| event.c_call? || event.c_return? }
   #   event1 = trip.start
-  #   
+  #
   def pause_when(callable = nil, &block)
     pauser = callable || block
     raise ArgumentError, "Expected a block or an object that responds to call" unless pauser
@@ -113,8 +120,10 @@ class Trip
   #   Returns an event, or nil
   #
   def start
-    raise InProgressError, "A trace is already in progress." \
-                           "Call #resume instead ?" if started? && !finished?
+    if started? && !finished?
+      raise InProgressError, "A trace is already in progress." \
+                             "Call #resume instead ?"
+    end
     @queue = Queue.new
     @thread = Thread.new do
       Thread.current.set_trace_func method(:on_event).to_proc
@@ -161,16 +170,17 @@ class Trip
   end
 
   private
+
   def on_event(type, file, lineno, from_method, binding, from_module)
     run_safely(Trip::InternalError.new("The tracer encountered an internal error and crashed")) {
       event = Event.new type, {
-                          file:         file,
-                          lineno:       lineno,
-                          from_module:  from_module,
-                          from_method:  from_method,
-                          binding:      binding
-                        }
-      if event.file != __FILE__ and run_safely(Trip::PauseError.new("The pause Proc encountered an error and crashed")) { @pause_when.call(event) }
+        file: file,
+        lineno: lineno,
+        from_module: from_module,
+        from_method: from_method,
+        binding: binding
+      }
+      if (event.file != __FILE__) && run_safely(Trip::PauseError.new("The pause Proc encountered an error and crashed")) { @pause_when.call(event) }
         @queue.enq(event)
         Thread.stop
       end
@@ -179,7 +189,7 @@ class Trip
 
   def run_safely(e)
     yield
-  rescue Exception => cause
+  rescue *RESCUABLE_EXCEPTIONS => cause
     e.define_singleton_method(:cause) { cause }
     Thread.current.set_trace_func(nil)
     @caller.raise(e)
