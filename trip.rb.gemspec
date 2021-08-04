@@ -25,4 +25,8 @@ DESCRIPTION
   g.licenses    = ['MIT']
   g.files	= `git ls-files`.split($/)
   g.required_ruby_version = '>= 2.0'
+
+  g.add_development_dependency "yard"
+  g.add_development_dependency "redcarpet"
+  g.add_development_dependency "rspec"
 end
