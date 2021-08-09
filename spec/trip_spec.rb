@@ -25,9 +25,7 @@ RSpec.describe Trip do
 
   describe "#initialize" do
     it "raises an ArgumentError without a block" do
-      expect {
-        Trip.new
-      }.to raise_error(ArgumentError)
+      expect { Trip.new }.to raise_error(ArgumentError)
     end
   end
 
@@ -43,9 +41,7 @@ RSpec.describe Trip do
 
     it "raises Trip::InProgressError" do
       trip.start
-      expect {
-        trip.start
-      }.to raise_error(Trip::InProgressError)
+      expect { trip.start }.to raise_error(Trip::InProgressError)
     end
   end
 
@@ -75,9 +71,7 @@ RSpec.describe Trip do
 
   describe "#resume" do
     it "raises Trip::NotStartedError" do
-      expect {
-        trip.resume
-      }.to raise_error(Trip::NotStartedError)
+      expect { trip.resume }.to raise_error(Trip::NotStartedError)
     end
   end
 
