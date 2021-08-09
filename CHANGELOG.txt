@@ -2,6 +2,12 @@
 
 ## current
 
+* Nothing so far
+
+## v1.2.1
+
+* Update gemspec
+
 * Adopt standardrb as linter
 
 * Do not rescue Exception but instead rescue from StandardError,
