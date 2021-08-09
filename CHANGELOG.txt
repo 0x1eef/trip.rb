@@ -2,7 +2,7 @@
 
 ## current
 
-* Nothing so far
+* Fix "gem build" warnings
 
 ## v1.2.1
 

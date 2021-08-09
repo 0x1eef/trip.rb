@@ -26,8 +26,8 @@ Gem::Specification.new do |g|
   g.files	= `git ls-files`.split($/)
   g.required_ruby_version = ">= 2.0"
 
-  g.add_development_dependency "yard"
-  g.add_development_dependency "redcarpet"
-  g.add_development_dependency "rspec"
-  g.add_development_dependency "standardrb"
+  g.add_development_dependency "yard", "~> 0.9"
+  g.add_development_dependency "redcarpet", "~> 3.5"
+  g.add_development_dependency "rspec", "~> 3.10"
+  g.add_development_dependency "standardrb", "~> 1.1"
 end
