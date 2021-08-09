@@ -3,7 +3,7 @@ require "trip"
 Gem::Specification.new do |g|
   g.name = "trip.rb"
   g.homepage = "https://github.com/0x1eef/trip.rb"
-  g.authors	= ["rg"]
+  g.authors	= ["0x1eef"]
   g.email = "1aab@protonmail.com"
   g.version = Trip::VERSION
 
@@ -16,7 +16,7 @@ Gem::Specification.new do |g|
     Trip is a concurrent tracer that can pause, resume and alter code while it is
     being traced. Trip yields control between two threads, typically the main thread
     and a thread that Trip creates.
-    
+
     Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
     dedicated to running and tracing a block of Ruby code. Control is yielded
     between the main thread and this new thread until the trace completes.
