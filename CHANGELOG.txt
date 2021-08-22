@@ -2,6 +2,7 @@
 
 ## current
 
+* Refactor API documentation in `lib/trip.rb`
 * Fix "gem build" warnings
 
 ## v1.2.1
