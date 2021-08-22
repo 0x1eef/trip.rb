@@ -34,7 +34,7 @@ class Trip
   #  The block to be traced.
   #
   # @return [Trip]
-  #   Returns an instance of Trip.
+  #  Returns an instance of Trip.
   def initialize(&block)
     raise ArgumentError, "Expected a block to trace" unless block
     @thread = nil
