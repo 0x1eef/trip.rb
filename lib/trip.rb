@@ -36,7 +36,7 @@ class Trip
   # @return [Trip]
   #   Returns an instance of Trip.
   def initialize(&block)
-    raise ArgumentError, "Provide a block to trace" unless block
+    raise ArgumentError, "Expected a block to trace" unless block
     @thread = nil
     @block = block
     @queue = nil
@@ -50,7 +50,7 @@ class Trip
   #  A block or an object that responds to "#call".
   #
   # @raise [ArgumentError]
-  #  Raised when the `callable` param is missing.
+  #  Raised when the "callable"  argument is not provided.
   #
   # @return [nil]
   #  Returns nil.
@@ -61,7 +61,7 @@ class Trip
   #  event = trip.start
   def pause_when(callable = nil, &block)
     pauser = callable || block
-    raise ArgumentError, "Expected a block or an object that responds to call" unless pauser
+    raise ArgumentError, "Expected a block or an object implementing #call" unless pauser
     @pause_when = pauser
     nil
   end
@@ -93,10 +93,10 @@ class Trip
   # Starts the tracer.
   #
   # @raise [Trip::InProgessError]
-  #  Raised when there's already a trace in progress.
+  #  Raised when there is already a trace in progress.
   #
   # @raise [Trip::PauseError]
-  #  Raised when an exception is raised by the block
+  #  Raised when an exception is raised by the callable
   #  given to {#pause_when}.
   #
   # @raise [Trip::InternalError]
@@ -131,7 +131,7 @@ class Trip
   # @return [Trip::Event, nil]
   #  Returns an event or nil.
   def resume
-    raise NotStartedError, "a trace hasn't started" unless started?
+    raise NotStartedError, "A trace must be started first" unless started?
     if sleeping?
       @thread.wakeup
       @queue.deq
