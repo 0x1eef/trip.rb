@@ -9,9 +9,9 @@
 
 ## <a id='introduction'>Introduction</a>
 
-trip.rb is a concurrent tracer that can pause, resume and alter the 
-code being traced. The tracer yields control between two threads, 
-typically the main thread and a thread that trip.rb creates.
+trip.rb is a concurrent tracer that can pause, resume and alter the code 
+it is tracing. The tracer yields control between two threads, typically 
+the main thread and a thread that trip.rb creates.
 
 Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
 dedicated to running a block of Ruby code. Control is then yielded between 
