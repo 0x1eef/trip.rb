@@ -72,6 +72,18 @@ class Trip::Event < BasicObject
     @type == "call"
   end
 
+  # @return [Boolean]
+  #  Returns true if the event is a Ruby or C method call.
+  def call?
+    c_call? || rb_call?
+  end
+
+  # @return [Boolean]
+  #  Returns true if the event is a Ruby or C method return.
+  def return?
+    c_return? || rb_return?
+  end
+
   #
   # @return [Boolean]
   #   Returns true when an event is a method return by a method implemented in C.
