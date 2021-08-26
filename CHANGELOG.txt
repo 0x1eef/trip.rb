@@ -2,6 +2,8 @@
 
 ## current
 
+* Add "Event#call?", "Event#return?".
+
 * Do not raise from "#resume" if a trace hasn't started.
   Instead, start a trace.
 
