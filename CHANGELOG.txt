@@ -2,7 +2,11 @@
 
 ## current
 
+* Do not raise from "#resume" if a trace hasn't started.
+  Instead, start a trace.
+
 * Refactor API documentation in `lib/trip.rb`
+
 * Fix "gem build" warnings
 
 ## v1.2.1

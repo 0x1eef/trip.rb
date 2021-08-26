@@ -7,7 +7,6 @@ class Trip
   Error = Class.new(RuntimeError)
   InternalError = Class.new(Error)
   PauseError = Class.new(Error)
-  NotStartedError = Class.new(Error)
   InProgressError = Class.new(Error)
 
   # @private
@@ -119,19 +118,17 @@ class Trip
     @queue.deq
   end
 
-  # Resumes the tracer.
+  # Resumes a trace or starts one if {#start} hasn't been called.
   #
   # @raise [Trip::PauseError] (see #start)
   #
   # @raise [Trip::InternalError] (see #start)
   #
-  # @raise [Trip::NotStartedError]
-  #  Raised when {#start} has not been called.
   #
   # @return [Trip::Event, nil]
   #  Returns an event or nil.
   def resume
-    raise NotStartedError, "A trace must be started first" unless started?
+    return start unless started?
     if sleeping?
       @thread.wakeup
       @queue.deq
