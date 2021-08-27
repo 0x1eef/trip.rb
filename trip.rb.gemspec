@@ -8,19 +8,19 @@ Gem::Specification.new do |g|
   g.version = Trip::VERSION
 
   g.summary = <<~SUMMARY
-  trip.rb is a concurrent tracer that can pause, resume and alter the code it is
-  tracing. The tracer yields control between two threads, typically the main thread
-  and a thread that trip.rb creates.
+    trip.rb is a concurrent tracer that can pause, resume and alter the code it is
+    tracing. The tracer yields control between two threads, typically the main thread
+    and a thread that trip.rb creates.
   SUMMARY
 
   g.description = <<~DESCRIPTION
-  trip.rb is a concurrent tracer that can pause, resume and alter the code it is
-  tracing. The tracer yields control between two threads, typically the main thread
-  and a thread that trip.rb creates.
+    trip.rb is a concurrent tracer that can pause, resume and alter the code it is
+    tracing. The tracer yields control between two threads, typically the main thread
+    and a thread that trip.rb creates.
 
-  Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
-  dedicated to running and tracing a block of Ruby code. Control is yielded
-  between the main thread and this new thread until the trace completes.
+    Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
+    dedicated to running and tracing a block of Ruby code. Control is yielded
+    between the main thread and this new thread until the trace completes.
   DESCRIPTION
 
   g.licenses = ["MIT"]

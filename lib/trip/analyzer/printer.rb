@@ -25,7 +25,7 @@ module Trip::Analyzer::Printer
              " " * indent_by,
              Paint["-> ", :blue],
              event.signature.ljust((49 + precision) - indent_by),
-             duration ? "#{duration.round(precision)}s" : '',
+             duration ? "#{duration.round(precision)}s" : "",
              "\n"
   end
 

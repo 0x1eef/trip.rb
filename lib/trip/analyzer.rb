@@ -1,9 +1,9 @@
-require 'trip'
-require 'stringio'
-require 'paint'
+require "trip"
+require "stringio"
+require "paint"
 
 class Trip::Analyzer
-  require_relative 'analyzer/printer'
+  require_relative "analyzer/printer"
   include Trip::Analyzer::Printer
 
   # @return [Integer]
@@ -30,12 +30,12 @@ class Trip::Analyzer
   #
   # @return [void]
   def analyze(precision: DEFAULT_PRECISION)
-    stringio   = StringIO.new
+    stringio = StringIO.new
     open_count = 0
-    indent_by  = 0
+    indent_by = 0
     events, duration = run_code
     print_about
-    events.reverse.each do |event, duration|
+    events.reverse_each do |event, duration|
       indent_by = open_count * 2
       open_count, indent_by = adjust_counters(event, open_count, indent_by)
       print_event(stringio, event, indent_by, duration, precision)
@@ -49,7 +49,7 @@ class Trip::Analyzer
   def run_code
     start = Process.clock_gettime(Process::CLOCK_REALTIME)
     events = []
-    while event = @trip.resume
+    while (event = @trip.resume)
       if event.return?
         call_event, = events.find { |(e, _)| event.caller_context == e.caller_context && e.call? }
         events.unshift([event, event.created_at - call_event.created_at])
@@ -78,7 +78,7 @@ class Trip::Analyzer
       File.basename(File.dirname(event.path)),
       File.basename(event.path)
     ].join(File::Separator)
-    path = "#{path}:#{event.lineno}"
+    "#{path}:#{event.lineno}"
   end
 end
 
