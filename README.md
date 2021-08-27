@@ -34,7 +34,11 @@ the calling thread and Trip's thread until the trace completes.
 **1.**
 
 By default the tracer pauses on method call and method return events from 
-methods implemented in Ruby:
+methods implemented in Ruby. This can be changed to cover both methods 
+implemented in C and Ruby - or meet other criteria - using `Trip#pause_when`, 
+which will be covered in the next example. 
+
+For this example a trace is done with the default settings.
 
 ```ruby
 def add(x,y)
@@ -51,14 +55,24 @@ event3 = trip.resume # returns nil (thread exits)
 **2.**
 
 The logic for deciding when to pause the tracer can be customized using the 
-`#pause_when` method. It accepts a block that receives an event (`Trip::Event`)
-to help support making a decision on whether to pause the tracer or not:
+`Trip#pause_when` method. The `#pause_when` method accepts a block or object
+implementing `#call`. The block or object is then called by Trip.rb during a 
+trace to decide if the trace should pause or continue uninterrupted.
+
+The block or an object's `#call` method receives an instance of `Trip::Event` 
+to help support it in making its decision to pause or continue. A truthy return 
+value pauses the tracer and a falsey return value allows the trace to continue.
+
+This example configures Trip.rb to pause on method call and return events from 
+methods implemented in C (as opposed to those implemented in Ruby). Note that 
+when to pause can be based on other criteria from an event as well - not just
+method call and return events.
 
 ```ruby
 trip = Trip.new { Kernel.puts 1+6 }
 trip.pause_when { |event| event.c_call? || event.c_return? }
-event1 = trip.start # returns a Trip::Event (for a method call to a method implemented in C)
-trip.stop           # returns nil, thread exits
+event1 = trip.start  # Event for c-call (Kernel#puts)
+event2 = trip.resume # Event for c-call (IO#puts)
 ```
 
 **3.**
@@ -89,7 +103,7 @@ Trip.rb implements a stacktrace analyzer that can be useful for debugging and
 gaining insight into the code being traced. One day I might extract it into 
 its own gem - for now it is shipped with the Trip.rb gem.
 
-The analyzer has to be required it separately:
+The analyzer has to be required separately:
 
 ```ruby
 require "trip/analyzer"
