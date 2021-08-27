@@ -89,13 +89,13 @@ Trip.rb implements a stacktrace analyzer that can be useful for debugging and
 gaining insight into the code being traced. One day I might extract it into 
 its own gem - for now it is shipped with the Trip.rb gem.
 
-It has to be required it separately:
+The analyzer has to be required it separately:
 
 ```ruby
 require "trip/analyzer"
 ```
 
-Iit requires the "paint" gem to be installed: 
+It depends on the "paint" gem for colorized output. 
 
 ```ruby
 gem install paint
