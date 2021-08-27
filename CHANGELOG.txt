@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.0.3
+
+* Fix botched release
+
 ## v2.0.2
 
 * Fix typo.

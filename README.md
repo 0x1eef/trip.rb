@@ -102,7 +102,7 @@ Trip.analyze { ERB.new("foo").result }
 
 Running 
     
-    ruby -Ilib -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less
+    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less
 
 shows a stacktrace similar to this:
 
