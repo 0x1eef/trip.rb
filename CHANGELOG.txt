@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## current
+## v2.0.0
+
+* Rename "Event#type" as "Event#name".
 
 * Add "Trip.analyze" and "Trip::Analyzer".
   Must be required separately using require "trip/analyzer".
