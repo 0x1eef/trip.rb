@@ -70,8 +70,10 @@ RSpec.describe Trip do
   end
 
   describe "#resume" do
-    it "raises Trip::NotStartedError" do
-      expect { trip.resume }.to raise_error(Trip::NotStartedError)
+    it "starts a trace if one has not already been started" do
+      expect(trip).to_not be_started
+      trip.resume
+      expect(trip).to be_started
     end
   end
 

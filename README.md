@@ -3,13 +3,15 @@
 **Table of contents**
 
 * [Introduction](#introduction)
-* [Examples](#examples)
+* [Examples](#examples) 
+  * [As a concurrent tracer](#as-a-concurrent-tracer)
+  * [As a stacktrace analyzer](#as-a-stacktrace-analyzer)
 * [Install](#install)
 * [License](#license)
 
 ## <a id='introduction'>Introduction</a>
 
-trip.rb is a concurrent tracer that can pause, resume and alter the code 
+Trip.rb is a concurrent tracer that can pause, resume and alter the code 
 it is tracing. The tracer yields control between two threads, typically 
 the main thread and a thread that trip.rb creates.
 
@@ -19,10 +21,12 @@ the calling thread and Trip's thread until the trace completes.
 
 ## <a id='examples'>Examples</a>
 
+### <a id='as-a-concurrent-tracer'>As a concurrent tracer</a>
+
 **1.**
 
-By default the tracer pauses on method call and method return events from methods 
-implemented in Ruby:
+By default the tracer pauses on method call and method return events from 
+methods implemented in Ruby:
 
 ```ruby
 def add(x,y)
@@ -68,6 +72,36 @@ event2 = trip.resume          # returns a Trip::Event (for the method return of 
 event2.binding.eval('to_s')   # returns '4 + 3'
 trip.stop                     # returns nil, thread exits
 ```
+
+### <a id='as-a-stacktrace-analyzer'>As a stacktrace analyzer</a>
+
+Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
+gaining insight into the code being traced.
+
+It has to be required separately:
+
+```ruby
+require "trip/analyzer"
+```
+
+it requires the "paint" gem to be installed: 
+
+```ruby
+gem install paint
+```
+
+It can be invoked by calling `Trip.analyze` with a block:
+
+```ruby
+require "erb"
+require "trip/analyzer"
+Trip.analyze { ERB.new("foo").result }
+```
+
+It displays a stacktrace similar to this:
+
+![preview](./screenshots/analyzer.png)
+
 
 ## <a id='install'>Install</a>
 

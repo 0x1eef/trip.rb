@@ -33,7 +33,7 @@ RSpec.describe Trip::Event do
     describe "call and return of method implemented in C" do
       let(:trip) do
         trip = Trip.new { Kernel.print "" }
-        trip.pause_when { |event| event.from_module == Kernel and event.from_method == :print }
+        trip.pause_when { |event| event.caller_context.module == Kernel and event.caller_context.method_name == :print }
         trip
       end
 
@@ -50,24 +50,24 @@ RSpec.describe Trip::Event do
     end
   end
 
-  describe "#from_module" do
+  describe ".caller_context.module" do
     it "returns the Module from where an event originated" do
       event = trip.start
-      expect(event.from_module).to eq(Trip::DummyClass)
+      expect(event.caller_context.module).to eq(Trip::DummyClass)
     end
   end
 
-  describe "#from_method" do
+  describe ".caller_context.method_name" do
     it "returns the type of the method where an event originated" do
       event = trip.start
-      expect(event.from_method).to eq(:run)
+      expect(event.caller_context.method_name).to eq(:run)
     end
   end
 
   describe "#file" do
     it "returns __FILE__" do
       event = trip.start
-      expect(event.file).to eq(__FILE__)
+      expect(event.path).to eq(__FILE__)
     end
   end
 

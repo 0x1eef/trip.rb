@@ -29,7 +29,7 @@ class Trip
   # @private
   PAUSE_WHEN = ->(event) { event.rb_call? || event.rb_return? }
 
-  # @param [Proc] &block
+  # @param [Proc] block
   #  The block to be traced.
   #
   # @return [Trip]
@@ -149,16 +149,16 @@ class Trip
 
   private
 
-  def on_event(type, file, lineno, from_method, binding, from_module)
+  def on_event(type, path, lineno, method_name, binding, mod)
     run_safely(Trip::InternalError.new("The tracer encountered an internal error and crashed")) {
       event = Event.new type, {
-        file: file,
+        path: path,
         lineno: lineno,
-        from_module: from_module,
-        from_method: from_method,
+        module: mod,
+        method_name: method_name,
         binding: binding
       }
-      if (event.file != __FILE__) && run_safely(Trip::PauseError.new("The pause Proc encountered an error and crashed")) { @pause_when.call(event) }
+      if (event.path != __FILE__) && run_safely(Trip::PauseError.new("The pause Proc encountered an error and crashed")) { @pause_when.call(event) }
         @queue.enq(event)
         Thread.stop
       end

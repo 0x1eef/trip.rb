@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class Trip::Event < BasicObject
+  # @attr_reader [Module] module
+  #  The module where an event occurred.
+  #
+  # @attr_reader [Symbol] method_name
+  #  The name of a method where an event occurred.
+  CallerContext = ::Struct.new(:module, :method_name)
+
   # @return [String]
   #  Returns the type of event as reported by the "Thread#set_trace_func" API.
   #  Examples: "c-call", "call", "c-return", "return", ...
@@ -13,8 +20,8 @@ class Trip::Event < BasicObject
 
   # @return [String]
   #  Returns the path where an event occurred.
-  def file
-    @event[:file]
+  def path
+    @event[:path]
   end
 
   # @return [Integer]
@@ -23,16 +30,11 @@ class Trip::Event < BasicObject
     @event[:lineno]
   end
 
-  # @return [Module]
-  #  Returns the class or module where an event occurred.
-  def from_module
-    @event[:from_module]
-  end
-
-  # @return [Symbol]
-  #  Returns the method name where an event occurred.
-  def from_method
-    @event[:from_method]
+  # @return [Trip::Event::CallerContext]
+  #  Returns a struct containing the module and method name where
+  #  an event occurred.
+  def caller_context
+    CallerContext.new @event[:module], @event[:method_name]
   end
 
   # @return [Binding]
@@ -77,12 +79,28 @@ class Trip::Event < BasicObject
     c_return? || rb_return?
   end
 
+  # @example
+  #  event1.signature  # => "Foo.bar"
+  #  event2.signature  # => "Foo#bar"
+  #
+  # @return [String]
+  #  Returns the signature for the method where an event occurred
+  #  by using "#" to denote instance methods and using "." to denote
+  #  singleton methods.
+  def signature
+    [
+      caller_context.module.to_s,
+      method_notation,
+      caller_context.method_name
+    ].join
+  end
+
   # @return [String]
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \
     "type='#{type}'" \
-    "file='#{file}' lineno='#{lineno}' " \
-    "from_module='#{from_module}' from_method='#{from_method}' " \
+    "file='#{path}' lineno='#{lineno}' " \
+    "module='#{caller_context.module}' method_name='#{caller_context.method_name}' " \
     "binding=#{binding.inspect}>"
   end
 
@@ -90,5 +108,18 @@ class Trip::Event < BasicObject
   #  Returns a binding object for an instance of {Trip::Event}.
   def __binding__
     ::Kernel.binding
+  end
+
+  private
+
+  def method_notation
+    if binding
+      # If self is a class or module return '.'
+      # If self is an instance of a class return '#'.
+      ::Module === binding.eval('self') ? '.' : '#'
+    else
+      singleton_method_names = caller_context.module.singleton_methods
+      singleton_method_names.include?(caller_context.method_name) ? '.' : '#'
+    end
   end
 end
