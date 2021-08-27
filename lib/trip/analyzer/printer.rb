@@ -6,32 +6,32 @@ module Trip::Analyzer::Printer
           "\n"
   end
 
-  def print_header_row
+  def print_header_row(precision)
     print Paint["Path", :underline].ljust(38),
           Paint["Event", :underline].ljust(25),
-          Paint["Method", :underline].ljust(60),
+          Paint["Method", :underline].ljust(53 + precision),
           Paint["Time", :underline]
   end
 
-  def print_trace(stringio)
+  def print_trace(stringio, precision)
     print "\n",
           Paint["Trace", :bold],
           "\n"
-    print_header_row
+    print_header_row(precision)
     print "\n", stringio.string
   end
 
-  def print_event(io, event, indent_by, duration)
+  def print_event(io, event, indent_by, duration, precision)
     io.print event_path(event).ljust(30),
             Paint[event.name, :green].ljust(24),
              " " * indent_by,
              Paint["-> ", :blue],
-             event.signature.ljust(50 - indent_by),
-             duration ? "#{duration.round(4)}s" : '',
+             event.signature.ljust((44 + precision) - indent_by),
+             duration ? "#{duration.round(precision)}s" : '',
              "\n"
   end
 
-  def print_summary(duration)
+  def print_summary(duration, precision)
     print "\n",
           Paint["Summary", :bold],
           "\n",
@@ -43,7 +43,7 @@ module Trip::Analyzer::Printer
           "#{@rb_call_count} (#{method_call_average(@rb_call_count)}%) ",
           "method calls were to methods implemented in Ruby.",
           "\n",
-          "The trace took #{duration.round(2)}s.",
+          "The trace took #{duration.round(precision)}s.",
           "\n"
   end
 
