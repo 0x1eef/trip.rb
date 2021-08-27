@@ -2,12 +2,22 @@
 
 ## current
 
-* Add "Event#call?", "Event#return?".
+* Add "Trip.analyze" and "Trip::Analyzer".
+  Must be required separately using require "trip/analyzer".
+  Requires "paint" gem.
 
-* Do not raise from "#resume" if a trace hasn't started.
+* Add "Trip::Event#caller_context"
+
+* Add "Trip::Event::CallerContext"
+
+* "Trip::Event#file" => "Trip::Event#path"
+
+* Add "Trip::Event#call?", "Trip::Event#return?".
+
+* Don't raise from "#resume" if a trace hasn't begun.
   Instead, start a trace.
 
-* Refactor API documentation in `lib/trip.rb`
+* Refactor API documentation in "lib/trip.rb"
 
 * Fix "gem build" warnings
 
