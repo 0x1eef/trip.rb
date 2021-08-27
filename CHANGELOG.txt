@@ -2,6 +2,8 @@
 
 ## current
 
+* Improve trace analysis appearance
+
 * Fix bug where duration would be incorrectly calculated
 
 * Improve "Trip::Event" docs.
