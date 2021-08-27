@@ -100,7 +100,11 @@ require "trip/analyzer"
 Trip.analyze { ERB.new("foo").result }
 ```
 
-It displays a stacktrace similar to this:
+Running 
+    
+    ruby -Ilib -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less
+
+shows a stacktrace similar to this:
 
 ![preview](./screenshots/analyzer.png)
 
