@@ -8,9 +8,19 @@ class Trip::Event < BasicObject
   #  The name of a method where an event occurred.
   CallerContext = ::Struct.new(:module, :method_name)
 
+  # Returns one of the following event names:
+  #
+  #   * c-call
+  #   * c-return
+  #   * call
+  #   * return
+  #   * class
+  #   * end
+  #   * line
+  #   * raise
+  #
   # @return [String]
-  #  Returns the name of event as reported by the "Thread#set_trace_func" API.
-  #  Examples: "c-call", "call", "c-return", "return", ...
+  #  an event name
   attr_reader :name
 
   # @return [Integer]
@@ -30,56 +40,63 @@ class Trip::Event < BasicObject
   end
 
   # @return [Integer]
-  #  Returns the line number where an event occurred,
+  #  Returns the line number where an event occurred.
   def lineno
     @event[:lineno]
   end
 
   # @return [Trip::Event::CallerContext]
-  #  Returns a struct containing the module and method name where
-  #  an event occurred.
+  #  Returns a struct containing the module and method name
+  #  where an event occurred.
   def caller_context
     CallerContext.new @event[:module], @event[:method_name]
   end
 
   # @return [Binding]
-  #  Returns a Binding object in the context of where an event occurred.
+  #  Returns a Binding object in the context of where
+  #  an event occurred.
   def binding
     @event[:binding]
   end
 
   # @return [Boolean]
-  #  Returns true when an event is for a C method call.
-  def c_return?
-    @name == "c-return"
-  end
-
-  # @return [Boolean]
-  #  Returns true when an event is for a Ruby method return.
-  def rb_return?
-    @name == "return"
-  end
-
-  # @return [Boolean]
-  #   Returns true when an event is for a C method call.
-  def c_call?
-    @name == "c-call"
-  end
-
-  # @return [Boolean]
-  #   Returns true when an event is for a Ruby method call.
+  #  Returns true when an event is a call from a
+  #  method implemented in Ruby.
   def rb_call?
     @name == "call"
   end
 
   # @return [Boolean]
-  #  Returns true if the event is for a Ruby or C method call.
+  #  Returns true when an event is a return from a
+  #  method implemented in Ruby.
+  def rb_return?
+    @name == "return"
+  end
+
+  # @return [Boolean]
+  #  Returns true when an event is a call to a method
+  #  implemented in C.
+  def c_call?
+    @name == "c-call"
+  end
+
+  # @return [Boolean]
+  #  Returns true when an event is a return from a
+  #  method implemented in C.
+  def c_return?
+    @name == "c-return"
+  end
+
+  # @return [Boolean]
+  #  Returns true when an event is a call to a
+  #  method implemented in Ruby or C.
   def call?
     c_call? || rb_call?
   end
 
   # @return [Boolean]
-  #  Returns true if the event is for a Ruby or C method return.
+  #  Returns true when an event is a return from a
+  #  method implemented in Ruby or C.
   def return?
     c_return? || rb_return?
   end
@@ -119,11 +136,23 @@ class Trip::Event < BasicObject
 
   # Best guess the method notation to use.
   def method_notation
-    method_name = caller_context.method_name
-    if caller_context.module.instance_methods.include?(method_name)
-      "#"
+    # C method calls and returns have a Binding whose
+    # receiver is the self of the nearest Ruby method
+    # rather than the self of the C method under trace.
+    #
+    # As a result we best guess if the method is an instance
+    # method or a singleton method for methods implemented in C.
+    if c_call? || c_return?
+      mod   = caller_context.module
+      mname = caller_context.method_name
+      if mod.method_defined?(mname) ||
+         mod.private_method_defined?(mname)
+       "#"
+      else
+        "."
+      end
     else
-      "."
+      ::Module === binding.receiver ? "." : "#"
     end
   end
 end

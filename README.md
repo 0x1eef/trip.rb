@@ -3,9 +3,13 @@
 **Table of contents**
 
 * [Introduction](#introduction)
-* [Examples](#examples) 
-  * [As a concurrent tracer](#as-a-concurrent-tracer)
-  * [As a stacktrace analyzer](#as-a-stacktrace-analyzer)
+* [Getting started](#examples) 
+  * [Using trip.rb as a concurrent tracer](#as-a-concurrent-tracer)
+    * [Usage](#concurrent-tracer-usage)
+  * [Using trip.rb as a stacktrace analyzer](#as-a-stacktrace-analyzer)
+    * [Usage](#stacktrace-analyzer-usage)
+    * [Precision](#stacktrace-analyzer-precision)
+    * [Best guessing for methods implemented in C](#c-note)
 * [Install](#install)
 * [License](#license)
 
@@ -21,9 +25,11 @@ Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
 dedicated to running a block of Ruby code. Control is then yielded between 
 the calling thread and Trip's thread until the trace completes.
 
-## <a id='examples'>Examples</a>
+## <a id='examples'>Getting started</a>
 
-### <a id='as-a-concurrent-tracer'>As a concurrent tracer</a>
+### <a id='as-a-concurrent-tracer'>Using trip.rb a concurrent tracer</a>
+
+#### <a id='concurrent-tracer-usage'>Usage</a>
 
 **1.**
 
@@ -75,7 +81,9 @@ event2.binding.eval('to_s')   # returns '4 + 3'
 trip.stop                     # returns nil, thread exits
 ```
 
-### <a id='as-a-stacktrace-analyzer'>As a stacktrace analyzer</a>
+### <a id='as-a-stacktrace-analyzer'>Using trip.rb as a stacktrace analyzer</a>
+
+#### <a id='stacktrace-analyzer-usage'>Usage</a>
 
 Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
 gaining insight into the code being traced.
@@ -102,12 +110,40 @@ Trip.analyze { ERB.new("foo").result }
 
 Running 
     
-    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less
+    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less -c
 
 shows a stacktrace similar to this:
 
-![preview](./screenshots/screenshot_1.png)
+![preview 1](./screenshots/screenshot_1.png)
 
+#### <a id='stacktrace-analyzer-precision'>Precision</a>
+
+The default precision used when printing the execution time of a method is 4. It can
+be changed with the `precision` keyword argument. For example:
+
+```ruby
+Trip.analyze(precision: 2) { sleep 2 }
+```
+
+shows a stacktrace similar to this:
+
+![preview 2](./screenshots/screenshot_2.png)
+
+#### <a id='c-note'>Best guessing for methods implemented in C</a> 
+
+Trip.rb uses `#` to denote an instance method and it uses `.` to denote a 
+singleton method (also known as a class method) in the traces it generates.
+
+This proved diffilcult to determine for methods implemented in C because 
+their binding's self is the self of the nearest Ruby method rather than the 
+self of the method being traced - as is the case with methods implemented 
+in Ruby.
+
+The best solution I found to date was to take a best guess on which notation 
+should be used for methods implemented in C. The best guess is sometimes
+incorrect. It's worth keeping that in mind for `c-call` and `c-return` events.
+
+Thankfully, methods implemented in Ruby don't have this problem.
 
 ## <a id='install'>Install</a>
 

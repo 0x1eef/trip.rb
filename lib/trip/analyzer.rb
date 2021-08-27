@@ -6,6 +6,11 @@ class Trip::Analyzer
   require_relative 'analyzer/printer'
   include Trip::Analyzer::Printer
 
+  # @return [Integer]
+  #  Returns the default precision used when printing a method's
+  #  execution time.
+  DEFAULT_PRECISION = 4
+
   # @example
   #  analyzer = Trip::Analyzer.new { Digest::MD5.hexdigest("hello world") }
   #  analyzer.analyze
@@ -19,19 +24,24 @@ class Trip::Analyzer
     @rb_call_count = 0
   end
 
-  def analyze
+  # @param [Integer] precision
+  #  An integer representing the precision to be used when printing a method's
+  #  execution time.
+  #
+  # @return [void]
+  def analyze(precision: DEFAULT_PRECISION)
     stringio   = StringIO.new
     open_count = 0
     indent_by  = 0
     events, duration = run_code
     print_about
-    events.each do |event, duration|
+    events.reverse.each do |event, duration|
       indent_by = open_count * 2
       open_count, indent_by = adjust_counters(event, open_count, indent_by)
-      print_event(stringio, event, indent_by, duration)
+      print_event(stringio, event, indent_by, duration, precision)
     end
-    print_summary(duration)
-    print_trace(stringio)
+    print_summary(duration, precision)
+    print_trace(stringio, precision)
   end
 
   private
@@ -42,9 +52,9 @@ class Trip::Analyzer
     while event = @trip.resume
       if event.return?
         call_event, = events.find { |(e, _)| event.caller_context == e.caller_context && e.call? }
-        events.push([event, event.created_at - call_event.created_at])
+        events.unshift([event, event.created_at - call_event.created_at])
       else
-        events.push([event, nil])
+        events.unshift([event, nil])
       end
     end
     finish = Process.clock_gettime(Process::CLOCK_REALTIME)
@@ -72,6 +82,15 @@ class Trip::Analyzer
   end
 end
 
-def Trip.analyze &blk
-  Trip::Analyzer.new(&blk).analyze
+# Analyzes a block of Ruby code by printing a
+# detailed trace to $stdout.
+#
+# @example
+#  Trip.analyze { ERB.new("").result }
+#
+# @param (see Trip::Analyzer#analyze)
+#
+# @return [void]
+def Trip.analyze precision: Trip::Analyzer::DEFAULT_PRECISION, &blk
+  Trip::Analyzer.new(&blk).analyze(precision: precision)
 end
