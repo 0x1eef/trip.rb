@@ -150,7 +150,9 @@ class Trip
   private
 
   def on_event(name, path, lineno, method_name, binding, mod)
-    run_safely(Trip::InternalError.new("The tracer encountered an internal error and crashed")) {
+    internal_error = Trip::InternalError.new("The tracer encountered an internal error and crashed")
+    pause_error = Trip::PauseError.new("The pause Proc encountered an error and crashed")
+    rescued_run(internal_error) do
       event = Event.new name, {
         path: path,
         lineno: lineno,
@@ -158,14 +160,15 @@ class Trip
         method_name: method_name,
         binding: binding
       }
-      if (event.path != __FILE__) && run_safely(Trip::PauseError.new("The pause Proc encountered an error and crashed")) { @pause_when.call(event) }
+      return if event.path == __FILE__
+      if rescued_run(pause_error) { @pause_when.call(event) }
         @queue.enq(event)
         Thread.stop
       end
-    }
+    end
   end
 
-  def run_safely(e)
+  def rescued_run(e)
     yield
   rescue *RESCUABLE_EXCEPTIONS => cause
     e.define_singleton_method(:cause) { cause }
