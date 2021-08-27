@@ -7,6 +7,7 @@
   * [Using trip.rb as a concurrent tracer](#as-a-concurrent-tracer)
     * [Usage](#concurrent-tracer-usage)
   * [Using trip.rb as a stacktrace analyzer](#as-a-stacktrace-analyzer)
+    * [About](#stacktrace-analyzer-about)
     * [Usage](#stacktrace-analyzer-usage)
     * [Precision](#stacktrace-analyzer-precision)
     * [Best guessing for methods implemented in C](#c-note)
@@ -97,22 +98,25 @@ trip.stop                     # returns nil, thread exits
 
 ### <a id='as-a-stacktrace-analyzer'>Using trip.rb as a stacktrace analyzer</a>
 
-#### <a id='stacktrace-analyzer-usage'>Usage</a>
+#### <a id='stacktrace-analyzer-about'>About</a>
 
 Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
 gaining insight into the code being traced. One day I might extract it into 
 its own gem - for now it is shipped with the Trip.rb gem.
 
-The analyzer has to be required separately:
+#### <a id='stacktrace-analyzer-usage'>Usage</a>
+
+First install the trip.rb and the paint gems.  
+The paint gem is used for colorized output by the trace analyzer. 
+
+```
+gem install trip.rb paint
+```
+
+The analyzer can be required as `trip/analyzer`.
 
 ```ruby
 require "trip/analyzer"
-```
-
-It depends on the "paint" gem for colorized output. 
-
-```ruby
-gem install paint
 ```
 
 It can be invoked by calling `Trip.analyze` with a block:
