@@ -1,10 +1,8 @@
 module Trip::Analyzer::Printer
   def print_about
-    print Paint["About", :bold],
+    print Paint["trip.rb", :bold], " (v#{Trip::VERSION})",
           "\n",
-          "This analysis was brought to you by ", Paint["trip.rb", :bold], ".",
-          "\n",
-          "See https://github.com/0x1eef/trip.rb#readme for more information.",
+          "Homepage https://github.com/0x1eef/trip.rb#readme",
           "\n"
   end
 
