@@ -2,7 +2,7 @@ module Trip::Analyzer::Printer
   def print_about
     print Paint["About", :bold],
           "\n",
-          "This trace was brought to you by ", Paint["trip.rb", :bold], ".",
+          "This analysis was brought to you by ", Paint["trip.rb", :bold], ".",
           "\n",
           "See https://github.com/0x1eef/trip.rb#readme for more information.",
           "\n",
