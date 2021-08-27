@@ -16,7 +16,7 @@ class Trip::Analyzer
   #  analyzer.analyze
   #
   # @return [Trip::Analyzer]
-  def initialize(&blk)
+  def initialize
     @trip = Trip.new { yield }
     @trip.pause_when { |event| event.call? || event.return? }
     @method_call_count = 0
