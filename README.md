@@ -59,7 +59,7 @@ The logic for deciding when to pause the tracer can be customized using the
 implementing `#call`. The block or object is then called by Trip.rb during a 
 trace to decide if the trace should pause or continue uninterrupted.
 
-The block or an object's `#call` method receives an instance of `Trip::Event` 
+The block or an object's `#call` method is called with an instance of `Trip::Event` 
 to help support it in making its decision to pause or continue. A truthy return 
 value pauses the tracer and a falsey return value allows the trace to continue.
 
