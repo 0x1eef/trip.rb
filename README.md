@@ -107,13 +107,13 @@ its own gem - for now it is shipped with the Trip.rb gem.
 #### <a id='stacktrace-analyzer-usage'>Usage</a>
 
 First install the trip.rb and the paint gems.  
-The paint gem is used for colorized output by the stacktrace analyzer. 
+The paint gem is used for colorized output by the analyzer. 
 
 ```
 gem install trip.rb paint
 ```
 
-The analyzer can be required as `trip/analyzer`. 
+The analyzer can be required as `trip/analyzer`.   
 Requiring `trip` won't require the analyzer.
 
 ```ruby
