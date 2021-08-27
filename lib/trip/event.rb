@@ -117,14 +117,13 @@ class Trip::Event < BasicObject
 
   private
 
+  # Best guess the method notation to use.
   def method_notation
-    if binding
-      # If self is a class or module return '.'
-      # If self is an instance of a class return '#'.
-      ::Module === binding.eval('self') ? '.' : '#'
+    method_name = caller_context.method_name
+    if caller_context.module.instance_methods.include?(method_name)
+      "#"
     else
-      singleton_method_names = caller_context.module.singleton_methods
-      singleton_method_names.include?(caller_context.method_name) ? '.' : '#'
+      "."
     end
   end
 end
