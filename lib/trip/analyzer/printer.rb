@@ -11,7 +11,8 @@ module Trip::Analyzer::Printer
   def print_header_row
     print Paint["Path", :underline].ljust(38),
           Paint["Event", :underline].ljust(25),
-          Paint["Method", :underline].rjust(5)
+          Paint["Method", :underline].ljust(60),
+          Paint["Time", :underline]
   end
 
   def print_trace(stringio)
@@ -22,12 +23,13 @@ module Trip::Analyzer::Printer
     print "\n", stringio.string
   end
 
-  def print_event(io, event, indent_by)
+  def print_event(io, event, indent_by, duration)
     io.print event_path(event).ljust(30),
             Paint[event.name, :green].ljust(24),
              " " * indent_by,
              Paint["-> ", :blue],
-             event.signature,
+             event.signature.ljust(50 - indent_by),
+             duration ? "#{duration.round(4)}s" : '',
              "\n"
   end
 
