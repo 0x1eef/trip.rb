@@ -86,15 +86,16 @@ trip.stop                     # returns nil, thread exits
 #### <a id='stacktrace-analyzer-usage'>Usage</a>
 
 Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
-gaining insight into the code being traced.
+gaining insight into the code being traced. One day I might extract it into 
+its own gem - for now it is shipped with the Trip.rb gem.
 
-It has to be required separately:
+It has to be required it separately:
 
 ```ruby
 require "trip/analyzer"
 ```
 
-it requires the "paint" gem to be installed: 
+It requires the "paint" gem to be installed: 
 
 ```ruby
 gem install paint
@@ -118,8 +119,8 @@ shows a stacktrace similar to this:
 
 #### <a id='stacktrace-analyzer-precision'>Precision</a>
 
-The default precision used when printing the execution time of a method is 4. It can
-be changed with the `precision` keyword argument. For example:
+The default precision used when printing the execution time of a method is 4. 
+It can be changed with the `precision` keyword argument. For example:
 
 ```ruby
 Trip.analyze(precision: 2) { sleep 2 }
