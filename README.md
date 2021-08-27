@@ -13,7 +13,9 @@
 
 Trip.rb is a concurrent tracer that can pause, resume and alter the code 
 it is tracing. The tracer yields control between two threads, typically 
-the main thread and a thread that trip.rb creates.
+the main thread and a thread that Trip.rb creates. Bundled with Trip.rb 
+is a [stacktrace analyzer](#as-a-stacktrace-analyzer) that serves as an example 
+and as a useful debugging tool. 
 
 Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
 dedicated to running a block of Ruby code. Control is then yielded between 
