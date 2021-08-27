@@ -5,7 +5,6 @@ module Trip::Analyzer::Printer
           "This analysis was brought to you by ", Paint["trip.rb", :bold], ".",
           "\n",
           "See https://github.com/0x1eef/trip.rb#readme for more information.",
-          "\n",
           "\n"
   end
 
