@@ -95,7 +95,7 @@ It has to be required it separately:
 require "trip/analyzer"
 ```
 
-It requires the "paint" gem to be installed: 
+Iit requires the "paint" gem to be installed: 
 
 ```ruby
 gem install paint
@@ -123,7 +123,7 @@ The default precision used when printing the execution time of a method is 4.
 It can be changed with the `precision` keyword argument. For example:
 
 ```ruby
-Trip.analyze(precision: 2) { sleep 2 }
+Trip.analyze(precision: 2) { sleep 2.553 }
 ```
 
 shows a stacktrace similar to this:
