@@ -106,7 +106,7 @@ Running
 
 shows a stacktrace similar to this:
 
-![preview](./screenshots/screenshot1.png)
+![preview](./screenshots/screenshot_1.png)
 
 
 ## <a id='install'>Install</a>
