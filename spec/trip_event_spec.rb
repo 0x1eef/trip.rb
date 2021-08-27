@@ -16,17 +16,17 @@ RSpec.describe Trip::Event do
     trip.stop
   end
 
-  describe "#type" do
+  describe "#name" do
     describe "call and return of method implemented in Ruby" do
       it 'returns "call"' do
         event = trip.start
-        expect(event.type).to eq("call")
+        expect(event.name).to eq("call")
       end
 
       it 'returns "return"' do
         trip.start
         event = trip.resume
-        expect(event.type).to eq("return")
+        expect(event.name).to eq("return")
       end
     end
 
@@ -39,13 +39,13 @@ RSpec.describe Trip::Event do
 
       it 'returns "c-call"' do
         event = trip.start
-        expect(event.type).to eq("c-call")
+        expect(event.name).to eq("c-call")
       end
 
       it 'returns "c-return"' do
         trip.start
         event = trip.resume
-        expect(event.type).to eq("c-return")
+        expect(event.name).to eq("c-return")
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe Trip::Event do
   end
 
   describe ".caller_context.method_name" do
-    it "returns the type of the method where an event originated" do
+    it "returns the name of the method where an event originated" do
       event = trip.start
       expect(event.caller_context.method_name).to eq(:run)
     end

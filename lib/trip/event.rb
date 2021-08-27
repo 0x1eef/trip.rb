@@ -9,12 +9,12 @@ class Trip::Event < BasicObject
   CallerContext = ::Struct.new(:module, :method_name)
 
   # @return [String]
-  #  Returns the type of event as reported by the "Thread#set_trace_func" API.
+  #  Returns the name of event as reported by the "Thread#set_trace_func" API.
   #  Examples: "c-call", "call", "c-return", "return", ...
-  attr_reader :type
+  attr_reader :name
 
-  def initialize(type, event)
-    @type = type
+  def initialize(name, event)
+    @name = name
     @event = event
   end
 
@@ -46,25 +46,25 @@ class Trip::Event < BasicObject
   # @return [Boolean]
   #  Returns true when an event is for a C method call.
   def c_return?
-    @type == "c-return"
+    @name == "c-return"
   end
 
   # @return [Boolean]
   #  Returns true when an event is for a Ruby method return.
   def rb_return?
-    @type == "return"
+    @name == "return"
   end
 
   # @return [Boolean]
   #   Returns true when an event is for a C method call.
   def c_call?
-    @type == "c-call"
+    @name == "c-call"
   end
 
   # @return [Boolean]
   #   Returns true when an event is for a Ruby method call.
   def rb_call?
-    @type == "call"
+    @name == "call"
   end
 
   # @return [Boolean]
@@ -98,7 +98,7 @@ class Trip::Event < BasicObject
   # @return [String]
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \
-    "type='#{type}'" \
+    "name='#{name}'" \
     "file='#{path}' lineno='#{lineno}' " \
     "module='#{caller_context.module}' method_name='#{caller_context.method_name}' " \
     "binding=#{binding.inspect}>"

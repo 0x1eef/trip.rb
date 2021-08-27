@@ -149,9 +149,9 @@ class Trip
 
   private
 
-  def on_event(type, path, lineno, method_name, binding, mod)
+  def on_event(name, path, lineno, method_name, binding, mod)
     run_safely(Trip::InternalError.new("The tracer encountered an internal error and crashed")) {
-      event = Event.new type, {
+      event = Event.new name, {
         path: path,
         lineno: lineno,
         module: mod,

@@ -25,7 +25,7 @@ module Trip::Analyzer::Printer
 
   def print_event(io, event, indent_by)
     io.print event_path(event).ljust(30),
-            Paint[event.type, :green].ljust(24),
+            Paint[event.name, :green].ljust(24),
              " " * indent_by,
              Paint["-> ", :blue],
              event.signature,
