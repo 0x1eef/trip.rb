@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## current
+
+* Add "time" column.
+
+* Add "Trip::Event#created_at"
+
 ## v2.0.3
 
 * Fix botched release

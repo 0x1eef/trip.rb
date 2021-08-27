@@ -13,9 +13,14 @@ class Trip::Event < BasicObject
   #  Examples: "c-call", "call", "c-return", "return", ...
   attr_reader :name
 
+  # @return [Integer]
+  #  Number of seconds since epoch.
+  attr_reader :created_at
+
   def initialize(name, event)
     @name = name
     @event = event
+    @created_at = ::Process.clock_gettime(::Process::CLOCK_REALTIME)
   end
 
   # @return [String]

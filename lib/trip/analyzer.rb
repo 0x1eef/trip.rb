@@ -25,10 +25,10 @@ class Trip::Analyzer
     indent_by  = 0
     events, duration = run_code
     print_about
-    events.each do |event|
+    events.each do |event, duration|
       indent_by = open_count * 2
       open_count, indent_by = adjust_counters(event, open_count, indent_by)
-      print_event(stringio, event, indent_by)
+      print_event(stringio, event, indent_by, duration)
     end
     print_summary(duration)
     print_trace(stringio)
@@ -40,7 +40,12 @@ class Trip::Analyzer
     start = Process.clock_gettime(Process::CLOCK_REALTIME)
     events = []
     while event = @trip.resume
-      events.push(event)
+      if event.return?
+        call_event, = events.find { |(e, _)| event.caller_context == e.caller_context && e.call? }
+        events.push([event, event.created_at - call_event.created_at])
+      else
+        events.push([event, nil])
+      end
     end
     finish = Process.clock_gettime(Process::CLOCK_REALTIME)
     [events, finish - start]
