@@ -1,0 +1,3 @@
+ignore:
+  - 'lib/trip/analyzer/printer.rb':
+    - Layout/ArgumentAlignment

@@ -143,11 +143,11 @@ class Trip::Event < BasicObject
     # As a result we best guess if the method is an instance
     # method or a singleton method for methods implemented in C.
     if c_call? || c_return?
-      mod   = caller_context.module
+      mod = caller_context.module
       mname = caller_context.method_name
       if mod.method_defined?(mname) ||
-         mod.private_method_defined?(mname)
-       "#"
+          mod.private_method_defined?(mname)
+        "#"
       else
         "."
       end
