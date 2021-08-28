@@ -5,13 +5,13 @@
 * [Introduction](#introduction)
 * [Getting started](#examples) 
   * [Using trip.rb as a concurrent tracer](#as-a-concurrent-tracer)
-    * [Usage](#concurrent-tracer-usage)
+      * [Usage](#concurrent-tracer-usage)
   * [Using trip.rb as a stacktrace analyzer](#as-a-stacktrace-analyzer)
-    * [About](#stacktrace-analyzer-about)
-    * [Usage](#stacktrace-analyzer-usage)
-    * [Precision](#stacktrace-analyzer-precision)
-    * [Writing to a custom IO](#stacktrace-custom-io)
-    * [Best guessing for methods implemented in C](#c-note)
+      * [About](#stacktrace-analyzer-about)
+      * [Usage](#stacktrace-analyzer-usage)
+      * [Precision](#stacktrace-analyzer-precision)
+      * [Writing to a custom IO](#stacktrace-custom-io)
+      * [Best guessing C methods](#c-note)
 * [Install](#install)
 * [License](#license)
 
@@ -163,7 +163,7 @@ Trip.analyze(io: str_io) { sleep 2.55 }
 puts str_io.string
 ```
 
-#### <a id='c-note'>Best guessing for methods implemented in C</a> 
+#### <a id='c-note'>Best guessing C methods</a> 
 
 Trip.rb uses `#` to denote an instance method and it uses `.` to denote a 
 singleton method (also known as a class method) in the traces it generates.
