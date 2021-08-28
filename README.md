@@ -1,4 +1,4 @@
-# trip.rb
+# <a id='top'>trip.rb</a>
 
 **Table of contents**
 
@@ -97,6 +97,8 @@ event2.binding.eval('to_s')   # returns '4 + 3'
 trip.stop                     # returns nil, thread exits
 ```
 
+[Back to top](#top)
+
 ### <a id='as-a-stacktrace-analyzer'>Using trip.rb as a stacktrace analyzer</a>
 
 #### <a id='stacktrace-analyzer-about'>About</a>
@@ -139,6 +141,8 @@ shows a stacktrace similar to this:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
+[Back to top](#top)
+
 #### <a id='stacktrace-analyzer-precision'>Precision</a>
 
 The default precision used when printing the execution time of a method is 4. 
@@ -151,6 +155,8 @@ Trip.analyze(page: true, precision: 2) { sleep 2.553 }
 shows a stacktrace similar to this:
 
 ![preview 2](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_2.png)
+
+[Back to top](#top)
 
 #### <a id='stacktrace-custom-io'>Writing to a custom IO</a>
 
@@ -165,6 +171,8 @@ str_io = StringIO.new
 Trip.analyze(io: str_io, color: false) { sleep 2.55 }
 puts str_io.string
 ```
+
+[Back to top](#top)
 
 #### <a id='c-note'>Best guessing C methods</a> 
 
@@ -181,6 +189,8 @@ should be used for methods implemented in C. The best guess is sometimes
 incorrect. It's worth keeping that in mind for `c-call` and `c-return` events.
 
 Thankfully, methods implemented in Ruby don't have this problem.
+
+[Back to top](#top)
 
 ## <a id='install'>Install</a>
 
