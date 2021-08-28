@@ -128,16 +128,12 @@ The `page` keyword argument being set to true opens the stacktrace
 using the pager `less`. By default paging is off.
 
 ```ruby
-require "erb"
+require "xchan"
 require "trip/analyzer"
-Trip.analyze(page: true) { ERB.new("foo").result }
+Trip.analyze(page: true) { xchan.send 123 }
 ```
 
-Running 
-    
-    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze(page: true) { xchan.send 12 }'
-
-shows a stacktrace similar to this:
+When the above code is run a stacktrace analysis similar to this is displayed:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
