@@ -41,7 +41,7 @@ Trip.rb is available as a rubygem:
 
     gem install trip.rb
 
-<a id='concurrent-tracer-usage'>**Usage**</a>
+<a id='concurrent-tracer-usage'>**Usage examples**</a>
 
 
 *<a id='usage-1'>1. Perform a trace with default settings</a>*
@@ -130,7 +130,7 @@ The paint gem is used for colorized output by the analyzer.
 gem install trip.rb paint
 ```
 
-<a id='stacktrace-analyzer-usage'>**Usage**</a>
+<a id='stacktrace-analyzer-usage'>**Usage examples**</a>
 
 *<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>*
 
