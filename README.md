@@ -16,7 +16,7 @@
           * [Analyze a method call](#stacktrace-analyzer-method)
           * [Set precision used for execution time](#stacktrace-analyzer-precision)
           * [Write stacktrace analysis to a custom IO](#stacktrace-custom-io)
-      * [Best guessing C methods](#c-note)
+      * [C method limitation](#c-note)
 * [License](#license)
 
 ## <a id='introduction'>Introduction</a>
@@ -182,7 +182,7 @@ puts str_io.string
 
 [Back to top](#top)
 
-### <a id='c-note'>Best guessing C methods</a> 
+<a id='c-note'>**C method limitation**</a> 
 
 Trip.rb's analyzer uses `#` to denote an instance method and it uses `.` to 
 denote a singleton method (also known as a class method) in the traces it 
