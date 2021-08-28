@@ -120,7 +120,7 @@ end
 #
 # @param (see Trip::Analyzer#analyze)
 #
-# @return [void]
+# @return (see Trip::Analyzer#analyze)
 def Trip.analyze io: $stdout,
                  color: true,
                  page: false,
