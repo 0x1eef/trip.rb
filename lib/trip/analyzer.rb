@@ -39,10 +39,7 @@ class Trip::Analyzer
   #
   # @return [IO]
   #  IO where the analysis was written to.
-  def analyze io: $stdout,
-              page: false,
-              color: true,
-              precision: DEFAULT_PRECISION
+  def analyze io: $stdout, page: false, color: true, precision: DEFAULT_PRECISION
     mode = Paint.mode
     Paint.mode = color ? true : nil
     open_count = 0
