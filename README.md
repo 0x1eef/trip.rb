@@ -109,7 +109,7 @@ its own gem - for now it is shipped with the Trip.rb gem.
 
 #### <a id='stacktrace-analyzer-usage'>Usage</a>
 
-First install the trip.rb and the paint gems.  
+First install the trip.rb and paint gems.  
 The paint gem is used for colorized output by the analyzer. 
 
 ```
