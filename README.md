@@ -44,7 +44,7 @@ Trip.rb is available as a rubygem:
 <a id='concurrent-tracer-usage'>**Usage**</a>
 
 
-**<a id='usage-1'>1. Perform a trace with default settings</a>**
+*<a id='usage-1'>1. Perform a trace with default settings</a>*
 
 By default the tracer pauses on method call and method return events from 
 methods implemented in Ruby. This can be changed to cover both methods 
@@ -65,7 +65,7 @@ event2 = trip.resume # returns a Trip::Event (for the method return of "#add")
 event3 = trip.resume # returns nil (thread exits)
 ```
 
-**2. <a id='usage-2'>Perform a trace with custom settings</a>**
+*2. <a id='usage-2'>Perform a trace with custom settings</a>*
 
 The logic for deciding when to pause the tracer can be customized using the 
 `Trip#pause_when` method. The `#pause_when` method accepts a block or object
@@ -88,7 +88,7 @@ event1 = trip.start  # Event for c-call (Kernel#puts)
 event2 = trip.resume # Event for c-call (IO#puts)
 ```
 
-**3. <a id='usage-3'>Access and alter the execution context of a Trip::Event</a>**
+*3. <a id='usage-3'>Access and alter the execution context of a Trip::Event</a>*
 
 `Trip::Event#binding` returns a [`Binding`](https://rubydoc.info/stdlib/core/Binding) object 
 that captures the execution context of where an event occurred. `Binding#eval` can be used
@@ -132,7 +132,7 @@ gem install trip.rb paint
 
 <a id='stacktrace-analyzer-usage'>**Usage**</a>
 
-**<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>**
+*<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>*
 
 The analyzer can be required as `trip/analyzer`.  
 The analyzer can be invoked by calling `Trip.analyze { <code> }`. In
@@ -151,7 +151,7 @@ When the above code is run an analysis of the stacktrace similar to this should 
 
 [Back to top](#top)
 
-<a id='stacktrace-analyzer-precision'>**2. Set precision used for execution time**</a>
+<a id='stacktrace-analyzer-precision'>*2. Set precision used for execution time*</a>
 
 The default precision used when printing the execution time of a method is 4. 
 It can be changed with the `precision` keyword argument. For example:
@@ -166,7 +166,7 @@ shows a stacktrace analysis similar to this:
 
 [Back to top](#top)
 
-<a id='stacktrace-custom-io'>**3. Write stacktrace analysis to a custom IO**</a>
+<a id='stacktrace-custom-io'>*3. Write stacktrace analysis to a custom IO*</a>
 
 The stacktrace analysis can be written to a custom IO - such as a StringIO - by setting
 the `io` keyword argument. Disabling color can be useful for a case like this 
