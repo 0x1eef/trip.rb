@@ -184,8 +184,9 @@ puts str_io.string
 
 ### <a id='c-note'>Best guessing C methods</a> 
 
-Trip.rb uses `#` to denote an instance method and it uses `.` to denote a 
-singleton method (also known as a class method) in the traces it generates.
+Trip.rb's analyzer uses `#` to denote an instance method and it uses `.` to 
+denote a singleton method (also known as a class method) in the traces it 
+generates.
 
 This proved diffilcult to determine for methods implemented in C because 
 their binding's self is the self of the nearest Ruby method rather than the 
