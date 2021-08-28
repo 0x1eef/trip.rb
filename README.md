@@ -5,14 +5,18 @@
 * [Introduction](#introduction)
 * [Getting started](#examples) 
   * [Using trip.rb as a concurrent tracer](#as-a-concurrent-tracer)
+      * [Install](#install-trip-1)
       * [Usage](#concurrent-tracer-usage)
+          * [Perform a trace with default settings](#usage-1)
+          * [Perform a trace with custom settings](#usage-2)
+          * [Access and alter the execution context of a Trip::Event](#usage-3)
   * [Using trip.rb as a stacktrace analyzer](#as-a-stacktrace-analyzer)
-      * [About](#stacktrace-analyzer-about)
+      * [Install](#install-trip-2)
       * [Usage](#stacktrace-analyzer-usage)
-      * [Precision](#stacktrace-analyzer-precision)
-      * [Writing to a custom IO](#stacktrace-custom-io)
+          * [Analyze a method call](#stacktrace-analyzer-method)
+          * [Set precision used for execution time](#stacktrace-analyzer-precision)
+          * [Write analysis to a custom IO](#stacktrace-custom-io)
       * [Best guessing C methods](#c-note)
-* [Install](#install)
 * [License](#license)
 
 ## <a id='introduction'>Introduction</a>
@@ -20,8 +24,8 @@
 Trip.rb is a concurrent tracer that can pause, resume and alter the code 
 it is tracing. The tracer yields control between two threads, typically 
 the main thread and a thread that Trip.rb creates. Bundled with Trip.rb 
-is a [stacktrace analyzer](#as-a-stacktrace-analyzer) that serves as an example 
-and as a useful debugging tool. 
+is a [stacktrace analyzer](#as-a-stacktrace-analyzer) that serves as an 
+example and as a useful debugging tool. 
 
 Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
 dedicated to running a block of Ruby code. Control is then yielded between 
@@ -31,9 +35,16 @@ the calling thread and Trip's thread until the trace completes.
 
 ### <a id='as-a-concurrent-tracer'>Using trip.rb a concurrent tracer</a>
 
+#### <a id=install-trip-1>Install</a>
+
+Trip.rb is available as a rubygem:
+
+    gem install trip.rb
+
 #### <a id='concurrent-tracer-usage'>Usage</a>
 
-**1.**
+
+**<a id='usage-1'>1. Perform a trace with default settings</a>**
 
 By default the tracer pauses on method call and method return events from 
 methods implemented in Ruby. This can be changed to cover both methods 
@@ -54,7 +65,7 @@ event2 = trip.resume # returns a Trip::Event (for the method return of "#add")
 event3 = trip.resume # returns nil (thread exits)
 ```
 
-**2.**
+**2. <a id='usage-2'>Perform a trace with custom settings</a>**
 
 The logic for deciding when to pause the tracer can be customized using the 
 `Trip#pause_when` method. The `#pause_when` method accepts a block or object
@@ -77,12 +88,17 @@ event1 = trip.start  # Event for c-call (Kernel#puts)
 event2 = trip.resume # Event for c-call (IO#puts)
 ```
 
-**3.**
+**3. <a id='usage-3'>Access and alter the execution context of a Trip::Event</a>**
 
-`Trip::Event#binding` returns a `Binding` object that provides access to the context
-of where an event occurred. It can be used to run code in that same context through 
-`Binding#eval`. This allows the surrounding environment to be changed while the tracer 
-is paused:
+`Trip::Event#binding` returns a [`Binding`](https://rubydoc.info/stdlib/core/Binding) object 
+that captures the execution context of where an event occurred. `Binding#eval` can be used
+to evaluate code in the captured execution context and that allows for altering the execution
+context while the code being traced is paused. 
+
+This feature works best for methods implemented in Ruby. For methods implemented in C, the 
+Binding provided will be for the nearest Ruby method - which can be confusing if you're not
+aware of it.
+
 
 ```ruby
 def add(x,y)
@@ -90,24 +106,22 @@ def add(x,y)
 end
 
 trip = Trip.new { add(2,3) }
-event1 = trip.start           # returns a Trip::Event (for the method call of add)
-event1.binding.eval('x = 4')  # returns 4 (also changes the value of 'x')
-event2 = trip.resume          # returns a Trip::Event (for the method return of add)
+event1 = trip.start           # Returns "call" Trip::Event 
+event1.binding.eval('x = 4')  # Change "x" to 4.
+event2 = trip.resume          # Returns "return" Trip::Event
 event2.binding.eval('to_s')   # returns '4 + 3'
-trip.stop                     # returns nil, thread exits
+trip.resume                   # returns nil, thread exits
 ```
 
 [Back to top](#top)
 
 ### <a id='as-a-stacktrace-analyzer'>Using trip.rb as a stacktrace analyzer</a>
 
-#### <a id='stacktrace-analyzer-about'>About</a>
-
 Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
 gaining insight into the code being traced. One day I might extract it into 
 its own gem - for now it is shipped with the Trip.rb gem.
 
-#### <a id='stacktrace-analyzer-usage'>Usage</a>
+#### <a id=install-trip-2>Install</a>
 
 First install the trip.rb and paint gems.  
 The paint gem is used for colorized output by the analyzer. 
@@ -116,10 +130,13 @@ The paint gem is used for colorized output by the analyzer.
 gem install trip.rb paint
 ```
 
+#### <a id='stacktrace-analyzer-usage'>Usage</a>
+
+#### <a id='stacktrace-analyzer-method'> Analyze a method call</a>
+
 The analyzer can be required as `trip/analyzer`.  
-The analyzer can be invoked by calling `Trip.analyze` with a block. 
-The `page` keyword argument being set to true opens the stacktrace 
-using the pager `less`. By default paging is off.
+The analyzer can be invoked by calling `Trip.analyze { <code> }`. In
+this example setting the `page` keyword argument to true opens the analysis using the pager `less`.
 
 ```ruby
 require "trip/analyzer"
@@ -127,13 +144,13 @@ require "xchan"
 Trip.analyze(page: true) { xchan.send 123 }
 ```
 
-When the above code is run a stacktrace analysis similar to this is shown:
+When the above code is run an analysis of the stacktrace like this is shown:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
 [Back to top](#top)
 
-#### <a id='stacktrace-analyzer-precision'>Precision</a>
+#### <a id='stacktrace-analyzer-precision'>Set precision used for execution time</a>
 
 The default precision used when printing the execution time of a method is 4. 
 It can be changed with the `precision` keyword argument. For example:
@@ -142,13 +159,13 @@ It can be changed with the `precision` keyword argument. For example:
 Trip.analyze(page: true, precision: 2) { sleep 2.553 }
 ```
 
-shows a stacktrace similar to this:
+shows a stacktrace analysis similar to this:
 
 ![preview 2](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_2.png)
 
 [Back to top](#top)
 
-#### <a id='stacktrace-custom-io'>Writing to a custom IO</a>
+#### <a id='stacktrace-custom-io'>Write analysis to a custom IO</a>
 
 The stacktrace can be written to a custom IO - such as a StringIO - by setting
 the `io` keyword argument. Disabling color can be useful for a case like this 
@@ -164,7 +181,7 @@ puts str_io.string
 
 [Back to top](#top)
 
-#### <a id='c-note'>Best guessing C methods</a> 
+### <a id='c-note'>Best guessing C methods</a> 
 
 Trip.rb uses `#` to denote an instance method and it uses `.` to denote a 
 singleton method (also known as a class method) in the traces it generates.
@@ -181,10 +198,6 @@ incorrect. It's worth keeping that in mind for `c-call` and `c-return` events.
 Thankfully, methods implemented in Ruby don't have this problem.
 
 [Back to top](#top)
-
-## <a id='install'>Install</a>
-
-    gem install trip.rb
 
 ## <a id='license'>License</a>
 
