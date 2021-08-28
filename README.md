@@ -15,7 +15,7 @@
       * [Usage](#stacktrace-analyzer-usage)
           * [Analyze a method call](#stacktrace-analyzer-method)
           * [Set precision used for execution time](#stacktrace-analyzer-precision)
-          * [Write analysis to a custom IO](#stacktrace-custom-io)
+          * [Write stacktrace analysis to a custom IO](#stacktrace-custom-io)
       * [Best guessing C methods](#c-note)
 * [License](#license)
 
@@ -136,7 +136,8 @@ gem install trip.rb paint
 
 The analyzer can be required as `trip/analyzer`.  
 The analyzer can be invoked by calling `Trip.analyze { <code> }`. In
-this example setting the `page` keyword argument to true opens the analysis using the pager `less`.
+this example setting the `page` keyword argument to true opens the stacktrace 
+analysis using the pager `less`.
 
 ```ruby
 require "trip/analyzer"
@@ -144,7 +145,7 @@ require "xchan"
 Trip.analyze(page: true) { xchan.send 123 }
 ```
 
-When the above code is run an analysis of the stacktrace  like this is shown:
+When the above code is run an analysis of the stacktrace similar to this should appear:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
@@ -165,7 +166,7 @@ shows a stacktrace analysis similar to this:
 
 [Back to top](#top)
 
-<a id='stacktrace-custom-io'>**3. Write analysis to a custom IO**</a>
+<a id='stacktrace-custom-io'>**3. Write stacktrace analysis to a custom IO**</a>
 
 The stacktrace analysis can be written to a custom IO - such as a StringIO - by setting
 the `io` keyword argument. Disabling color can be useful for a case like this 
