@@ -116,24 +116,18 @@ The paint gem is used for colorized output by the analyzer.
 gem install trip.rb paint
 ```
 
-The analyzer can be required as `trip/analyzer`
-
-
-```ruby
-require "trip/analyzer"
-```
-
+The analyzer can be required as `trip/analyzer`.  
 The analyzer can be invoked by calling `Trip.analyze` with a block. 
 The `page` keyword argument being set to true opens the stacktrace 
 using the pager `less`. By default paging is off.
 
 ```ruby
-require "xchan"
 require "trip/analyzer"
+require "xchan"
 Trip.analyze(page: true) { xchan.send 123 }
 ```
 
-When the above code is run a stacktrace analysis similar to this is displayed:
+When the above code is run a stacktrace analysis similar to this is shown:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
