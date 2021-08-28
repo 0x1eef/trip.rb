@@ -132,7 +132,7 @@ gem install trip.rb paint
 
 #### <a id='stacktrace-analyzer-usage'>Usage</a>
 
-#### <a id='stacktrace-analyzer-method'> Analyze a method call</a>
+**<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>**
 
 The analyzer can be required as `trip/analyzer`.  
 The analyzer can be invoked by calling `Trip.analyze { <code> }`. In
@@ -150,7 +150,7 @@ When the above code is run an analysis of the stacktrace  like this is shown:
 
 [Back to top](#top)
 
-#### <a id='stacktrace-analyzer-precision'>Set precision used for execution time</a>
+<a id='stacktrace-analyzer-precision'>**2. Set precision used for execution time**</a>
 
 The default precision used when printing the execution time of a method is 4. 
 It can be changed with the `precision` keyword argument. For example:
@@ -165,7 +165,7 @@ shows a stacktrace analysis similar to this:
 
 [Back to top](#top)
 
-#### <a id='stacktrace-custom-io'>Write analysis to a custom IO</a>
+<a id='stacktrace-custom-io'>**3. Write analysis to a custom IO**</a>
 
 The stacktrace analysis can be written to a custom IO - such as a StringIO - by setting
 the `io` keyword argument. Disabling color can be useful for a case like this 
