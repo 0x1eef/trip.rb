@@ -144,7 +144,7 @@ require "xchan"
 Trip.analyze(page: true) { xchan.send 123 }
 ```
 
-When the above code is run an analysis of the stacktrace like this is shown:
+When the above code is run an analysis of the stacktrace  like this is shown:
 
 ![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
@@ -167,7 +167,7 @@ shows a stacktrace analysis similar to this:
 
 #### <a id='stacktrace-custom-io'>Write analysis to a custom IO</a>
 
-The stacktrace can be written to a custom IO - such as a StringIO - by setting
+The stacktrace analysis can be written to a custom IO - such as a StringIO - by setting
 the `io` keyword argument. Disabling color can be useful for a case like this 
 as well, which can be done by setting the `color` keyword argument to false.
 
