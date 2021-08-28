@@ -48,6 +48,6 @@ module Trip::Analyzer::Printer
   private
 
   def method_call_average(count)
-    (count / @method_call_count.to_f).round(2) * 100
+    ((count / @method_call_count.to_f) * 100).round(2)
   end
 end
