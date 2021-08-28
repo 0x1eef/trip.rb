@@ -40,13 +40,11 @@ class Trip::Analyzer
   # @return [IO]
   #  IO where the analysis was written to.
   def analyze io: $stdout, page: false, color: true, precision: DEFAULT_PRECISION
+    open_count, indent_by = 0, 0
+    stacktrace_io, io = StringIO.new, page ? StringIO.new : io
     mode = Paint.mode
     Paint.mode = color ? true : nil
-    open_count = 0
-    indent_by = 0
     events, duration = run_code
-    stacktrace_io = StringIO.new
-    io = StringIO.new if page
     print_about(io)
     events.reverse_each do |event, duration|
       indent_by = open_count * 2
