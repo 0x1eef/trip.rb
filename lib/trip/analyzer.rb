@@ -25,23 +25,33 @@ class Trip::Analyzer
   end
 
   # @param [Integer] precision
-  #  An integer representing the precision to be used when printing a method's
-  #  execution time.
+  #  An integer representing the precision to be used when printing
+  #  a method's execution time.
   #
-  # @return [void]
-  def analyze(precision: DEFAULT_PRECISION)
-    stringio = StringIO.new
+  # @param [IO] io
+  #  The IO to write the analysis to.
+  #
+  # @param [Boolean] page
+  #  When true the analysis is paged using the pager "less".
+  #
+  # @return [IO]
+  #  IO where the analysis was written to.
+  def analyze(io: $stdout, page: false, precision: DEFAULT_PRECISION)
     open_count = 0
     indent_by = 0
     events, duration = run_code
-    print_about
+    stacktrace_io = StringIO.new
+    io = StringIO.new if page
+    print_about(io)
     events.reverse_each do |event, duration|
       indent_by = open_count * 2
       open_count, indent_by = adjust_counters(event, open_count, indent_by)
-      print_event(stringio, event, indent_by, duration, precision)
+      print_event(stacktrace_io, event, indent_by, duration, precision)
     end
-    print_summary(duration, precision)
-    print_trace(stringio, precision)
+    print_summary(io, duration, precision)
+    print_trace(io, stacktrace_io, precision)
+    page(io) if page
+    io
   end
 
   private
@@ -73,6 +83,12 @@ class Trip::Analyzer
     [open_count, indent_by]
   end
 
+  def page(io)
+    pager = IO.popen(["less", "-c"], "w")
+    pager.write(io.string)
+    pager.close
+  end
+
   def event_path(event)
     path = [
       File.basename(File.dirname(event.path)),
@@ -86,11 +102,19 @@ end
 # detailed trace to $stdout.
 #
 # @example
+#  # Prints trace to $stdout (no paging)
 #  Trip.analyze { ERB.new("").result }
+#
+#  # Prints trace with a pager (less)
+#  Trip.analyze(page: true) { ERB.new("").result }
+#
+#  # Prints trace to a StringIO and returns it
+#  io = Trip.analyze(io: StringIO.new)
+#  io.string
 #
 # @param (see Trip::Analyzer#analyze)
 #
 # @return [void]
-def Trip.analyze precision: Trip::Analyzer::DEFAULT_PRECISION, &blk
-  Trip::Analyzer.new(&blk).analyze(precision: precision)
+def Trip.analyze io: $stdout, page: false, precision: Trip::Analyzer::DEFAULT_PRECISION, &blk
+  Trip::Analyzer.new(&blk).analyze(io: io, page: page, precision: precision)
 end

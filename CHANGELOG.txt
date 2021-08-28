@@ -2,6 +2,10 @@
 
 ## current
 
+* Add "io" keyword argument to Trip.analyze
+
+* Add "page" keyword argument to Trip.analyze
+
 * Rename "Trip#run_safely" as "Trip#rescued_run".
 
 * Improve trace analysis appearance

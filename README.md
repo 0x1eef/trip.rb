@@ -10,6 +10,7 @@
     * [About](#stacktrace-analyzer-about)
     * [Usage](#stacktrace-analyzer-usage)
     * [Precision](#stacktrace-analyzer-precision)
+    * [Writing to a custom IO](#stacktrace-custom-io)
     * [Best guessing for methods implemented in C](#c-note)
 * [Install](#install)
 * [License](#license)
@@ -113,28 +114,30 @@ The paint gem is used for colorized output by the analyzer.
 gem install trip.rb paint
 ```
 
-The analyzer can be required as `trip/analyzer`.   
-Requiring `trip` won't require the analyzer.
+The analyzer can be required as `trip/analyzer`
+
 
 ```ruby
 require "trip/analyzer"
 ```
 
-It can be invoked by calling `Trip.analyze` with a block:
+The analyzer can be invoked by calling `Trip.analyze` with a block. 
+The `page` keyword argument being set to true opens the stacktrace 
+using the pager `less`. By default paging is off.
 
 ```ruby
 require "erb"
 require "trip/analyzer"
-Trip.analyze { ERB.new("foo").result }
+Trip.analyze(page: true) { ERB.new("foo").result }
 ```
 
 Running 
     
-    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze { xchan.send 123 }' | less -c
+    ruby -rxchan -rtrip/analyzer -e 'Trip.analyze(page: true) { xchan.send 12 }'
 
 shows a stacktrace similar to this:
 
-![preview 1](./screenshots/screenshot_1.png)
+![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
 
 #### <a id='stacktrace-analyzer-precision'>Precision</a>
 
@@ -142,12 +145,23 @@ The default precision used when printing the execution time of a method is 4.
 It can be changed with the `precision` keyword argument. For example:
 
 ```ruby
-Trip.analyze(precision: 2) { sleep 2.553 }
+Trip.analyze(page: true, precision: 2) { sleep 2.553 }
 ```
 
 shows a stacktrace similar to this:
 
-![preview 2](./screenshots/screenshot_2.png)
+![preview 2](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_2.png)
+
+#### <a id='stacktrace-custom-io'>Writing to a custom IO</a>
+
+The stacktrace can be written to a custom IO - such as a StringIO - by setting
+the `io` keyword argument. For example:
+
+```ruby
+str_io = StringIO.new
+Trip.analyze(io: str_io) { sleep 2.55 }
+puts str_io.string
+```
 
 #### <a id='c-note'>Best guessing for methods implemented in C</a> 
 
