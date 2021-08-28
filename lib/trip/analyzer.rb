@@ -34,9 +34,17 @@ class Trip::Analyzer
   # @param [Boolean] page
   #  When true the analysis is paged using the pager "less".
   #
+  # @param [Boolean] color
+  #  When false color is disabled.
+  #
   # @return [IO]
   #  IO where the analysis was written to.
-  def analyze(io: $stdout, page: false, precision: DEFAULT_PRECISION)
+  def analyze io: $stdout,
+              page: false,
+              color: true,
+              precision: DEFAULT_PRECISION
+    mode = Paint.mode
+    Paint.mode = color ? true : nil
     open_count = 0
     indent_by = 0
     events, duration = run_code
@@ -52,6 +60,8 @@ class Trip::Analyzer
     print_trace(io, stacktrace_io, precision)
     page(io) if page
     io
+  ensure
+    Paint.mode = mode
   end
 
   private
@@ -108,13 +118,23 @@ end
 #  # Prints trace with a pager (less)
 #  Trip.analyze(page: true) { ERB.new("").result }
 #
-#  # Prints trace to a StringIO and returns it
-#  io = Trip.analyze(io: StringIO.new)
+#  # Prints a trace to a StringIO with colors disabled
+#  # and then returns the io.
+#  io = Trip.analyze(color: false, io: StringIO.new)
 #  io.string
 #
 # @param (see Trip::Analyzer#analyze)
 #
 # @return [void]
-def Trip.analyze io: $stdout, page: false, precision: Trip::Analyzer::DEFAULT_PRECISION, &blk
-  Trip::Analyzer.new(&blk).analyze(io: io, page: page, precision: precision)
+def Trip.analyze io: $stdout,
+                 color: true,
+                 page: false,
+                 precision: Trip::Analyzer::DEFAULT_PRECISION,
+                 &blk
+  Trip::Analyzer.new(&blk).analyze(
+    io: io,
+    color: color,
+    page: page,
+    precision: precision
+  )
 end

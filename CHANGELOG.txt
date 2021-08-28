@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.2.0
+
+* Add "color" keyword argument to Trip.analyze.
+  When false it disables color.
+
 ## v2.1.0
 
 * Add "io" keyword argument to Trip.analyze
