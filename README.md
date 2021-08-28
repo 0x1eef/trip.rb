@@ -35,13 +35,13 @@ the calling thread and Trip's thread until the trace completes.
 
 ### <a id='as-a-concurrent-tracer'>Using trip.rb a concurrent tracer</a>
 
-#### <a id=install-trip-1>Install</a>
+<a id=install-trip-1>**Install**</a>
 
 Trip.rb is available as a rubygem:
 
     gem install trip.rb
 
-#### <a id='concurrent-tracer-usage'>Usage</a>
+<a id='concurrent-tracer-usage'>**Usage**</a>
 
 
 **<a id='usage-1'>1. Perform a trace with default settings</a>**
@@ -121,7 +121,7 @@ Trip.rb implements a stacktrace analyzer that can be useful for debugging and
 gaining insight into the code being traced. One day I might extract it into 
 its own gem - for now it is shipped with the Trip.rb gem.
 
-#### <a id=install-trip-2>Install</a>
+<a id=install-trip-2>**Install**</a>
 
 First install the trip.rb and paint gems.  
 The paint gem is used for colorized output by the analyzer. 
@@ -130,7 +130,7 @@ The paint gem is used for colorized output by the analyzer.
 gem install trip.rb paint
 ```
 
-#### <a id='stacktrace-analyzer-usage'>Usage</a>
+<a id='stacktrace-analyzer-usage'>**Usage**</a>
 
 **<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>**
 
