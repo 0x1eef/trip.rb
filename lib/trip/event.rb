@@ -145,11 +145,14 @@ class Trip::Event < BasicObject
     if c_call? || c_return?
       mod = caller_context.module
       mname = caller_context.method_name
-      if mod.method_defined?(mname) ||
-          mod.private_method_defined?(mname)
-        "#"
+      if ::Module === mod
+        if mod.method_defined?(mname) || mod.private_method_defined?(mname)
+          "#"
+        else
+          "."
+        end
       else
-        "."
+        "#"
       end
     else
       ::Module === binding.receiver ? "." : "#"
