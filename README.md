@@ -168,9 +168,9 @@ shows a stacktrace analysis similar to this:
 
 <a id='stacktrace-custom-io'>*3. Write stacktrace analysis to a custom IO*</a>
 
-The stacktrace analysis can be written to a custom IO - such as a StringIO - by setting
-the `io` keyword argument. Disabling color can be useful for a case like this 
-as well, which can be done by setting the `color` keyword argument to false.
+The stacktrace analysis can be written to a custom IO - such as a StringIO or File - 
+by setting the `io` keyword argument. Disabling color can be useful for a case 
+like this, which can be done by setting the `color` keyword argument to false.
 
 For example:
 
