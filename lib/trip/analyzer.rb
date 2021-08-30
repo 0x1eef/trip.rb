@@ -29,16 +29,16 @@ class Trip::Analyzer
   #  a method's execution time.
   #
   # @param [IO] io
-  #  The IO to write the analysis to.
+  #  The IO to write the stacktrace report to.
   #
   # @param [Boolean] page
-  #  When true the analysis is paged using the pager "less".
+  #  When true the stacktrace report is paged using the pager "less".
   #
   # @param [Boolean] color
   #  When false color is disabled.
   #
   # @return [IO]
-  #  IO where the analysis was written to.
+  #  IO where the stacktrace report was written to.
   def analyze io: $stdout, page: false, color: true, precision: DEFAULT_PRECISION
     open_count, indent_by = 0, 0
     stacktrace_io, io = StringIO.new, page ? StringIO.new : io
@@ -103,18 +103,18 @@ class Trip::Analyzer
   end
 end
 
-# Analyzes a block of Ruby code by printing a
-# detailed trace to $stdout.
+# Analyze a block of Ruby code by printing a
+# detailed stacktrace report to $stdout.
 #
 # @example
-#  # Prints trace to $stdout (no paging)
+#  # Prints stacktrace report to $stdout (no paging)
 #  Trip.analyze { ERB.new("").result }
 #
-#  # Prints trace with a pager (less)
+#  # Prints stacktrace report with a pager (less)
 #  Trip.analyze(page: true) { ERB.new("").result }
 #
-#  # Prints a trace to a StringIO with colors disabled
-#  # and then returns the io.
+#  # Prints a stactrace report to a StringIO with colors
+#  # disabled and then returns the io.
 #  io = Trip.analyze(color: false, io: StringIO.new)
 #  io.string
 #

@@ -13,7 +13,7 @@
 
 * Rename "Trip#run_safely" as "Trip#rescued_run".
 
-* Improve trace analysis appearance
+* Improve trace report appearance
 
 * Fix bug where duration would be incorrectly calculated
 
