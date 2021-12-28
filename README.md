@@ -21,7 +21,7 @@ tracer then pauses (suspends) the thread when a condition is encountered,
 and yields control back to the calling thread (normally the main thread).
 
 The main thread can then resume the tracer, and repeat this process until the
-thread exits. While the tracer thread is paused, the main thread can examine
+tracer thread exits. While the tracer thread is paused, the main thread can examine
 event information, and evaluate code in the context (Binding) of where an
 event occurred.
 
