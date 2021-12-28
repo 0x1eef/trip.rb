@@ -34,6 +34,7 @@ class Trip
   # @private
   DEFAULT_LISTEN_EVENTS = %i[call c_call return c_return]
 
+  ##
   # @param [Proc] block
   #  A block that will be traced and run on its own thread.
   #
@@ -54,56 +55,12 @@ class Trip
     @caller = Thread.current
   end
 
-  # Stores a callable that decides when to pause the tracer.
-  #
-  # @param [Proc] callable
-  #  A block or an object that responds to "#call".
-  #
-  # @raise [ArgumentError]
-  #  Raised when the "callable"  argument is not provided.
-  #
-  # @return [nil]
-  #  Returns nil.
-  #
-  # @example
-  #  trip = Trip.new { Kernel.puts 1+1 }
-  #  trip.pause_when {|event| event.c_call? || event.c_return? }
-  #  event = trip.start
-  def pause_when(callable = nil, &block)
-    pauser = callable || block
-    raise ArgumentError, "Expected a block or an object implementing #call" unless pauser
-    @pause_when = pauser
-    nil
-  end
-
-  # @return [Boolean]
-  #  Returns true when a trace has been started
-  def started?
-    @thread != nil
-  end
-
-  # @return [Boolean]
-  #  Returns true when the tracer thread is running.
-  def running?
-    @thread and @thread.status == RUN_STATE
-  end
-
-  # @return [Boolean]
-  #  Returns true when the tracer thread is sleeping.
-  def sleeping?
-    @thread and @thread.status == SLEEP_STATE
-  end
-
-  # @return [Boolean]
-  #  Returns true when the tracer thread has finished.
-  def finished?
-    @thread and END_STATE.include?(@thread.status)
-  end
-
+  ##
   # Starts the tracer.
   #
   # @raise [Trip::InProgessError]
-  #  Raised when there is already a trace in progress.
+  #  Raised when the tracer has already been started
+  #  and hasn't finished tracing.
   #
   # @raise [Trip::PauseError]
   #  Raised when an exception is raised by the callable
@@ -130,13 +87,12 @@ class Trip
     @queue.deq
   end
 
-  # Resumes a trace or starts one if {#start} hasn't been called.
+  ##
+  # Resumes the tracer - or starts it if the tracer hasn't
+  # started yet.
   #
   # @raise [Trip::PauseError] (see #start)
-  #
   # @raise [Trip::InternalError] (see #start)
-  #
-  #
   # @return [Trip::Event, nil]
   #  Returns an event or nil.
   def resume
@@ -148,6 +104,7 @@ class Trip
     end
   end
 
+  ##
   # Stops the tracer.
   #
   # @return [nil]
@@ -158,6 +115,58 @@ class Trip
       @thread.join
       nil
     end
+  end
+
+  ##
+  # Stores a callable that decides when to pause the tracer
+  # by returning a true or false when called.
+  #
+  # @param [Proc] callable
+  #  A block or an object that implements "call".
+  #
+  # @raise [ArgumentError]
+  #  Raised when the "callable" argument is not provided.
+  #
+  # @return [nil]
+  #  Returns nil.
+  #
+  # @example
+  #  trip = Trip.new { Kernel.puts 1 + 1 }
+  #  trip.pause_when {|event| event.c_call? || event.c_return? }
+  #  event = trip.start
+  def pause_when(callable = nil, &block)
+    pauser = callable || block
+    raise ArgumentError, "Expected a block or an object implementing #call" unless pauser
+    @pause_when = pauser
+    nil
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when the tracer has started.
+  def started?
+    @thread != nil
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when the tracer thread is running.
+  def running?
+    @thread and @thread.status == RUN_STATE
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when the tracer thread is sleeping.
+  def sleeping?
+    @thread and @thread.status == SLEEP_STATE
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when the tracer thread has finished.
+  def finished?
+    @thread and END_STATE.include?(@thread.status)
   end
 
   private

@@ -1,20 +1,31 @@
 # frozen_string_literal: true
 
 class Trip::Event < BasicObject
+  ##
   # Returns one of the following event names:
-  #  * :c_call
-  #  * :c_return
-  #  * :call
-  #  * :return
-  #  * :class
-  #  * :end
-  #  * :line
-  #  * :raise
+  #
+  #  * <code>:c_call</code>
+  #  * <code>:c_return</code>
+  #  * <code>:call</code>
+  #  * <code>:return</code>
+  #  * <code>:class</code>
+  #  * <code>:end</code>
+  #  * <code>:line</code>
+  #  * <code>:raise</code>
+  #  * <code>:b_call</code>
+  #  * <code>:b_return</code>
+  #  * <code>:thread_begin</code>
+  #  * <code>:thread_end</code>
+  #  * <code>:fiber_switch</code>
+  #  * <code>:script_compiled</code>
+  #
+  # @see https://docs.w3cub.com/ruby~3/tracepoint#class-TracePoint-label-Events
   #
   # @return [Symbol]
-  #  An event name
+  #  An event name.
   attr_reader :name
 
+  ##
   # @return [Integer]
   #  Number of seconds since epoch.
   attr_reader :created_at
@@ -25,18 +36,21 @@ class Trip::Event < BasicObject
     @created_at = ::Process.clock_gettime(::Process::CLOCK_REALTIME)
   end
 
+  ##
   # @return [String]
   #  Returns the path where an event occurred.
   def path
     @tp_details[:path]
   end
 
+  ##
   # @return [Integer]
   #  Returns the line number where an event occurred.
   def lineno
     @tp_details[:lineno]
   end
 
+  ##
   # @return [Object, BasicObject]
   #  Returns the value of self in the context of where
   #  an event occurred.
@@ -44,6 +58,7 @@ class Trip::Event < BasicObject
     @tp_details[:self]
   end
 
+  ##
   # @return [Module]
   #  Returns the Module in the context of where an
   #  event occurred.
@@ -52,6 +67,7 @@ class Trip::Event < BasicObject
     ::Module === event_self ? event_self : event_self.class
   end
 
+  ##
   # @return [Symbol]
   #  Returns the ID (name) of the method where an event
   #  occurred.
@@ -59,6 +75,7 @@ class Trip::Event < BasicObject
     @tp_details[:method_id]
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when the event is for the definition of
   #  a class or module using "class Name" or "module Name"
@@ -67,6 +84,7 @@ class Trip::Event < BasicObject
     name == :class
   end
 
+  ##
   # @return [Binding]
   #  Returns a Binding object in the context of where
   #  an event occurred.
@@ -74,6 +92,7 @@ class Trip::Event < BasicObject
     @tp_details[:binding]
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a call from a
   #  method implemented in Ruby.
@@ -81,6 +100,7 @@ class Trip::Event < BasicObject
     @name == :call
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a return from a
   #  method implemented in Ruby.
@@ -88,6 +108,7 @@ class Trip::Event < BasicObject
     @name == :return
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a call to a method
   #  implemented in C.
@@ -95,6 +116,7 @@ class Trip::Event < BasicObject
     @name == :c_call
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a return from a
   #  method implemented in C.
@@ -102,16 +124,18 @@ class Trip::Event < BasicObject
     @name == :c_return
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a call to a
-  #  method implemented in Ruby or C.
+  #  method implemented in either Ruby or C.
   def call?
     c_call? || rb_call?
   end
 
+  ##
   # @return [Boolean]
   #  Returns true when an event is a return from a
-  #  method implemented in Ruby or C.
+  #  method implemented in either Ruby or C.
   def return?
     c_return? || rb_return?
   end
