@@ -166,16 +166,28 @@ class Trip
     return if tp.path == __FILE__ ||
               tp.path == '<internal:trace_point>' ||
               @thread != tp.binding.eval('Thread.current')
-    internal_error = Trip::InternalError.new("The tracer encountered an internal error and crashed")
-    pause_error = Trip::PauseError.new("The pause Proc encountered an error and crashed")
-    rescued_run(internal_error) do
+    rescued_yield(internal_error) do
       event = Event.new(tp.event, copy_tp(tp))
-      if rescued_run(pause_error) { @pause_when.call(event) }
+      if rescued_yield(pause_error) { @pause_when.call(event) }
         @queue.enq(event)
         @tracer.disable
         Thread.stop
       end
     end
+  end
+
+  def internal_error
+    Trip::InternalError.new(
+      "The tracer encountered an internal error and crashed. " \
+      "See #cause for details."
+    )
+  end
+
+  def pause_error
+    Trip::PauseError.new(
+      "The pause_when Proc encountered an error and crashed. " \
+      "See #cause for details."
+    )
   end
 
   def copy_tp(tp)
@@ -188,7 +200,7 @@ class Trip
     }
   end
 
-  def rescued_run(e)
+  def rescued_yield(e)
     yield
   rescue *RESCUABLE_EXCEPTIONS => cause
     e.define_singleton_method(:cause) { cause }
