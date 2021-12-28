@@ -152,21 +152,24 @@ class Trip
   # @return [Boolean]
   #  Returns true when the tracer thread is running.
   def running?
-    @thread and @thread.status == RUN_STATE
+    return false unless @thread
+    @thread.status == RUN_STATE
   end
 
   ##
   # @return [Boolean]
   #  Returns true when the tracer thread is sleeping.
   def sleeping?
-    @thread and @thread.status == SLEEP_STATE
+    return false unless @thread
+    @thread.status == SLEEP_STATE
   end
 
   ##
   # @return [Boolean]
   #  Returns true when the tracer thread has finished.
   def finished?
-    @thread and END_STATE.include?(@thread.status)
+    return false unless @thread
+    END_STATE.include?(@thread.status)
   end
 
   private

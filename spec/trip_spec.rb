@@ -15,7 +15,7 @@ RSpec.describe Trip do
     Trip::Planet.new "earth"
   end
 
-  let(:trip) do
+  subject(:trip) do
     Trip.new { planet.echo("ping") }
   end
 
@@ -100,31 +100,32 @@ RSpec.describe Trip do
   end
 
   describe "#finished?" do
-    it "returns true" do
-      trip.start
-      trip.resume while trip.resume
-      expect(trip).to be_finished
+    context "after the tracer has finished" do
+      before { trip.resume while trip.resume }
+
+      it { is_expected.to be_finished }
     end
 
-    it "returns false" do
-      trip.start
-      expect(trip).to_not be_finished
+    context "before the tracer has finished" do
+      before { trip.start }
+
+      it { is_expected.to_not be_finished }
     end
 
-    it "returns nil" do
-      expect(trip.finished?).to be(nil)
+    context "before the tracer has started" do
+      it { is_expected.to_not be_finished }
     end
   end
 
   describe "#running?" do
-    it "returns false" do
-      trip.start
-      trip.resume while trip.resume
-      expect(trip).to_not be_running
+    context "after the tracer has finished" do
+      before { trip.resume while trip.resume }
+
+      it { is_expected.to_not be_running }
     end
 
-    it "returns nil" do
-      expect(trip.running?).to be(nil)
+    context "before the tracer has started" do
+      it { is_expected.to_not be_running }
     end
   end
 end
