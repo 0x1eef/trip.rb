@@ -1,90 +1,105 @@
 # frozen_string_literal: true
 
 class Trip::Event < BasicObject
-  # @attr_reader [Module] module
-  #  The module where an event occurred.
-  #
-  # @attr_reader [Symbol] method_name
-  #  The name of a method where an event occurred.
-  CallerContext = ::Struct.new(:module, :method_name)
-
   # Returns one of the following event names:
+  #  * :c_call
+  #  * :c_return
+  #  * :call
+  #  * :return
+  #  * :class
+  #  * :end
+  #  * :line
+  #  * :raise
   #
-  #   * c-call
-  #   * c-return
-  #   * call
-  #   * return
-  #   * class
-  #   * end
-  #   * line
-  #   * raise
-  #
-  # @return [String]
-  #  an event name
+  # @return [Symbol]
+  #  An event name
   attr_reader :name
 
   # @return [Integer]
   #  Number of seconds since epoch.
   attr_reader :created_at
 
-  def initialize(name, event)
+  def initialize(name, tp_details)
     @name = name
-    @event = event
+    @tp_details = tp_details
     @created_at = ::Process.clock_gettime(::Process::CLOCK_REALTIME)
   end
 
   # @return [String]
   #  Returns the path where an event occurred.
   def path
-    @event[:path]
+    @tp_details[:path]
   end
 
   # @return [Integer]
   #  Returns the line number where an event occurred.
   def lineno
-    @event[:lineno]
+    @tp_details[:lineno]
   end
 
-  # @return [Trip::Event::CallerContext]
-  #  Returns a struct containing the module and method name
-  #  where an event occurred.
-  def caller_context
-    CallerContext.new @event[:module], @event[:method_name]
+  # @return [Object, BasicObject]
+  #  Returns the value of self in the context of where
+  #  an event occurred.
+  def self
+    @tp_details[:self]
+  end
+
+  # @return [Module]
+  #  Returns the Module in the context of where an
+  #  event occurred.
+  def module
+    event_self = self.self
+    ::Module === event_self ? event_self : event_self.class
+  end
+
+  # @return [Symbol]
+  #  Returns the ID (name) of the method where an event
+  #  occurred.
+  def method_id
+    @tp_details[:method_id]
+  end
+
+  # @return [Boolean]
+  #  Returns true when the event is for the definition of
+  #  a class or module using "class Name" or "module Name"
+  #  syntax.
+  def module_def?
+    name == :class
   end
 
   # @return [Binding]
   #  Returns a Binding object in the context of where
   #  an event occurred.
   def binding
-    @event[:binding]
+    @tp_details[:binding]
   end
 
   # @return [Boolean]
   #  Returns true when an event is a call from a
   #  method implemented in Ruby.
   def rb_call?
-    @name == "call"
+    @name == :call
   end
 
   # @return [Boolean]
   #  Returns true when an event is a return from a
   #  method implemented in Ruby.
   def rb_return?
-    @name == "return"
+    @name == :return
   end
 
   # @return [Boolean]
   #  Returns true when an event is a call to a method
   #  implemented in C.
   def c_call?
-    @name == "c-call"
+    @name == :c_call
   end
 
   # @return [Boolean]
   #  Returns true when an event is a return from a
   #  method implemented in C.
   def c_return?
-    @name == "c-return"
+    @name == :c_return
   end
 
   # @return [Boolean]
@@ -101,28 +116,12 @@ class Trip::Event < BasicObject
     c_return? || rb_return?
   end
 
-  # @example
-  #  event1.signature  # => "Foo.bar"
-  #  event2.signature  # => "Foo#bar"
-  #
-  # @return [String]
-  #  Returns the signature for the method where an event occurred
-  #  by using "#" to denote instance methods and using "." to denote
-  #  singleton methods.
-  def signature
-    [
-      caller_context.module.to_s,
-      method_notation,
-      caller_context.method_name
-    ].join
-  end
-
   # @return [String]
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \
-    "name='#{name}'" \
-    "file='#{path}' lineno='#{lineno}' " \
-    "module='#{caller_context.module}' method_name='#{caller_context.method_name}' " \
+    "name='#{name}' " \
+    "path='#{path}' lineno='#{lineno}' " \
+    "self='#{self.self}' method_id='#{method_id}' " \
     "binding=#{binding.inspect}>"
   end
 
@@ -130,32 +129,5 @@ class Trip::Event < BasicObject
   #  Returns a binding object for an instance of {Trip::Event}.
   def __binding__
     ::Kernel.binding
-  end
-
-  private
-
-  # Best guess the method notation to use.
-  def method_notation
-    # C method calls and returns have a Binding whose
-    # receiver is the self of the nearest Ruby method
-    # rather than the self of the C method under trace.
-    #
-    # As a result we best guess if the method is an instance
-    # method or a singleton method for methods implemented in C.
-    if c_call? || c_return?
-      mod = caller_context.module
-      mname = caller_context.method_name
-      if ::Module === mod
-        if mod.method_defined?(mname) || mod.private_method_defined?(mname)
-          "#"
-        else
-          "."
-        end
-      else
-        "#"
-      end
-    else
-      ::Module === binding.receiver ? "." : "#"
-    end
   end
 end

@@ -26,20 +26,31 @@ class Trip
   # @private
   END_STATE = [nil, false]
 
+  # The default condition for which to pause the tracer.
   # @private
-  PAUSE_WHEN = ->(event) { event.rb_call? || event.rb_return? }
+  DEFAULT_PAUSE_WHEN = ->(event) { event.call? || event.return? }
+
+  # The default events to listen for.
+  # @private
+  DEFAULT_LISTEN_EVENTS = %i[call c_call return c_return]
 
   # @param [Proc] block
-  #  The block to be traced.
+  #  A block that will be traced and run on its own thread.
+  #
+  # @param [Array<Symbol>] events
+  #  An array of event names, as Symbols, which the tracer
+  #  should listen for.
   #
   # @return [Trip]
   #  Returns an instance of Trip.
-  def initialize(&block)
+  def initialize(events: DEFAULT_LISTEN_EVENTS, &block)
     raise ArgumentError, "Expected a block to trace" unless block
     @thread = nil
+    @tracer = nil
     @block = block
     @queue = nil
-    @pause_when = PAUSE_WHEN
+    @pause_when = DEFAULT_PAUSE_WHEN
+    @events = events == :all ? [] : events
     @caller = Thread.current
   end
 
@@ -110,9 +121,10 @@ class Trip
     end
     @queue = Queue.new
     @thread = Thread.new do
-      Thread.current.set_trace_func method(:on_event).to_proc
+      @tracer = TracePoint.new(*@events, &method(:on_event))
+      @tracer.enable
       @block.call
-      Thread.current.set_trace_func(nil)
+      @tracer.disable
       @queue.enq(nil)
     end
     @queue.deq
@@ -130,6 +142,7 @@ class Trip
   def resume
     return start unless started?
     if sleeping?
+      @tracer.enable
       @thread.wakeup
       @queue.deq
     end
@@ -140,7 +153,7 @@ class Trip
   # @return [nil]
   def stop
     if @thread
-      @thread.set_trace_func(nil)
+      @tracer.disable
       @thread.exit
       @thread.join
       nil
@@ -149,30 +162,37 @@ class Trip
 
   private
 
-  def on_event(name, path, lineno, method_name, binding, mod)
+  def on_event(tp)
+    return if tp.path == __FILE__ ||
+              tp.path == '<internal:trace_point>' ||
+              @thread != tp.binding.eval('Thread.current')
     internal_error = Trip::InternalError.new("The tracer encountered an internal error and crashed")
     pause_error = Trip::PauseError.new("The pause Proc encountered an error and crashed")
     rescued_run(internal_error) do
-      event = Event.new name, {
-        path: path,
-        lineno: lineno,
-        module: mod,
-        method_name: method_name,
-        binding: binding
-      }
-      return if event.path == __FILE__
+      event = Event.new(tp.event, copy_tp(tp))
       if rescued_run(pause_error) { @pause_when.call(event) }
         @queue.enq(event)
+        @tracer.disable
         Thread.stop
       end
     end
+  end
+
+  def copy_tp(tp)
+    {
+      self: tp.self,
+      method_id: tp.method_id,
+      binding: tp.binding,
+      path: tp.path.dup,
+      lineno: tp.lineno,
+    }
   end
 
   def rescued_run(e)
     yield
   rescue *RESCUABLE_EXCEPTIONS => cause
     e.define_singleton_method(:cause) { cause }
-    Thread.current.set_trace_func(nil)
+    @tracer.disable
     @caller.raise(e)
     false
   end

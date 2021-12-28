@@ -1,205 +1,151 @@
 # <a id='top'>trip.rb</a>
 
-**Table of contents**
+Trip.rb is a concurrent tracer that can pause (suspend) and resume the code
+it is tracing. The tracer yields control between two threads, typically
+the main thread and a thread that Trip.rb creates. The process of yielding
+control back and forth between the two threads is repeated until the trace
+has finished.
 
-* [Introduction](#introduction)
-* [Getting started](#examples) 
-  * [Using trip.rb as a concurrent tracer](#as-a-concurrent-tracer)
-      * [Install](#install-trip-1)
-      * [Usage examples](#concurrent-tracer-usage)
-          * [Perform a trace with default settings](#usage-1)
-          * [Perform a trace with custom settings](#usage-2)
-          * [Access and alter the execution context of a Trip::Event](#usage-3)
-  * [Using trip.rb as a stacktrace analyzer](#as-a-stacktrace-analyzer)
-      * [Install](#install-trip-2)
-      * [Usage examples](#stacktrace-analyzer-usage)
-          * [Analyze a method call](#stacktrace-analyzer-method)
-          * [Set precision used for execution time](#stacktrace-analyzer-precision)
-          * [Write the stacktrace report to a custom IO](#stacktrace-custom-io)
-      * [C method limitation](#c-note)
-* [License](#license)
+Trip.rb is implemented using [TracePoint](https://docs.w3cub.com/ruby~3/tracepoint) -
+where as before Trip.rb used ["Thread#set_trace_func"](https://docs.w3cub.com/ruby~3/thread#method-i-set_trace_func).
+TracePoint being its modern replacement, it was decided to update Trip.rb's
+internals to use TracePoint instead - starting from v3.0.0.
 
-## <a id='introduction'>Introduction</a>
+## Demo
 
-Trip.rb is a concurrent tracer that can pause, resume and alter the code 
-it is tracing. The tracer yields control between two threads, typically 
-the main thread and a thread that Trip.rb creates. Bundled with Trip.rb 
-is a [stacktrace analyzer](#as-a-stacktrace-analyzer) that serves as an 
-example and as a useful debugging tool. 
+**Concurency**
 
-Under the hood, Trip uses `Thread#set_trace_func` and spawns a new thread
-dedicated to running a block of Ruby code. Control is then yielded between 
-the calling thread and Trip's thread until the trace completes.
+You might wonder what is meant by "concurrent tracer"; it can be explained
+as a tracer that spawns a new thread to run and trace a block of Ruby code. The
+tracer then pauses (suspends) the thread when a condition is encountered,
+and yields control back to the calling thread (normally the main thread).
 
-## <a id='examples'>Getting started</a>
+The main thread can then resume the tracer, and repeat this process until the
+thread exits. While the tracer thread is paused, the main thread can examine
+event information, and evaluate code in the context (Binding) of where an
+event occurred.
 
-### <a id='as-a-concurrent-tracer'>Using trip.rb a concurrent tracer</a>
-
-<a id=install-trip-1>**Install**</a>
-
-Trip.rb is available as a rubygem:
-
-    gem install trip.rb
-
-<a id='concurrent-tracer-usage'>**Usage examples**</a>
-
-
-*<a id='usage-1'>1. Perform a trace with default settings</a>*
-
-By default the tracer pauses on method call and method return events from 
-methods implemented in Ruby. This can be changed to cover both methods 
-implemented in C and Ruby - or meet other criteria - using `Trip#pause_when`, 
-which will be covered in the next example. 
-
-For this example a trace is done with the default settings.
+This example illustrates the explanation in code:
 
 ```ruby
+require "trip"
+
+##
+# Create a new Trip.
+# Pause for all events originating from "Kernel.puts".
+trip = Trip.new { Kernel.puts 1+1 }
+trip.pause_when { |event| event.module == Kernel && event.method_id == :puts }
+
+##
+# Start the tracer by spawning a new thread,
+# which is then paused (suspended) upon the
+# method call of "Kernel.puts"
+event1 = trip.start
+print event1.name, " ", event1.method_id, "\n"
+
+##
+# Resume the tracer thread from its paused state,
+# and then pause again for the method return of
+# "Kernel.puts".
+event2 = trip.resume
+print event2.name, " ", event2.method_id, "\n"
+
+##
+# This call to "trip.resume" returns nil, and
+# exits the tracer thread.
+event3 = trip.resume
+print event3.inspect, "\n"
+
+# == Produces the output:
+# c_call puts
+# 2
+# c_return puts
+# nil
+```
+
+**Deciding what events to listen for**
+
+The tracer will listen for method call and return events from methods
+implemented in both C and Ruby by default. The "events" keyword
+argument can be used to narrow or extend the scope of what events the
+tracer will listen for.
+
+This "events" option is built on a TracePoint feature
+that allows certain events to be excluded from the trace, and avoids
+wasting CPU time on the excluded events. This also works in the other
+direction, if you want to include all event types `Trip.new(events: :all) { ... }`
+can be used. A full list of event names is available [here](https://docs.w3cub.com/ruby~3/tracepoint#class-TracePoint-label-Events).
+
+In this example, we express interest in call and return events from
+Ruby methods only, which reduces noise from C call and return
+events in the code being traced. "trip.resume" is used to both
+start and resume the tracer, without having to use "trip.start".
+
+```ruby
+require "trip"
+
 def add(x,y)
-  # C method calls ignored by the tracer:
   Kernel.puts x + y
 end
 
-trip = Trip.new { add(20,50) }
-event1 = trip.start  # returns a Trip::Event (for the method call of "#add")
-event2 = trip.resume # returns a Trip::Event (for the method return of "#add")
-event3 = trip.resume # returns nil (thread exits)
-```
-
-*2. <a id='usage-2'>Perform a trace with custom settings</a>*
-
-The logic for deciding when to pause the tracer can be customized using the 
-`Trip#pause_when` method. The `#pause_when` method accepts a block or object
-implementing `#call`. The block or object is then called by Trip.rb during a 
-trace to decide if the trace should pause or continue uninterrupted.
-
-The block or an object's `#call` method is called with an instance of `Trip::Event` 
-to help support it in making its decision to pause or continue. A truthy return 
-value pauses the tracer and a falsey return value allows the trace to continue.
-
-This example configures Trip.rb to pause on method call and return events from 
-methods implemented in C (as opposed to those implemented in Ruby). Note that 
-when to pause can be based on other criteria from an event as well - not just
-method call and return events.
-
-```ruby
-trip = Trip.new { Kernel.puts 1+6 }
-trip.pause_when { |event| event.c_call? || event.c_return? }
-event1 = trip.start  # Event for c-call (Kernel#puts)
-event2 = trip.resume # Event for c-call (IO#puts)
-```
-
-*3. <a id='usage-3'>Access and alter the execution context of a Trip::Event</a>*
-
-`Trip::Event#binding` returns a [`Binding`](https://rubydoc.info/stdlib/core/Binding) object 
-that captures the execution context of where an event occurred. `Binding#eval` can be used
-to evaluate code in the captured execution context and that allows for altering the execution
-context while the code being traced is paused. 
-
-This feature works best for methods implemented in Ruby. For methods implemented in C, the 
-Binding provided will be for the nearest Ruby method - which can be confusing if you're not
-aware of it.
-
-
-```ruby
-def add(x,y)
-  to_s = "#{x} + #{y}"
+##
+# Create a new Trip.
+# The events listened for are scoped to call
+# and return events from Ruby methods (excludes C methods)
+trip = Trip.new(events: %i[call return]) { add(20,50) }
+while event = trip.resume
+  print event.name, " ", event.method_id, "\n"
 end
 
-trip = Trip.new { add(2,3) }
-event1 = trip.start           # Returns "call" Trip::Event 
-event1.binding.eval('x = 4')  # Change "x" to 4.
-event2 = trip.resume          # Returns "return" Trip::Event
-event2.binding.eval('to_s')   # returns '4 + 3'
-trip.resume                   # returns nil, thread exits
+# == Produces the output:
+# call add
+# 70
+# return add
 ```
 
-[Back to top](#top)
+**How to pause the tracer using custom logic**
 
-### <a id='as-a-stacktrace-analyzer'>Using trip.rb as a stacktrace analyzer</a>
+In the previous example we saw how to specify what events to listen for,
+in a similar vain the logic that decides when to pause the tracer can be
+customized as well -- with the "Trip#pause_when" method. By default the
+tracer will pause when it encounters call and return events from methods
+implemented in either C or Ruby.
 
-Trip.rb implements a stacktrace analyzer that can be useful for debugging and 
-gaining insight into the code being traced. One day I might extract it into 
-its own gem - for now it is shipped with the Trip.rb gem.
-
-<a id=install-trip-2>**Install**</a>
-
-First install the trip.rb and paint gems.  
-The paint gem is used for colorized output by the analyzer. 
-
-```
-gem install trip.rb paint
-```
-
-<a id='stacktrace-analyzer-usage'>**Usage examples**</a>
-
-*<a id='stacktrace-analyzer-method'> 1. Analyze a method call</a>*
-
-The analyzer can be required as `trip/analyzer`.  
-The analyzer can generate a stacktrace report by calling `Trip.analyze { <code> }`. 
-In this example setting the `page` keyword argument to true opens the report 
-using the pager `less`.
+In this example, we change that logic to pause the tracer when a new
+class or module is defined using "class Name" or "module Name". An important
+point to not overlook is that as the tracer runs, the tracer is suspended
+and resumed multiple times, and so are the class / module definitions.
 
 ```ruby
-require "trip/analyzer"
-require "xchan"
-Trip.analyze(page: true) { xchan.send 123 }
+require "trip"
+
+trip = Trip.new(events: %i[class]) do
+  class Foo
+  end
+
+  class Bar
+  end
+
+  class Baz
+  end
+end
+
+trip.pause_when { |event| event.module_def? }
+while event = trip.resume
+  print event.self, " class defined", "\n"
+end
+
+# == Produces output:
+# Foo class defined
+# Bar class defined
+# Baz class defined
 ```
 
-When the above code is run a stacktrace report similar to this should appear:
+## Install
 
-![preview 1](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_1.png)
+Trip.rb is available as a RubyGem:
 
-[Back to top](#top)
-
-<a id='stacktrace-analyzer-precision'>*2. Set precision used for execution time*</a>
-
-The default precision used when printing the execution time of a method is 4. 
-It can be changed with the `precision` keyword argument. For example:
-
-```ruby
-Trip.analyze(page: true, precision: 2) { sleep 2.553 }
-```
-
-shows a stacktrace report similar to this:
-
-![preview 2](https://github.com/0x1eef/trip.rb/raw/master/screenshots/screenshot_2.png)
-
-[Back to top](#top)
-
-<a id='stacktrace-custom-io'>*3. Write the stacktrace report to a custom IO*</a>
-
-The stacktrace report can be written to a custom IO - such as a StringIO or File - 
-by setting the `io` keyword argument. Disabling color can be useful for a case 
-like this, which can be done by setting the `color` keyword argument to false.
-
-For example:
-
-```ruby
-str_io = StringIO.new
-Trip.analyze(io: str_io, color: false) { sleep 2.55 }
-puts str_io.string
-```
-
-[Back to top](#top)
-
-<a id='c-note'>**C method limitation**</a> 
-
-Trip.rb's analyzer uses `#` to denote an instance method and it uses `.` to 
-denote a singleton method (also known as a class method) in the traces it 
-generates.
-
-This proved diffilcult to determine for methods implemented in C because 
-their binding's self is the self of the nearest Ruby method rather than the 
-self of the method being traced - as is the case with methods implemented 
-in Ruby.
-
-The best solution I found to date was to take a best guess on which notation 
-should be used for methods implemented in C. The best guess is sometimes
-incorrect. It's worth keeping that in mind for `c-call` and `c-return` events.
-
-Thankfully, methods implemented in Ruby don't have this problem.
-
-[Back to top](#top)
+    gem install trip.rb
 
 ## <a id='license'>License</a>
 
