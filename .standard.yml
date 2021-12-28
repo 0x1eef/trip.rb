@@ -1,5 +1,6 @@
 ignore:
-  - 'lib/trip/analyzer.rb':
+  - '**/*.rb':
     - Layout/ParameterAlignment
-  - 'lib/trip/analyzer/printer.rb':
     - Layout/ArgumentAlignment
+    - Lint/AssignmentInCondition
+    - Lint/ConstantDefinitionInBlock

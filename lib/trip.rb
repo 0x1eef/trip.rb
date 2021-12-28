@@ -164,8 +164,8 @@ class Trip
 
   def on_event(tp)
     return if tp.path == __FILE__ ||
-              tp.path == '<internal:trace_point>' ||
-              @thread != tp.binding.eval('Thread.current')
+              tp.path == "<internal:trace_point>" ||
+              @thread != tp.binding.eval("Thread.current")
     rescued_yield(internal_error) do
       event = Event.new(tp.event, copy_tp(tp))
       if rescued_yield(pause_error) { @pause_when.call(event) }
@@ -196,7 +196,7 @@ class Trip
       method_id: tp.method_id,
       binding: tp.binding,
       path: tp.path.dup,
-      lineno: tp.lineno,
+      lineno: tp.lineno
     }
   end
 

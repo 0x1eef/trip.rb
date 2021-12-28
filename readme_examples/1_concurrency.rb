@@ -1,6 +1,6 @@
 require "trip"
 
-trip = Trip.new { Kernel.puts 1+1 }
+trip = Trip.new { Kernel.puts 1 + 1 }
 trip.pause_when { |event| event.module == Kernel && event.method_id == :puts }
 
 # Start the tracer.
