@@ -18,53 +18,43 @@ RSpec.describe Trip::Event do
 
   describe "#name" do
     describe "call and return of method implemented in Ruby" do
+      before do
+        trip.pause_when { |event| event.rb_call? || event.rb_return? }
+      end
+
       it 'returns "call"' do
         event = trip.start
-        expect(event.name).to eq("call")
+        expect(event.name).to eq(:call)
       end
 
       it 'returns "return"' do
         trip.start
         event = trip.resume
-        expect(event.name).to eq("return")
+        expect(event.name).to eq(:return)
       end
     end
 
     describe "call and return of method implemented in C" do
       let(:trip) do
         trip = Trip.new { Kernel.print "" }
-        trip.pause_when { |event| event.caller_context.module == Kernel and event.caller_context.method_name == :print }
+        trip.pause_when { |event| event.module == Kernel and event.method_id == :print }
         trip
       end
 
       it 'returns "c-call"' do
         event = trip.start
-        expect(event.name).to eq("c-call")
+        expect(event.name).to eq(:c_call)
       end
 
       it 'returns "c-return"' do
         trip.start
         event = trip.resume
-        expect(event.name).to eq("c-return")
+        expect(event.name).to eq(:c_return)
       end
     end
   end
 
-  describe ".caller_context.module" do
-    it "returns the Module from where an event originated" do
-      event = trip.start
-      expect(event.caller_context.module).to eq(Trip::DummyClass)
-    end
-  end
-
-  describe ".caller_context.method_name" do
-    it "returns the name of the method where an event originated" do
-      event = trip.start
-      expect(event.caller_context.method_name).to eq(:run)
-    end
-  end
-
-  describe "#file" do
+  describe "#path" do
     it "returns __FILE__" do
       event = trip.start
       expect(event.path).to eq(__FILE__)
@@ -79,6 +69,10 @@ RSpec.describe Trip::Event do
   end
 
   describe "#binding" do
+    before do
+      trip.pause_when { |event| event.rb_call? || event.rb_return? }
+    end
+
     it "returns a binding" do
       event = trip.start
       expect(event.binding).to be_instance_of(Binding)

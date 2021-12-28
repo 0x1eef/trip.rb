@@ -30,5 +30,5 @@ Gem::Specification.new do |g|
   g.add_development_dependency "yard", "~> 0.9"
   g.add_development_dependency "redcarpet", "~> 3.5"
   g.add_development_dependency "rspec", "~> 3.10"
-  g.add_development_dependency "standardrb", "~> 1.1"
+  g.add_development_dependency "standardrb", "~> 1.0"
 end
