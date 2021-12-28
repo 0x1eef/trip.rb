@@ -4,3 +4,4 @@ ignore:
     - Layout/ArgumentAlignment
     - Lint/AssignmentInCondition
     - Lint/ConstantDefinitionInBlock
+    - Layout/MultilineOperationIndentation
