@@ -13,7 +13,7 @@ internals to use TracePoint instead - starting from v3.0.0.
 
 ## Demo
 
-**Concurency**
+**Concurrent**
 
 You might wonder what is meant by "concurrent tracer"; it can be explained
 as a tracer that spawns a new thread to run and trace a block of Ruby code. The
