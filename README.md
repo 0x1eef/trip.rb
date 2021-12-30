@@ -114,7 +114,7 @@ implemented in either C or Ruby.
 In this example, we change that logic to pause the tracer when a new
 class or module is defined using "class Name" or "module Name". An important
 point to not overlook is that as the tracer runs, the tracer is suspended
-and resumed multiple times, and so are the class / module definitions.
+and resumed multiple times, and so are the class definitions.
 
 ```ruby
 require "trip"
