@@ -63,7 +63,7 @@ print event3.inspect, "\n"
 # nil
 ```
 
-**Deciding what events to listen for**
+**Decide what events to listen for**
 
 The tracer will listen for method call and return events from methods
 implemented in both C and Ruby by default. The "events" keyword
@@ -71,8 +71,8 @@ argument can be used to narrow or extend the scope of what events the
 tracer will listen for.
 
 This "events" option is built on a TracePoint feature
-that allows certain events to be excluded from the trace, and avoids
-wasting CPU time on the excluded events. This also works in the other
+that allows certain events to be included or excluded from the trace, and
+avoids geenerating events for excluded events. This also works in the other
 direction, if you want to include all event types `Trip.new(events: :all) { ... }`
 can be used. A full list of event names is available [here](https://docs.w3cub.com/ruby~3/tracepoint#class-TracePoint-label-Events).
 
@@ -103,7 +103,7 @@ end
 # return add
 ```
 
-**How to pause the tracer using custom logic**
+**Pause the tracer using custom logic**
 
 In the previous example we saw how to specify what events to listen for,
 in a similar vain the logic that decides when to pause the tracer can be
