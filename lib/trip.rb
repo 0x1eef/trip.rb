@@ -119,7 +119,7 @@ class Trip
 
   ##
   # Stores a callable that decides when to pause the tracer
-  # by returning a true or false when called.
+  # by returning true or false when called.
   #
   # @param [Proc] callable
   #  A block or an object that implements "call".
