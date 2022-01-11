@@ -140,6 +140,14 @@ class Trip::Event < BasicObject
     c_return? || rb_return?
   end
 
+  ##
+  # @return [Boolean]
+  #  Returns true when an event is for the raise of
+  #  an exception.
+  def raise?
+    @name == :raise
+  end
+
   # @return [String]
   def inspect
     "#<Trip::Event:0x#{__id__.to_s(16)} " \

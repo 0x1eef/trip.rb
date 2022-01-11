@@ -141,6 +141,33 @@ end
 # Baz class defined
 ```
 
+**Start an IRB session when an exception is raised**
+
+In this example, we see how to start an IRB session exactly
+where an exception was raised. The example listens for only
+"raise" events, and when "putzzz" is called a NoMethodError 
+is raised. This pauses the tracer, and allows the main thread
+start an IRB session in the context of the "Person#greet" method.
+
+```ruby
+require "trip"
+
+class Person
+  def initialize(name: )
+    @name = name
+  end
+
+  def greet
+    putz "Hello"
+  end
+end
+
+trip = Trip.new(events: %i[raise]) { Person.new(name: "0x1eef").greet }
+trip.pause_when { |event| event.raise? }
+event = trip.start
+event.binding.irb
+```
+
 ## Install
 
 Trip.rb is available as a RubyGem:
