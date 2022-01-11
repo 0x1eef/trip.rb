@@ -6,7 +6,7 @@ class Person
   end
 
   def greet
-    putz "Hello"
+    putzzz "Hello"
   end
 end
 
