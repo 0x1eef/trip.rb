@@ -141,7 +141,7 @@ end
 # Baz class defined
 ```
 
-**Start an IRB session when an exception is raised**
+**Start an IRB session where an exception is raised**
 
 In this example, we see how to start an IRB session exactly
 where an exception was raised. The example listens for only
