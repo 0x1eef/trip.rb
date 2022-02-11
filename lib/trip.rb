@@ -135,9 +135,12 @@ class Trip
   #  trip.pause_when {|event| event.c_call? || event.c_return? }
   #  event = trip.start
   def pause_when(callable = nil, &block)
-    pauser = callable || block
-    raise ArgumentError, "Expected a block or an object implementing #call" unless pauser
-    @pause_when = pauser
+    callable ||= block
+    unless callable.respond_to?(:call)
+      raise ArgumentError,
+            "Expected a block or an object implementing #call"
+    end
+    @pause_when = callable
     nil
   end
 
