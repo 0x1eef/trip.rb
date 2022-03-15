@@ -65,7 +65,7 @@ RSpec.describe Trip do
     end
 
     context "when given an exception's cause" do
-      subject(:start) do
+      subject do
         trip.start
       rescue Trip::PauseError => ex
         ex.cause.message
