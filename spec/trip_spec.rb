@@ -63,6 +63,16 @@ RSpec.describe Trip do
       before { trip.pause_when { raise } }
       it { expect { start }.to raise_error(Trip::PauseError) }
     end
+
+    context "when given an exception's cause" do
+      subject(:start) do
+        trip.start
+      rescue Trip::PauseError => ex
+        ex.cause.message
+      end
+      before { trip.pause_when { raise "from spec" } }
+      it { is_expected.to eq("from spec") }
+    end
   end
 
   describe "#to_a" do
