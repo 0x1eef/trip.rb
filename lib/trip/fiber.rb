@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+##
+# The {Trip::Fiber Trip::Fiber} class is responsible for creating
+# and controlling an instance of Ruby's [Fiber](https://www.rubydoc.info/stdlib/core/Fiber)
+# class that will run and trace a piece of Ruby code. This class is not intended
+# to be used directly.
 class Trip::Fiber
   require "fiber"
 
@@ -7,14 +12,26 @@ class Trip::Fiber
     StandardError, ScriptError,
     SecurityError, SystemStackError
   ]
+  private_constant :RESCUABLE_EXCEPTIONS
 
+  ##
+  # @param [Trip] trip
+  #  An instance of {Trip}.
+  #
+  # @return  [Trip::Fiber]
+  #  Returns an instance of {Trip::Fiber Trip::Fiber}.
   def initialize(trip)
     @trip = trip
     @tracer = nil
     @fiber = nil
   end
 
-  def spawn
+  ##
+  # Creates a fiber.
+  #
+  # @return [Trip::Fiber]
+  #  Returns an instance of {Trip::Fiber Trip::Fiber}.
+  def create
     @fiber = Fiber.new do
       @tracer = TracePoint.new(*events, &method(:receive_event))
       @tracer.enable
@@ -24,6 +41,11 @@ class Trip::Fiber
     self
   end
 
+  ##
+  # Resumes a fiber.
+  #
+  # @return [Trip::Event, nil]
+  #  Returns an instance of {Trip::Event Trip::Event}, or nil.
   def resume
     @fiber.resume
   rescue FiberError

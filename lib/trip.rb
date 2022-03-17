@@ -77,7 +77,7 @@ class Trip
   # @return [Trip::Event, nil]
   #  Returns an event, or nil.
   def start
-    @fiber = Trip::Fiber.new(self).spawn
+    @fiber = Trip::Fiber.new(self).create
     resume
   end
 
