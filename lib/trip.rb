@@ -56,31 +56,30 @@ class Trip
   # Starts the tracer.
   #
   # @raise [Trip::InProgessError]
-  #  When the tracer has started but hasn't finished.
+  #  When a trace is in progress.
   #
   # @raise [Trip::PauseError]
-  #  When an exception is raised by the callable given to
-  #  {#pause_when}.
+  #  When an exception is raised by the callable given to {Trip#pause_when Trip#pause_when}.
   #
   # @raise [Trip::InternalError]
-  #  When Trip encounters an internal error.
+  #  When Trip encounters an internal error and crashes.
   #
   # @return [Trip::Event, nil]
-  #  Returns an event, or nil
+  #  Returns an event, or nil.
   def start
-    if started? && !finished?
-      raise InProgressError, "A trace is already in progress." \
-                             "Call #resume instead ?"
+    if started? and not finished?
+      raise InProgressError, "A trace is in progress"
+    else
+      @queue = Queue.new
+      @thread = Thread.new do
+        @tracer = TracePoint.new(*@events, &method(:on_event))
+        @tracer.enable
+        @block.call
+        @tracer.disable
+        @queue.enq(nil)
+      end
+      @queue.deq
     end
-    @queue = Queue.new
-    @thread = Thread.new do
-      @tracer = TracePoint.new(*@events, &method(:on_event))
-      @tracer.enable
-      @block.call
-      @tracer.disable
-      @queue.enq(nil)
-    end
-    @queue.deq
   end
 
   ##
@@ -91,8 +90,9 @@ class Trip
   # @return [Trip::Event, nil]
   #  Returns an event or nil.
   def resume
-    return start unless started?
-    if sleeping?
+    if @thread.nil?
+      start
+    elsif sleeping?
       @tracer.enable
       @thread.wakeup
       @queue.deq
@@ -104,38 +104,32 @@ class Trip
   #
   # @return [nil]
   def stop
-    if @thread
-      @tracer.disable
-      @thread.exit
-      @thread.join
-      nil
-    end
+    return unless @thread
+    @tracer.disable
+    @thread.exit
+    @thread.join
   end
 
   ##
   # Sets a callable that decides when to pause the tracer.
   #
+  # @example
+  #  trip = Trip.new { Kernel.puts(1 + 1) }
+  #  trip.pause_when { |event| event.c_call? || event.c_return? }
+  #
   # @param [Proc] callable
-  #  A block or an object that implements `#call`.
+  #  A block or object that implements "call".
   #
   # @raise [ArgumentError]
-  #  When the *callable* argument is not given.
+  #  When a **callable** is not provided.
   #
-  # @return [nil]
-  #  Returns nil.
-  #
-  # @example
-  #  trip = Trip.new { Kernel.puts 1 + 1 }
-  #  trip.pause_when {|event| event.c_call? || event.c_return? }
-  #  event = trip.start
+  # @return [void]
   def pause_when(callable = nil, &block)
     callable ||= block
     unless callable.respond_to?(:call)
-      raise ArgumentError,
-            "Expected a block or an object implementing #call"
+      raise ArgumentError, "Expected a block or object implementing call"
     end
     @pause_when = callable
-    nil
   end
 
   ##
