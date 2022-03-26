@@ -4,8 +4,8 @@ class Trip
   require_relative "trip/event"
   require_relative "trip/version"
 
-  RESCUABLE_EXCEPTIONS = [ StandardError, ScriptError, SecurityError, SystemStackError ]
-  DEFAULT_PAUSE  = ->(event) { event.call? || event.return? }
+  RESCUABLE_EXCEPTIONS = [StandardError, ScriptError, SecurityError, SystemStackError]
+  DEFAULT_PAUSE = ->(event) { event.call? || event.return? }
   DEFAULT_EVENTS = %i[call c_call return c_return]
 
   private_constant :RESCUABLE_EXCEPTIONS,
@@ -48,7 +48,7 @@ class Trip
     @block = block
     @queue = nil
     @pause_when = DEFAULT_PAUSE
-    @events = events == '*' ? [] : events
+    @events = events == "*" ? [] : events
     @caller = Thread.current
   end
 

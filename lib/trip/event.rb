@@ -53,9 +53,13 @@ class Trip::Event
   #
   # @return [Symbol]
   #  Returns the event name.
-  def name
-    @name
-  end
+  attr_reader :name
+
+  ##
+  # @return [Integer]
+  #  Returns the event's creation time as the number
+  #  of seconds since epoch.
+  attr_reader :epoch
 
   ##
   # @return [String]
@@ -90,18 +94,6 @@ class Trip::Event
   #  Returns a Binding object bound to where an event occurred.
   def binding
     @tp[:binding]
-  end
-
-  ##
-  # @example
-  #  event = trip.resume
-  #  time  = Time.at(event.since_epoch)
-  #
-  # @return [Integer]
-  #  Returns the event's creation time as a number
-  #  of seconds since epoch.
-  def epoch
-    @epoch
   end
   # @endgroup
 
@@ -235,11 +227,11 @@ class Trip::Event
   #
   # @return [String]
   def inspect
-   ["#<",
-    to_s.sub!("#<", "").sub!(">", ""),
-    " @name=:#{@name}",
-    " path='#{path}:#{lineno}'",
-    ">"].join
+    ["#<",
+      to_s.sub!("#<", "").sub!(">", ""),
+      " @name=:#{@name}",
+      " path='#{path}:#{lineno}'",
+      ">"].join
   end
 
   # @return [Binding]

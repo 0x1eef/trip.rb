@@ -31,7 +31,7 @@ RSpec/EmptyLineAfterSubject:
 # Disabled cops (lib-specific)
 Layout/MultilineMethodCallIndentation:
   Enabled: false
-Layout/ArgumentAlignment:
-  Enabled: false
 Layout/MultilineOperationIndentation:
+  Enabled: false
+Layout/ArgumentAlignment:
   Enabled: false

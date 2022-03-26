@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH << "lib"
 require "trip"
 Gem::Specification.new do |g|
@@ -6,11 +8,9 @@ Gem::Specification.new do |g|
   g.authors	= ["0x1eef"]
   g.email = "0x1eef@protonmail.com"
   g.version = Trip::VERSION
-
-  g.summary = <<~SUMMARY
-  trip.rb is a concurrent tracer that can pause and resume the code it is tracing.
+  g.summary = <<-SUMMARY
+    Trip is a concurrent tracer that can pause and resume the code it is tracing.'
   SUMMARY
-
   g.description = g.summary
   g.licenses = ["MIT"]
   g.files	= `git ls-files`.split($/)
