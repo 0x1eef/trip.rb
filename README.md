@@ -4,9 +4,8 @@ Trip is a concurrent tracer that can pause and resume the code
 it is tracing. Trip yields control between two threads - typically
 the main thread and a thread that Trip creates. The process of yielding
 control back and forth between the two threads can be repeated until the
-new thread has finished and exits normally.
-
-Trip is currently implemented using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
+new thread has finished and exits normally. Trip is currently implemented
+using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 ## Examples
 
