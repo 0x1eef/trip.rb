@@ -65,15 +65,14 @@ event = trip.resume
 #### Events
 
 Trip will listen for method call and return events from methods
-implemented in either C or Ruby by default. The `events:` keyword argument allows
-certain events to be included or excluded from the trace, and when the `events:` keyword
-argument is provided Trip does not generate events that are not explicitly included
-by name.
+implemented in either C or Ruby by default. The `events:` keyword
+argument can be provided to only generate events that are explicitly
+included by name.
 
-All events can be can be included by using `Trip.new(events: '*') { ... }`. A full list of
-event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html).
-The following example uses `trip.resume` to both start and resume the tracer - without calling
-`trip.start`, and only listens for call and return events from methods implemented in Ruby:
+All events can be can be included by using `Trip.new(events: '*') { ... }`. A
+full list of event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html). The following example uses `trip.resume` to both start and resume
+the tracer - without calling `trip.start`, and only listens for call and return
+events from methods implemented in Ruby:
 
 ```ruby
 require "trip"
