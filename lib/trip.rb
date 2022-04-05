@@ -11,18 +11,17 @@ class Trip
   Error = Class.new(RuntimeError)
 
   ##
-  # An exception for when Trip encounters an
-  # internal error.
+  # An exception that's raised when the tracer thread crashes.
   InternalError = Class.new(Error)
 
   ##
-  # An exception for when the callable set by
-  # {Trip#pause_when} raises an exception.
+  # An exception that's raised when the {Trip#pause_when Trip#pause_when}
+  # callback crashes.
   PauseError = Class.new(Error)
 
   ##
-  # An exception for when {Trip#start} is called
-  # before a trace has finished.
+  # An exception that's raised when {Trip#start Trip#start} is called
+  # before the current trace has finished.
   InProgressError = Class.new(Error)
 
   # @endgroup
