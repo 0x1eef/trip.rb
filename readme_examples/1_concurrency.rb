@@ -1,17 +1,26 @@
 require "trip"
 
+module Greeter
+  def self.say(message)
+    puts message
+  end
+end
+
 ##
 # Create a new Trip.
-# Pause for all events originating from "Kernel.puts".
-trip = Trip.new { Kernel.puts 1 + 1 }
-trip.pause_when { |event| event.module == Kernel && event.method_id == :puts }
+# Pause for events coming from "Greeter.say".
+trip = Trip.new { Greeter.say "Hello" }
+trip.pause_when { |event| event.module == Greeter && event.method_id == :say }
 
 ##
 # Start the tracer by spawning a new thread,
-# which is then paused (suspended) upon the
-# method call of "Kernel.puts"
+# and pause the tracer on the call of "Greeter.say".
+# The argument of "Greeter.say", `message` is then
+# changed.
 event1 = trip.start
 print event1.name, " ", event1.method_id, "\n"
+print "self: ", event1.self, "\n"
+event1.binding.eval("message << ' rubyist!'")
 
 ##
 # Resume the tracer thread from its paused state,
@@ -27,7 +36,8 @@ event3 = trip.resume
 print event3.inspect, "\n"
 
 # == Produces the output:
-# c_call puts
-# 2
-# c_return puts
+# call say
+# self: Greeter
+# Hello rubyist!
+# return say
 # nil
