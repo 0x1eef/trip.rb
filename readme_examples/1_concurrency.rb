@@ -1,3 +1,4 @@
+require_relative "setup"
 require "trip"
 
 module Greeter
@@ -13,10 +14,10 @@ trip = Trip.new { Greeter.say "Hello" }
 trip.pause_when { |event| event.module == Greeter && event.method_id == :say }
 
 ##
-# Start the tracer by spawning a new thread,
-# and pause the tracer on the call of "Greeter.say".
-# The argument of "Greeter.say", `message` is then
-# changed.
+# Start the tracer by calling "Trip#start".
+# Afterwards, pause the tracer on the call of
+# "Greeter.say". The argument of "Greeter.say",
+# `message` is then changed.
 event1 = trip.start
 print event1.name, " ", event1.method_id, "\n"
 print "self: ", event1.self, "\n"
@@ -24,8 +25,8 @@ event1.binding.eval("message << ' rubyist!'")
 
 ##
 # Resume the tracer thread from its paused state,
-# and then pause again for the method return of
-# "Kernel.puts".
+# and then pauses again for the method return of
+# "Greeter.say".
 event2 = trip.resume
 print event2.name, " ", event2.method_id, "\n"
 

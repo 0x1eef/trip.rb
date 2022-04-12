@@ -53,8 +53,8 @@ event1.binding.eval("message << ' rubyist!'")
 
 ##
 # Resume the tracer thread from its paused state,
-# and then pause again for the method return of
-# "Kernel.puts".
+# and then pauses again for the method return of
+# "Greeter.say".
 event2 = trip.resume
 print event2.name, " ", event2.method_id, "\n"
 
