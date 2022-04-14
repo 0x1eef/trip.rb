@@ -34,9 +34,15 @@
 #  * `:script_compiled`:
 #     When Ruby code is compiled by `eval`, `require`, or `load`.
 class Trip::Event
-  def initialize(name, tp_details)
+  ##
+  # @param [Symbol] name
+  #  The name of an event.
+  #
+  # @param [Hash] tp
+  #  A hash from TracePoint.
+  def initialize(name, tp)
     @name = name
-    @tp_details = tp_details
+    @tp = tp
     @since_epoch = Integer(Process.clock_gettime(Process::CLOCK_REALTIME))
   end
 
@@ -65,21 +71,21 @@ class Trip::Event
   # @return [String]
   #  Returns the path associated with an event.
   def path
-    @tp_details[:path]
+    @tp[:path]
   end
 
   ##
   # @return [Integer]
   #  Returns the line number associated with an event.
   def lineno
-    @tp_details[:lineno]
+    @tp[:lineno]
   end
 
   ##
   # @return [Object, BasicObject]
   #  Returns the `self` where an event occurred.
   def self
-    @tp_details[:self]
+    @tp[:self]
   end
 
   ##
@@ -94,14 +100,14 @@ class Trip::Event
   # @return [Symbol]
   #  Returns the method id associated with an event.
   def method_id
-    @tp_details[:method_id]
+    @tp[:method_id]
   end
 
   ##
   # @return [Binding]
   #  Returns a Binding object bound to where an event occurred.
   def binding
-    @tp_details[:binding]
+    @tp[:binding]
   end
   # @endgroup
 
