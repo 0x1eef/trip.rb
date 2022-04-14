@@ -157,13 +157,21 @@ class Trip::Event
     @name == :raise
   end
 
+  ##
+  # For REPL support.
+  #
+  # @return [void]
+  def pretty_print(q)
+    q.text(inspect)
+  end
+
   # @return [String]
   def inspect
-    "#<Trip::Event:0x#{__id__.to_s(16)} " \
-    "name='#{name}' " \
-    "path='#{path}' lineno='#{lineno}' " \
-    "self='#{self.self}' method_id='#{method_id}' " \
-    "binding=#{binding.inspect}>"
+   ["#<",
+    to_s.sub!("#<", "").sub!(">", ""),
+    " @name=:#{@name}",
+    " path='#{path}:#{lineno}'",
+    ">"].join
   end
 
   # @return [Binding]
