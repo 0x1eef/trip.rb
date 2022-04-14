@@ -33,7 +33,7 @@
 #     When a Fiber switches context. <br><br>
 #  * `:script_compiled` <br>
 #     When Ruby code is compiled by `eval`, `require`, or `load`.
-class Trip::Event < BasicObject
+class Trip::Event
   def initialize(name, tp_details)
     @name = name
     @tp_details = tp_details
