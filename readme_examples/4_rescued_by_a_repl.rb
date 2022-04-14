@@ -1,3 +1,4 @@
+require_relative "setup"
 require "trip"
 
 module Greeter
@@ -7,6 +8,6 @@ module Greeter
 end
 
 trip = Trip.new(events: %i[raise]) { Greeter.say("hello") }
-trip.pause_when { |event| event.raise? }
+trip.pause_when(&:raise?)
 event = trip.start
 event.binding.irb

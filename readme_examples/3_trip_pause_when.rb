@@ -1,3 +1,4 @@
+require_relative "setup"
 require "trip"
 
 trip = Trip.new(events: %i[class]) do
@@ -11,7 +12,7 @@ trip = Trip.new(events: %i[class]) do
   end
 end
 
-trip.pause_when { |event| event.module_def? }
+trip.pause_when(&:module_def?)
 while event = trip.resume
   print event.self, " class defined", "\n"
 end

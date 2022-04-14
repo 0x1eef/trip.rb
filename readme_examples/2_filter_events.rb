@@ -1,3 +1,4 @@
+require_relative "setup"
 require "trip"
 
 def add(x, y)
