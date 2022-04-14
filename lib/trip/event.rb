@@ -37,7 +37,7 @@ class Trip::Event
   def initialize(name, tp_details)
     @name = name
     @tp_details = tp_details
-    @created_at = ::Process.clock_gettime(::Process::CLOCK_REALTIME)
+    @since_epoch = Integer(Process.clock_gettime(Process::CLOCK_REALTIME))
   end
 
   ##
@@ -50,10 +50,15 @@ class Trip::Event
   end
 
   ##
+  # @example
+  #  time = Time.at(event.since_epoch)
+  #  # ..
+  #
   # @return [Integer]
-  #  Number of seconds since epoch.
-  def created_at
-    @created_at
+  #  Returns the event's creation time as a number of seconds
+  #  since epoch.
+  def since_epoch
+    @since_epoch
   end
 
   ##
