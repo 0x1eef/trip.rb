@@ -6,10 +6,28 @@ class Trip
   require_relative "trip/event"
   require_relative "trip/version"
 
+  # @group Exceptions
+
+  ##
+  # The superclass of all Trip exceptions.
   Error = Class.new(RuntimeError)
+
+  ##
+  # An exception for when Trip encounters an
+  # internal error.
   InternalError = Class.new(Error)
+
+  ##
+  # An exception for when the callable set by
+  # {Trip#pause_when} raises an exception.
   PauseError = Class.new(Error)
+
+  ##
+  # An exception for when {Trip#start} is called
+  # before a trace has finished.
   InProgressError = Class.new(Error)
+
+  # @endgroup
 
   # @private
   RESCUABLE_EXCEPTIONS = [
@@ -60,15 +78,14 @@ class Trip
   # Starts the tracer.
   #
   # @raise [Trip::InProgessError]
-  #  Raised when the tracer has already been started
-  #  and hasn't finished tracing.
+  #  When the tracer has started but hasn't finished.
   #
   # @raise [Trip::PauseError]
-  #  Raised when an exception is raised by the callable
-  #  given to {#pause_when}.
+  #  When an exception is raised by the callable given to
+  #  {#pause_when}.
   #
   # @raise [Trip::InternalError]
-  #  Raised when an exception internal to Trip is raised.
+  #  When Trip encounters an internal error.
   #
   # @return [Trip::Event, nil]
   #  Returns an event, or nil
