@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+##
+# [**Road trippin'**](https://www.youtube.com/watch?v=11GYvfYjyV0)
 class Trip
   require_relative "trip/event"
   require_relative "trip/version"
@@ -36,11 +38,10 @@ class Trip
 
   ##
   # @param [Proc] block
-  #  A block that will be traced and run on its own thread.
+  #  A block that will be run and traced on a new thread.
   #
   # @param [Array<Symbol>] events
-  #  An array of event names, as Symbols, which the tracer
-  #  should listen for.
+  #  An array of event names the tracer should listen for.
   #
   # @return [Trip]
   #  Returns an instance of Trip.
@@ -88,8 +89,7 @@ class Trip
   end
 
   ##
-  # Resumes the tracer - or starts it if the tracer hasn't
-  # started yet.
+  # Starts or resumes the tracer.
   #
   # @raise [Trip::PauseError] (see #start)
   # @raise [Trip::InternalError] (see #start)
@@ -118,14 +118,13 @@ class Trip
   end
 
   ##
-  # Stores a callable that decides when to pause the tracer
-  # by returning true or false when called.
+  # Sets a callable that decides when to pause the tracer.
   #
   # @param [Proc] callable
-  #  A block or an object that implements "call".
+  #  A block or an object that implements `#call`.
   #
   # @raise [ArgumentError]
-  #  Raised when the "callable" argument is not provided.
+  #  When the *callable* argument is not given.
   #
   # @return [nil]
   #  Returns nil.
@@ -146,14 +145,14 @@ class Trip
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer has started.
+  #  Returns true when has tracer has started.
   def started?
     @thread != nil
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer thread is running.
+  #  Returns true when the tracer is running.
   def running?
     return false unless @thread
     @thread.status == RUN_STATE
@@ -161,7 +160,7 @@ class Trip
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer thread is sleeping.
+  #  Returns true when the tracer is sleeping.
   def sleeping?
     return false unless @thread
     @thread.status == SLEEP_STATE
@@ -169,7 +168,7 @@ class Trip
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer thread has finished.
+  #  Returns true when the tracer has finished.
   def finished?
     return false unless @thread
     END_STATE.include?(@thread.status)
