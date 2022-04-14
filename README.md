@@ -16,9 +16,8 @@ to use TracePoint instead - starting from Trip v3.0.0.
 
 One might wonder: what is meant by "concurrent tracer" ? In the context of Trip,
 it can be explained as a tracer that spawns a new thread to run (and trace) a
-block of Ruby code. The tracer then pauses (suspends) the new thread when a
-condition is met,  and then yields control back to the calling thread (normally
-the main thread).
+block of Ruby code. The tracer then pauses the new thread when a condition is met,
+and then yields control back to the calling thread (normally the main thread).
 
 The main thread can then resume the tracer, and repeat this process until the
 tracer thread exits. While the tracer thread is paused, the main thread can examine
@@ -127,8 +126,8 @@ implemented in either C or Ruby.
 
 In the example, the logic to pause the tracer is changed to pause
 when a new class or module is defined using "class Name" or "module Name".
-Remember, as this code runs, the tracer is suspended and resumed
-multiple times, and so are the class definitions.
+Remember, as this code runs, the tracer is paused and resumed multiple times,
+and so are the class definitions.
 
 ```ruby
 require "trip"
