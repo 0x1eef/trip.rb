@@ -5,32 +5,32 @@
 # TracePoint events:
 #
 #  * `:c_call`:
-#     When a method implemented in C is called. <br>
+#     When a method implemented in C is called.
 #  * `:c_return`:
-#     When a method implemented in C returns. <br>
+#     When a method implemented in C returns.
 #  * `:call`:
-#     When a method implemented in Ruby is called. <br>
+#     When a method implemented in Ruby is called.
 #  * `:return`:
-#     When a method implemented in Ruby returns. <br>
+#     When a method implemented in Ruby returns.
 #  * `:class`:
 #     When a module / class is defined or reopened using the "module"
-#     or "class" keywords. <br>
+#     or "class" keywords.
 #  * `:end`:
-#     When a module / class definition or reopening ends. <br>
+#     When a module / class definition or reopen ends.
 #  * `:line`:
-#     When on a line that starts an expression or statement. <br>
+#     When on a line that starts an expression or statement.
 #  * `:raise`:
-#     When an exception is raised. <br>
+#     When an exception is raised.
 #  * `:b_call`:
-#     When a block is called. <br>
+#     When a block is called.
 #  * `:b_return`:
-#     When a block returns. <br>
+#     When a block returns.
 #  * `:thread_begin`:
-#     When a thread begins.<br>
+#     When a thread begins.
 #  * `:thread_end`:
-#     When a thread ends.<br>
+#     When a thread ends.
 #  * `:fiber_switch`:
-#     When a Fiber switches context. <br>
+#     When a Fiber switches context.
 #  * `:script_compiled`:
 #     When Ruby code is compiled by `eval`, `require`, or `load`.
 class Trip::Event
@@ -50,7 +50,7 @@ class Trip::Event
   # @group Event properties
   #
   # @return [Symbol]
-  #  An event name.
+  #  Returns the event name.
   def name
     @name
   end
@@ -112,11 +112,10 @@ class Trip::Event
   # @endgroup
 
   ##
-  # @group Event predicates
+  # @group Event name predicates
   #
   # @return [Boolean]
-  #  Returns true when an event is for the definition or
-  #  reopening of a module / class.
+  #  Returns true for the definition or reopen of a module / class.
   def module_def?
     name == :class
   end
@@ -151,85 +150,23 @@ class Trip::Event
 
   ##
   # @return [Boolean]
-  #  Returns true when an event is a call to a
-  #  method implemented in either Ruby or C.
+  #  Returns true for a call to a method implemented in either
+  #  Ruby or C.
   def call?
     c_call? || rb_call?
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when an event is a return from a
-  #  method implemented in either Ruby or C.
+  #  Returns true for a return from a method implemented in either
+  #  Ruby or C.
   def return?
     c_return? || rb_return?
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when an event is for the raise of
-  #  an exception.
-  def raise?
-    @name == :raise
-  end
-  # @endgroup # @group Event name predicates
-
-  ##
-  # @return [Boolean]
-  #  Returns true when an event is for the definition or
-  #  reopening of a module / class.
-  def module_def?
-    name == :class
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true for a call to a method implemented in Ruby.
-  def rb_call?
-    @name == :call
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true for a return from a method implemented in Ruby.
-  def rb_return?
-    @name == :return
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true for a call to a method implemented in C.
-  def c_call?
-    @name == :c_call
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true for a return from a method implemented in C.
-  def c_return?
-    @name == :c_return
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true when an event is a call to a
-  #  method implemented in either Ruby or C.
-  def call?
-    c_call? || rb_call?
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true when an event is a return from a
-  #  method implemented in either Ruby or C.
-  def return?
-    c_return? || rb_return?
-  end
-
-  ##
-  # @return [Boolean]
-  #  Returns true when an event is for the raise of
-  #  an exception.
+  #  Returns true for the raise of an exception.
   def raise?
     @name == :raise
   end
@@ -243,6 +180,9 @@ class Trip::Event
     q.text(inspect)
   end
 
+  ##
+  # For REPL support.
+  #
   # @return [String]
   def inspect
    ["#<",
