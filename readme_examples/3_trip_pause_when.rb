@@ -12,12 +12,12 @@ trip = Trip.new(events: %i[class]) do
   end
 end
 
-trip.pause_when(&:module_def?)
+trip.pause_when(&:module_opened?)
 while event = trip.resume
-  print event.self, " class defined", "\n"
+  print event.self, " class opened", "\n"
 end
 
 # == Produces output:
-# Foo class defined
-# Bar class defined
-# Baz class defined
+# Foo class opened
+# Bar class opened
+# Baz class opened

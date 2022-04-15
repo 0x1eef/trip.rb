@@ -57,12 +57,12 @@ class Trip::Event
 
   ##
   # @example
+  #  event = trip.resume
   #  time = Time.at(event.since_epoch)
-  #  # ..
   #
   # @return [Integer]
-  #  Returns the event's creation time as a number of seconds
-  #  since epoch.
+  #  Returns the event's creation time as a number
+  #  of seconds since epoch.
   def since_epoch
     @since_epoch
   end
@@ -115,58 +115,65 @@ class Trip::Event
   # @group Event name predicates
   #
   # @return [Boolean]
-  #  Returns true for the definition or reopen of a module / class.
-  def module_def?
+  #  Returns true when a module / class is opened.
+  def module_opened?
     name == :class
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a call to a method implemented in Ruby.
+  #  Returns when a module / class is closed.
+  def module_closed?
+    name == :end
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when a method implemented in Ruby is called.
   def rb_call?
     @name == :call
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a return from a method implemented in Ruby.
+  #  Returns true when a method implemented in Ruby returns.
   def rb_return?
     @name == :return
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a call to a method implemented in C.
+  #  Returns true when a method implemented in C is called.
   def c_call?
     @name == :c_call
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a return from a method implemented in C.
+  #  Returns true when a method implemented in C returns.
   def c_return?
     @name == :c_return
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a call to a method implemented in either
-  #  Ruby or C.
+  #  Returns true when a method implemented in either Ruby
+  #  or C was called.
   def call?
     c_call? || rb_call?
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for a return from a method implemented in either
-  #  Ruby or C.
+  #  Returns true when a method implemented in either Ruby
+  #  or C returns.
   def return?
     c_return? || rb_return?
   end
 
   ##
   # @return [Boolean]
-  #  Returns true for the raise of an exception.
+  #  Returns true when an exception is raised.
   def raise?
     @name == :raise
   end
