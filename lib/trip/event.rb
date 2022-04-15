@@ -158,7 +158,7 @@ class Trip::Event
   ##
   # @return [Boolean]
   #  Returns true when a method implemented in either Ruby
-  #  or C was called.
+  #  or C is called.
   def call?
     c_call? || rb_call?
   end
