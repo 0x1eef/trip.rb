@@ -118,15 +118,13 @@ end
 In the previous example we saw how to filter events.
 The events specified by the `events:` keyword argument
 decide what events will be made available to `Trip#pause_when`.
-
 By default `Trip#pause_when` will pause the tracer on method call
 and return events from methods implemented in either C or Ruby.
 
 In the example, the logic for pausing the tracer is changed to pause
-when a new class or module is defined (or reopened) using the
-`class Name` or `module Name` syntax. Remember, as this code runs,
-the tracer is paused and resumed multiple times, and so are the
-class definitions.
+when a new module / class is defined with the `module Name` or `class Name`
+syntax. Keep in mind - as this code runs, the tracer is paused and resumed
+multiple times, and so are the class definitions.
 
 ```ruby
 require "trip"
