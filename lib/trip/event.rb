@@ -187,6 +187,20 @@ class Trip::Event
 
   ##
   # @return [Boolean]
+  #  Returns true when a thread begins.
+  def thread_begin?
+    @name == :thread_begin
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when a thread ends.
+  def thread_end?
+    @name == :thread_end
+  end
+
+  ##
+  # @return [Boolean]
   #  Returns true when an exception is raised.
   def raise?
     @name == :raise
