@@ -1,6 +1,6 @@
 require_relative "setup"
 
-class Trip::DummyClass
+class Trip::FooBar
   def self.run(x, y)
     sum = x + y
     sum.to_s
@@ -9,7 +9,7 @@ end
 
 RSpec.describe Trip::Event do
   let(:trip) do
-    Trip.new { Trip::DummyClass.run(2, 5) }
+    Trip.new { Trip::FooBar.run(2, 5) }
   end
 
   after do
