@@ -79,14 +79,6 @@ class Trip::Event
   end
 
   ##
-  # @return [Module]
-  #  Returns the module or class associated with an event.
-  def module
-    event_self = self.self
-    ::Module === event_self ? event_self : event_self.class
-  end
-
-  ##
   # @return [Symbol]
   #  Returns the method id associated with an event.
   def method_id
