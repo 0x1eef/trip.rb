@@ -112,33 +112,33 @@ class Trip::Event
   # @endgroup
 
   ##
-  # @group Event name predicates
+  # @group Event predicates
   #
   # @return [Boolean]
   #  Returns true when a module / class is opened.
   def module_opened?
-    name == :class
+    @name == :class
   end
 
   ##
   # @return [Boolean]
   #  Returns true when a module / class is closed.
   def module_closed?
-    name == :end
+    @name == :end
   end
 
   ##
   # @return [Boolean]
   #  Returns true when a block is called.
   def block_call?
-    name == :b_call
+    @name == :b_call
   end
 
   ##
   # @return [Boolean]
   #  Returns true when a block returns.
   def block_return?
-    name == :b_return
+    @name == :b_return
   end
 
   ##
@@ -190,6 +190,13 @@ class Trip::Event
   #  Returns true when an exception is raised.
   def raise?
     @name == :raise
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when starting a new expression or statement.
+  def line?
+    @name == :line
   end
   # @endgroup
 
