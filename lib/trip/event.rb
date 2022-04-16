@@ -58,18 +58,6 @@ class Trip::Event
   end
 
   ##
-  # @example
-  #  event = trip.resume
-  #  time = Time.at(event.since_epoch)
-  #
-  # @return [Integer]
-  #  Returns the event's creation time as a number
-  #  of seconds since epoch.
-  def since_epoch
-    @since_epoch
-  end
-
-  ##
   # @return [String]
   #  Returns the path associated with an event.
   def path
@@ -110,6 +98,18 @@ class Trip::Event
   #  Returns a Binding object bound to where an event occurred.
   def binding
     @tp[:binding]
+  end
+
+  ##
+  # @example
+  #  event = trip.resume
+  #  time  = Time.at(event.since_epoch)
+  #
+  # @return [Integer]
+  #  Returns the event's creation time as a number
+  #  of seconds since epoch.
+  def since_epoch
+    @since_epoch
   end
   # @endgroup
 
@@ -199,6 +199,20 @@ class Trip::Event
   #  Returns true when a thread ends.
   def thread_end?
     @name == :thread_end
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when a Fiber switches context.
+  def fiber_switch?
+    @name == :fiber_switch
+  end
+
+  ##
+  # @return [Boolean]
+  #  Returns true when a script is compiled.
+  def script_compiled?
+    @name == :script_compiled
   end
 
   ##
