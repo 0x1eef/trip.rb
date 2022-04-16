@@ -37,7 +37,7 @@ RSpec.describe Trip::Event do
     describe "call and return of method implemented in C" do
       let(:trip) do
         trip = Trip.new { Kernel.print "" }
-        trip.pause_when { |event| event.module == Kernel and event.method_id == :print }
+        trip.pause_when { |event| event.self == Kernel and event.method_id == :print }
         trip
       end
 
