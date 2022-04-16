@@ -38,7 +38,7 @@ end
 # Create a new Trip.
 # Pause for events coming from "Greeter.say".
 trip = Trip.new { Greeter.say "Hello" }
-trip.pause_when { |event| event.module == Greeter && event.method_id == :say }
+trip.pause_when { |event| event.self == Greeter && event.method_id == :say }
 
 ##
 # Start the tracer by calling "Trip#start".
@@ -69,6 +69,7 @@ print event3.inspect, "\n"
 # Hello rubyist!
 # return say
 # nil
+
 ```
 
 **2. Filter events**
