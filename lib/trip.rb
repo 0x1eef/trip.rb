@@ -4,9 +4,16 @@ class Trip
   require_relative "trip/event"
   require_relative "trip/version"
 
-  # @group Exceptions
+  RESCUABLE_EXCEPTIONS = [ StandardError, ScriptError, SecurityError, SystemStackError ]
+  DEFAULT_PAUSE  = ->(event) { event.call? || event.return? }
+  DEFAULT_EVENTS = %i[call c_call return c_return]
+
+  private_constant :RESCUABLE_EXCEPTIONS,
+                   :DEFAULT_PAUSE,
+                   :DEFAULT_EVENTS
 
   ##
+  # @group Exceptions
   # The superclass of all Trip exceptions.
   Error = Class.new(RuntimeError)
 
@@ -22,52 +29,26 @@ class Trip
   ##
   # An exception that's raised when {Trip#start Trip#start} is called
   # before the current trace has finished.
-  InProgressError = Class.new(Error)
-
   # @endgroup
-
-  # @private
-  RESCUABLE_EXCEPTIONS = [
-    StandardError,
-    ScriptError,
-    SecurityError,
-    SystemStackError
-  ]
-
-  # @private
-  RUN_STATE = "run"
-
-  # @private
-  SLEEP_STATE = "sleep"
-
-  # @private
-  END_STATE = [nil, false]
-
-  # The default condition for which to pause the tracer.
-  # @private
-  DEFAULT_PAUSE_WHEN = ->(event) { event.call? || event.return? }
-
-  # The default events to listen for.
-  # @private
-  DEFAULT_LISTEN_EVENTS = %i[call c_call return c_return]
+  InProgressError = Class.new(Error)
 
   ##
   # @param [Proc] block
-  #  A block that will be run and traced on a new thread.
+  #  The block to trace.
   #
   # @param [Array<Symbol>] events
-  #  An array of event names the tracer should listen for.
+  #  An array of event names to listen for.
   #
   # @return [Trip]
   #  Returns an instance of Trip.
-  def initialize(events: DEFAULT_LISTEN_EVENTS, &block)
+  def initialize(events: DEFAULT_EVENTS, &block)
     raise ArgumentError, "Expected a block to trace" unless block
     @thread = nil
     @tracer = nil
     @block = block
     @queue = nil
-    @pause_when = DEFAULT_PAUSE_WHEN
-    @events = events == :all || events == '*' ? [] : events
+    @pause_when = DEFAULT_PAUSE
+    @events = events == '*' ? [] : events
     @caller = Thread.current
   end
 
@@ -159,33 +140,31 @@ class Trip
 
   ##
   # @return [Boolean]
-  #  Returns true when has tracer has started.
+  #  Returns true when has tracer thread has started.
   def started?
     @thread != nil
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer is running.
+  #  Returns true when the tracer thread is running.
   def running?
-    return false unless @thread
-    @thread.status == RUN_STATE
+    @thread&.status == "run"
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer is sleeping.
+  #  Returns true when the tracer thread is sleeping.
   def sleeping?
-    return false unless @thread
-    @thread.status == SLEEP_STATE
+    @thread&.status == "sleep"
   end
 
   ##
   # @return [Boolean]
-  #  Returns true when the tracer has finished.
+  #  Returns true when the tracer thread has exited.
   def finished?
     return false unless @thread
-    END_STATE.include?(@thread.status)
+    [nil, false].include?(@thread.status)
   end
 
   private
