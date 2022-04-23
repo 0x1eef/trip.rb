@@ -8,33 +8,33 @@
 # An event is known by a name, which can be one of the following:
 #
 #  * `:c_call`:
-#     For when a method implemented in C is called.
+#     when a method implemented in C is called.
 #  * `:c_return`:
-#     For when a method implemented in C returns.
+#     when a method implemented in C returns.
 #  * `:call`:
-#     For when a method implemented in Ruby is called.
+#     when a method implemented in Ruby is called.
 #  * `:return`:
-#     For when a method implemented in Ruby returns.
+#     when a method implemented in Ruby returns.
 #  * `:class`:
-#     For when a module / class is defined or reopened.
+#     when a module / class is defined or reopened.
 #  * `:end`:
-#     For when a module / class definition or reopen ends.
+#     when a module / class definition or reopen ends.
 #  * `:line`:
-#     For when starting a new expression or statement.
+#     when starting a new expression or statement.
 #  * `:raise`:
-#     For when an exception is raised.
+#     when an exception is raised.
 #  * `:b_call`:
-#     For when a block is called.
+#     when a block is called.
 #  * `:b_return`:
-#     For when a block returns.
+#     when a block returns.
 #  * `:thread_begin`:
-#     For when a thread begins.
+#     when a thread begins.
 #  * `:thread_end`:
-#     For when a thread ends.
+#     when a thread ends.
 #  * `:fiber_switch`:
-#     For when a Fiber switches context.
+#     when a Fiber switches context.
 #  * `:script_compiled`:
-#     For when Ruby code is compiled by `eval`, `require`, or `load`.
+#     when Ruby code is compiled by `eval`, `require`, or `load`.
 class Trip::Event
   ##
   # @param [Symbol] name
@@ -223,7 +223,7 @@ class Trip::Event
   # @endgroup
 
   ##
-  # For REPL support.
+  # REPL support.
   #
   # @return [void]
   def pretty_print(q)
@@ -231,7 +231,7 @@ class Trip::Event
   end
 
   ##
-  # For REPL support.
+  # REPL support.
   #
   # @return [String]
   def inspect
