@@ -178,8 +178,9 @@ event.binding.irb
 
 ## Resources
 
-* [docs: 0x1eef.github.io/x/trip.rb](https://0x1eef.github.io/x/trip.rb)
-* [source code: github.com/0x1eef/trip.rb](https://github.com/0x1eef/trip.rb)
+* [**Source code (github.com/0x1eef/trip.rb)**](https://github.com/0x1eef/trip.rb)
+* [**Docs (0x1eef.github.io/x/trip.rb)**](https://0x1eef.github.io/x/trip.rb)
+
 
 ## Install
 
