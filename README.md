@@ -89,7 +89,7 @@ event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/tr
 In the example, the `events:` keyword argument specifies call and
 return events from methods implemented in Ruby, and that reduces the
 noise from call and return events from methods implemented in C. Something
-to keep in mind, `trip.resume` is used to both start and resume
+to keep in mind - `trip.resume` is used to both start and resume
 the tracer in the example - without ever calling `trip.start`.
 
 ```ruby
