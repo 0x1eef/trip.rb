@@ -8,8 +8,7 @@ Gem::Specification.new do |g|
   g.version = Trip::VERSION
 
   g.summary = <<~SUMMARY
-  trip.rb is a concurrent tracer that can pause and resume the code
-  it is tracing.
+  trip.rb is a concurrent tracer that can pause and resume the code it is tracing.
   SUMMARY
 
   g.description = g.summary
