@@ -68,7 +68,7 @@ class Trip
     @block = block
     @queue = nil
     @pause_when = DEFAULT_PAUSE_WHEN
-    @events = events == :all ? [] : events
+    @events = events == :all || events == '*' ? [] : events
     @caller = Thread.current
   end
 
