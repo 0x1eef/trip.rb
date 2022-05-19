@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# [**Rest in peace, Terry.**](https://www.youtube.com/watch?v=oH41gGBVpkE)
+# [*Quite a trip*](https://www.youtube.com/watch?v=IrdwGPLtnS8).
 class Trip
   require_relative "trip/event"
   require_relative "trip/version"
