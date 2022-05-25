@@ -23,7 +23,7 @@ when a condition is met, and then yields control back to the calling thread
 
 The main thread can then resume the tracer, and repeat this process until the
 tracer thread exits. While the tracer thread is paused, the main thread can examine
-event information - and evaluate code in the context (Binding) of where an event
+event information - and evaluate code in the [Binding (context)](https://rubydoc.info/stdlib/core/Binding) of where an event
 occurred. The following example hopes to provide a clearer picture of what that means
 in practice:
 
@@ -139,7 +139,7 @@ end
 #### IRB
 
 Trip can listen for the `raise` event, and then pause the tracer when
-it is encountered. Afterwards, an IRB session can be started in the context
+it is encountered. Afterwards, an IRB session can be started in the [Binding (context)](https://rubydoc.info/stdlib/core/Binding)
 of where an exception has been raised. The following example provides a
 demonstration:
 
