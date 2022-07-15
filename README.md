@@ -7,8 +7,8 @@ control back and forth between the two threads is repeated until the trace
 has finished.
 
 Trip.rb is implemented using [TracePoint](https://docs.w3cub.com/ruby~3/tracepoint) -
-where as before Trip.rb used ["Thread#set_trace_func"](https://docs.w3cub.com/ruby~3/thread#method-i-set_trace_func). It was decided to update Trip.rb's internals
-to use TracePoint instead - starting from Trip v3.0.0.
+where as before Trip.rb used ["Thread#set_trace_func"](https://docs.w3cub.com/ruby~3/thread#method-i-set_trace_func).
+The move to TracePoint was implemented from v3.0.0 onwards.
 
 ## Examples
 

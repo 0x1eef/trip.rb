@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-##
-# [*Quite a trip*](https://www.youtube.com/watch?v=Ho_MUbH3WkU).
 class Trip
   require_relative "trip/event"
   require_relative "trip/version"
