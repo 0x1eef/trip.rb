@@ -49,7 +49,7 @@ event = trip.start
 event.binding.eval("message << ' cool.'")
 
 ##
-# Execute the "puts message" line, and pause
+# Execute the "puts(message)" line, and pause
 # for the return of "Stdout.write".
 event = trip.resume
 
@@ -171,4 +171,5 @@ trip.rb is available as a RubyGem:
 
 ## <a id='license'>License</a>
 
-This project uses the MIT license - see [LICENSE.txt](./LICENSE.txt) for details.
+This project is released under the terms of the MIT license. <br>
+See [LICENSE.txt](./LICENSE.txt) for details.
