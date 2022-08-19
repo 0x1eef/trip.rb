@@ -147,7 +147,7 @@ demonstration:
 require "trip"
 
 module Stdout
-  def self.say(message)
+  def self.write(message)
     putzzz(message)
   end
 end

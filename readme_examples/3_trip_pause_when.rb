@@ -17,7 +17,7 @@ while event = trip.resume
   print event.self, " class opened", "\n"
 end
 
-# == Produces output:
+##
 # Foo class opened
 # Bar class opened
 # Baz class opened
