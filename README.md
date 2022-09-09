@@ -137,7 +137,9 @@ end
 
 The `Trip#to_a` method can perform a trace from start to finish, and then return an array of
 `Trip::Event` objects. The following example returns the number of files that Pry v0.14.1 requires -
-including duplicate calls to require, and without any plugins in the mix. When we exclude `require "pry"` from the count, the number is 168
+including duplicate calls to require, and without any plugins in the mix.
+
+When we exclude `require "pry"` from the count, the number is 168
 rather than 169:
 
 ```ruby
