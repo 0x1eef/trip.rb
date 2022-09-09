@@ -19,7 +19,7 @@ covered by the examples.
 
 In the context of Trip - a concurrent tracer can be explained as a tracer that
 spawns a new Fiber to run (and trace) a piece of Ruby code. Trip then pauses the new Fiber
-when a condition is met, and then yields control back to the root Fiber.
+when a condition is met, and yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
 new Fiber exits. While the new Fiber is paused, the root Fiber can examine
