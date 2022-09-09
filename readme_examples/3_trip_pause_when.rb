@@ -1,7 +1,7 @@
 require_relative "setup"
 require "trip"
 
-trip = Trip.new(events: %i[class]) do
+trip = Trip.new(%i[class]) do
   class Foo
   end
 

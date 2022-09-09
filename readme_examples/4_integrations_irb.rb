@@ -7,7 +7,7 @@ module Stdout
   end
 end
 
-trip = Trip.new(events: %i[raise]) { Stdout.write("hello") }
+trip = Trip.new(%i[raise]) { Stdout.write("hello") }
 trip.pause_when(&:raise?)
 event = trip.start
 event.binding.irb

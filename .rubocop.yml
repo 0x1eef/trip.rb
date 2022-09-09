@@ -35,3 +35,7 @@ Layout/MultilineOperationIndentation:
   Enabled: false
 Layout/ArgumentAlignment:
   Enabled: false
+Style/AndOr:
+  Enabled: false
+Style/Not:
+  Enabled: false

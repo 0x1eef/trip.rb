@@ -12,10 +12,6 @@ RSpec.describe Trip::Event do
     Trip.new { Trip::FooBar.run(2, 5) }
   end
 
-  after do
-    trip.stop
-  end
-
   describe "#name" do
     describe "call and return of method implemented in Ruby" do
       before do
