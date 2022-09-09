@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+##
+# Trip is a concurrent tracer that can pause and resume the code
+# it is tracing. Trip yields control between two Fibers - typically
+# the root Fiber and a Fiber that Trip creates. The process of yielding
+# control back and forth between the two Fibers can be repeated until the
+# the code being traced has finished and exits normally. Trip is
+# currently implemented using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 class Trip
   require_relative "trip/event"
   require_relative "trip/fiber"
@@ -15,27 +22,28 @@ class Trip
   Error = Class.new(RuntimeError)
 
   ##
-  # An exception that's raised when the tracer thread crashes.
+  # An exception that's raised when the tracer crashes.
   InternalError = Class.new(Error)
 
   ##
   # An exception that's raised when the {Trip#pause_when Trip#pause_when}
   # callback crashes.
   PauseError = Class.new(Error)
+  # @endgroup
 
   ##
   # @return [<Proc, #call>]
-  #  The callable object being traced.
+  #  Returns the callable object being traced.
   attr_reader :callable
 
   ##
   # @return [<Proc, #call>]
-  #  The callable that decides when to pause the tracer.
+  #  Returns the callable that decides when to pause the tracer.
   attr_reader :pauser
 
   ##
   # @return [<Array<Symbol>, String>]
-  #  The events being listened for.
+  #  Returns the events being listened for.
   attr_reader :events
 
   ##
@@ -76,8 +84,7 @@ class Trip
   ##
   # Starts or resumes the tracer.
   #
-  # @raise [Trip::PauseError] (see #start)
-  # @raise [Trip::InternalError] (see #start)
+  # @raise (see #start)
   # @return [Trip::Event, nil]
   #  Returns an event or nil.
   def resume
