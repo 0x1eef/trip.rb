@@ -131,6 +131,26 @@ end
 # Baz class opened
 ```
 
+### Analysis
+
+#### Count requires
+
+The `Trip#to_a` method can perform a trace from start to finish, and then return an array of
+`Trip::Event` objects. The following example returns the number of files that Pry v0.14.1 requires -
+without any plugins in the mix. When we exclude `require "pry"` from the count, the number is 168
+rather than 169:
+
+```ruby
+require "trip"
+
+trip = Trip.new(%i[c_call]) { require "pry" }
+trip.pause_when { _1.method_id == :require }
+p trip.to_a.size
+
+##
+# 169
+```
+
 ### Rescue
 
 #### IRB
