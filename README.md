@@ -9,6 +9,10 @@ currently implemented using [TracePoint](https://www.rubydoc.info/gems/tracepoin
 
 ## Examples
 
+The examples cover quite a lot - but not everything. The [API documentation](https://0x1eef.github.io/x/trip.rb)
+is available as a complete reference, and covers parts of the interface not
+covered by the examples.
+
 ### Concurrent
 
 #### What is a concurrent tracer ?
@@ -68,9 +72,10 @@ to `Trip.new` can specify a list of event names to listen for other than
 the defaults.
 
 All events can be can be included by using `Trip.new('*') { ... }`. A
-full list of event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html). The following example uses `trip.resume` to both start and resume
-the tracer - without calling `trip.start`, and only listens for call and return
-events from methods implemented in Ruby:
+full list of event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html).
+The following example uses `trip.resume` to both start and resume the tracer -
+without calling `trip.start`, and only listens for call and return events from methods
+implemented in Ruby:
 
 ```ruby
 require "trip"
