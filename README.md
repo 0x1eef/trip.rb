@@ -13,12 +13,12 @@ The examples cover quite a lot - but not everything. The [API documentation](htt
 is available as a complete reference, and covers parts of the interface not
 covered by the examples.
 
-### Concurrent
+### Concurrency
 
-#### What is a concurrent tracer ?
+#### A concurrent tracer
 
-In the context of Trip - it can be explained as a tracer that spawns a new Fiber
-to run (and trace) a piece of Ruby code. Trip then pauses the new Fiber
+In the context of Trip - a concurrent tracer can be explained as a tracer that
+spawns a new Fiber to run (and trace) a piece of Ruby code. Trip then pauses the new Fiber
 when a condition is met, and then yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
