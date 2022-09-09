@@ -2,8 +2,8 @@
 
 require_relative "setup"
 
-class Trip::FooBar
-  def self.run(x, y)
+class Trip::Math
+  def self.add(x, y)
     sum = x + y
     sum.to_s
   end
@@ -11,90 +11,66 @@ end
 
 RSpec.describe Trip::Event do
   let(:trip) do
-    Trip.new { Trip::FooBar.run(2, 5) }
+    Trip.new(%i[call return]) { Trip::Math.add(2, 5) }
   end
 
   describe "#name" do
-    describe "call and return of method implemented in Ruby" do
-      before do
-        trip.pause_when { |event| event.rb_call? || event.rb_return? }
+    describe "Ruby methods" do
+      context "when an event represents a method call" do
+        subject { trip.start.name }
+        it { is_expected.to eq(:call) }
       end
 
-      it 'returns "call"' do
-        event = trip.start
-        expect(event.name).to eq(:call)
-      end
-
-      it 'returns "return"' do
-        trip.start
-        event = trip.resume
-        expect(event.name).to eq(:return)
+      context "when an event represents a method return" do
+        subject { trip.resume.name }
+        before { trip.start }
+        it { is_expected.to eq(:return) }
       end
     end
 
-    describe "call and return of method implemented in C" do
-      let(:trip) do
-        trip = Trip.new { Kernel.print "" }
-        trip.pause_when { |event| event.self == Kernel and event.method_id == :print }
-        trip
+    describe "C methods" do
+      subject(:trip) { Trip.new(%i[c_call c_return]) { Kernel.print("") } }
+      before { trip.pause_when { _1.self == Kernel } }
+
+      context "when an event represents a method call" do
+        subject { trip.start.name }
+        it { is_expected.to eq(:c_call) }
       end
 
-      it 'returns "c-call"' do
-        event = trip.start
-        expect(event.name).to eq(:c_call)
-      end
-
-      it 'returns "c-return"' do
-        trip.start
-        event = trip.resume
-        expect(event.name).to eq(:c_return)
+      context "when an event represents a method return" do
+        subject { trip.resume.name }
+        before { trip.start }
+        it { is_expected.to eq(:c_return) }
       end
     end
   end
 
   describe "#path" do
-    it "returns __FILE__" do
-      event = trip.start
-      expect(event.path).to eq(__FILE__)
-    end
+    subject { trip.start.path }
+    it { is_expected.to eq(__FILE__) }
   end
 
   describe "#lineno" do
-    it "returns __LINE__" do
-      event = trip.start
-      expect(event.lineno).to eq(4)
-    end
+    subject { trip.start.lineno }
+    it { is_expected.to eq(6) }
   end
 
   describe "#binding" do
-    before do
-      trip.pause_when { |event| event.rb_call? || event.rb_return? }
-    end
-
-    it "returns a binding" do
-      event = trip.start
-      expect(event.binding).to be_instance_of(Binding)
-    end
-
-    it 'changes value of "x"' do
-      event = trip.start
-      event.binding.eval("x = 4")
-      event = trip.resume
-      expect(event.binding.eval("sum")).to eq(9)
+    context "when altering the context of a Binding" do
+      subject { binding.eval("sum") }
+      let(:binding) { trip.start.binding }
+      before { binding.eval("x = 4").then { trip.resume } }
+      it { is_expected.to eq(9) }
     end
   end
 
   describe "#__binding__" do
-    it "returns a binding for instance of Trip::Event" do
-      event = trip.start
-      expect(Trip::Event === event.__binding__.eval("self")).to eq(true)
-    end
+    subject { trip.start.__binding__.eval("self") }
+    it { is_expected.to be_instance_of(Trip::Event) }
   end
 
   describe "#inspect" do
-    it "returns a String" do
-      event = trip.start
-      expect(event.inspect).to be_instance_of(String)
-    end
+    subject { trip.start.inspect }
+    it { is_expected.to be_instance_of(String) }
   end
 end
