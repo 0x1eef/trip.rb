@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Trip::Fiber
   RESCUABLE_EXCEPTIONS = [
     StandardError, ScriptError,
@@ -65,7 +67,7 @@ class Trip::Fiber
   end
 
   def events
-    @trip.events == '*' ? [] : @trip.events
+    @trip.events == "*" ? [] : @trip.events
   end
 
   def pause_when(event)
