@@ -4,12 +4,12 @@ $LOAD_PATH << "lib"
 require "trip"
 Gem::Specification.new do |g|
   g.name = "trip.rb"
-  g.homepage = "https://github.com/0x1eef/trip.rb"
+  g.homepage = "https://github.com/0x1eef/trip.rb#readme"
   g.authors	= ["0x1eef"]
   g.email = "0x1eef@protonmail.com"
   g.version = Trip::VERSION
   g.summary = <<-SUMMARY
-    Trip is a concurrent tracer that can pause and resume the code it is tracing.'
+    Trip is a concurrent tracer that can pause and resume the code it is tracing.
   SUMMARY
   g.description = g.summary
   g.licenses = ["MIT"]
