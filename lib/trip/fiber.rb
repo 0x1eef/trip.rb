@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Trip::Fiber
+  require "fiber"
+
   RESCUABLE_EXCEPTIONS = [
     StandardError, ScriptError,
     SecurityError, SystemStackError
