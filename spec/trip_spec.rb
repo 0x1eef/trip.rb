@@ -20,41 +20,48 @@ RSpec.describe Trip do
   end
 
   describe "#initialize" do
-    it "raises an ArgumentError without a block" do
-      expect { Trip.new }.to raise_error(ArgumentError)
+    context "when an argument is not given" do
+      subject(:trip) { Trip.new }
+      it { expect { trip }.to raise_error(ArgumentError) }
     end
   end
 
   describe "#start" do
-    it "returns an instance of Trip::Event" do
-      expect(Trip::Event === trip.start).to be(true)
+    subject { trip.start }
+
+    context "when returning an event" do
+      it { is_expected.to be_instance_of(Trip::Event) }
     end
 
-    it "returns nil with a false pause predicate" do
-      trip.pause_when { false }
-      expect(trip.start).to be(nil)
+    context "when the pause predicate returns false" do
+      before { trip.pause_when { false } }
+      it { is_expected.to be_nil }
     end
   end
 
   describe "#pause_when" do
-    it "raises an ArgumentError" do
-      expect { trip.pause_when }.to raise_error(ArgumentError)
+    context "when an argument is not given" do
+      subject(:pause_when) { trip.pause_when }
+      it { expect { pause_when }.to raise_error(ArgumentError) }
     end
 
-    it "accepts a block" do
-      expect(trip.pause_when {})
-      expect(trip.pauser).to be_instance_of(Proc)
+    context "when a block is given" do
+      subject { trip.pauser }
+      before { trip.pause_when {} }
+      it { is_expected.to be_instance_of(Proc) }
     end
 
-    it "accepts an object who implements #call" do
-      obj = proc {}
-      trip.pause_when(obj)
-      expect(trip.pauser).to eq(obj)
+    context "when given a callable" do
+      subject { trip.pauser }
+      before { trip.pause_when(callable) }
+      let(:callable) { proc {} }
+      it { is_expected.to eq(callable) }
     end
 
-    it "causes the raise of Trip::PauseError" do
-      trip.pause_when { raise }
-      expect { trip.start }.to raise_error(Trip::PauseError)
+    context "when an exception is raised" do
+      subject(:start) { trip.start }
+      before { trip.pause_when { raise } }
+      it { expect { start }.to raise_error(Trip::PauseError) }
     end
   end
 

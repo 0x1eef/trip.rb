@@ -28,6 +28,8 @@ RSpec/EmptyLineAfterSubject:
   Enabled: false
 RSpec/DescribedClass:
   Enabled: false
+RSpec/EmptyLineAfterFinalLet:
+  Enabled: false
 
 ##
 # Disabled cops (lib-specific)
