@@ -12,7 +12,7 @@ end
 ##
 # Create a new Trip.
 # Pause for events coming from "Stdout.write".
-trip = Trip.new { Stdout.write("Ruby is") }
+trip = Trip.new { Stdout.write("Ruby is".dup) }
 trip.pause_when { |event| event.self == Stdout && event.method_id == :write }
 
 ##
