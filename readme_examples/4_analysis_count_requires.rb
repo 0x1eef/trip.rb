@@ -5,7 +5,12 @@ require "trip"
 
 trip = Trip.new(%i[c_call]) { require "pry" }
 trip.pause_when { _1.method_id == :require }
-p trip.to_a.size
+events = trip.to_a
 
 ##
-# 169
+# The number of calls to require
+p events.size
+
+##
+# The paths that were required
+p events.map { _1.binding.eval('path') }

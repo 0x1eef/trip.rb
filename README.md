@@ -137,7 +137,7 @@ end
 
 The `Trip#to_a` method can perform a trace from start to finish, and then return an array of
 `Trip::Event` objects. The following example returns the number of files that Pry v0.14.1 requires -
-without any plugins in the mix. When we exclude `require "pry"` from the count, the number is 168
+including duplicate calls to require, and without any plugins in the mix. When we exclude `require "pry"` from the count, the number is 168
 rather than 169:
 
 ```ruby
@@ -145,10 +145,21 @@ require "trip"
 
 trip = Trip.new(%i[c_call]) { require "pry" }
 trip.pause_when { _1.method_id == :require }
-p trip.to_a.size
+events = trip.to_a
+
+##
+# The number of calls to require
+p events.size
+
+##
+# The paths that were required
+p events.map { _1.binding.eval('path') }
 
 ##
 # 169
+# ["pry", "pry/version", "pry/last_exception",
+#  "pry/forwardable", "forwardable",  "forwardable/impl",
+#  ...]
 ```
 
 ### Rescue
