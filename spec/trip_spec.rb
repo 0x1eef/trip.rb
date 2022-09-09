@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "setup"
 
 class Trip::Planet
@@ -5,18 +7,16 @@ class Trip::Planet
     @name = name
   end
 
-  def echo message
+  def echo(message)
     message
   end
 end
 
 RSpec.describe Trip do
-  let(:planet) do
-    Trip::Planet.new "earth"
-  end
-
   subject(:trip) do
-    Trip.new { planet.echo("ping") }
+    Trip.new(%i[call return]) {
+      Trip::Planet.new("earth").echo("ping")
+    }
   end
 
   describe "#initialize" do
@@ -55,6 +55,13 @@ RSpec.describe Trip do
     it "causes the raise of Trip::PauseError" do
       trip.pause_when { raise }
       expect { trip.start }.to raise_error(Trip::PauseError)
+    end
+  end
+
+  describe "#to_a" do
+    context "when counting the number of returned events" do
+      subject { trip.to_a.size }
+      it { is_expected.to eq(4) }
     end
   end
 end

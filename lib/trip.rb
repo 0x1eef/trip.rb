@@ -117,4 +117,20 @@ class Trip
     end
     @pauser = callable
   end
+
+  ##
+  # Performs a trace from start to finish, then returns an array of
+  # {Trip::Event Trip::Event} objects upon completion.
+  #
+  # @return [Array<Trip::Event>]
+  #  Returns an array of {Trip::Event Trip::Event} objects.
+  def to_a
+    events = []
+    loop do
+      e = resume
+      break unless e
+      events.push(e)
+    end
+    events
+  end
 end

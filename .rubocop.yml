@@ -26,6 +26,8 @@ RSpec/EmptyLineAfterHook:
   Enabled: false
 RSpec/EmptyLineAfterSubject:
   Enabled: false
+RSpec/DescribedClass:
+  Enabled: false
 
 ##
 # Disabled cops (lib-specific)
