@@ -2,4 +2,4 @@
 
 source "https://rubygems.org"
 gemspec
-gem "pry"
+gem "pry", "= 0.14.1"
