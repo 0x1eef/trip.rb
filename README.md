@@ -4,8 +4,8 @@ Trip is a concurrent tracer that can pause and resume the code
 it is tracing. Trip yields control between two Fibers - typically
 the root Fiber and a Fiber that Trip creates. The process of yielding
 control back and forth between the two Fibers can be repeated until the
-the code being traced has finished and exits normally. Trip is
-currently implemented using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
+code being traced has finished and exits normally. Trip is currently implemented 
+using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 ## Examples
 
