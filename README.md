@@ -4,14 +4,16 @@ Trip is a concurrent tracer that can pause and resume the code
 it is tracing. Trip yields control between two Fibers - typically
 the root Fiber and a Fiber that Trip creates. The process of yielding
 control back and forth between the two Fibers can be repeated until the
-code being traced has finished and exits normally. Trip is currently implemented 
+code being traced has finished and exits normally. Trip is currently implemented
 using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 ## Examples
 
-The examples cover a lot - but not everything. The [API documentation](https://0x1eef.github.io/x/trip.rb)
-is available as a complete reference, and covers parts of the interface not
-covered by the examples.
+### Introduction
+
+The examples cover a lot - but not everything. <br>
+The  [API documentation](https://0x1eef.github.io/x/trip.rb) is available
+as a complete reference.
 
 ### Concurrency
 
@@ -188,10 +190,10 @@ event = trip.start
 event.binding.irb
 ```
 
-## Resources
+## Sources
 
-* [Source code (GitHub)](https://github.com/0x1eef/trip.rb)
-* [Documentation](https://0x1eef.github.io/x/trip.rb)
+* [Source code (GitHub)](https://github.com/0x1eef/trip.rb#readme)
+* [Source code (GitLab)](https://gitlab.com/0x1eef/trip-rb#about)
 
 ## Install
 
