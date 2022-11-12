@@ -189,7 +189,7 @@ event.binding.irb
 ## Sources
 
 * [Source code (GitHub)](https://github.com/0x1eef/trip.rb#readme)
-* [Source code (GitLab)](https://gitlab.com/0x1eef/trip-rb#about)
+* [Source code (GitLab)](https://gitlab.com/0x1eef/trip.rb#about)
 
 ## Install
 
