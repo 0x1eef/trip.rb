@@ -13,13 +13,6 @@ See [INSTALL](#install) for details.
 
 ## Examples
 
-### Introduction
-
-The examples provide a high-level overview, and cover a lot - but not
-everything. <br>
-The  [API documentation](https://0x1eef.github.io/x/trip.rb) is available
-as a complete reference.
-
 ### Concurrency
 
 #### A concurrent tracer
