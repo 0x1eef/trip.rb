@@ -7,6 +7,10 @@ control back and forth between the two Fibers can be repeated until the
 code being traced has finished and exits normally. Trip is currently implemented
 using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
+The [API documentation](https://0x1eef.github.io/x/trip.rb) is available as a
+complete reference. Trip is distributed as a RubyGem through its git repositories. 
+See [INSTALL](#install) for details.
+
 ## Examples
 
 ### Introduction
@@ -193,9 +197,17 @@ event.binding.irb
 
 ## Install
 
-trip.rb is available as a RubyGem:
+trip.rb is distributed as a RubyGem through its git repositories. <br>
+[GitHub](https://github.com/0x1eef/trip.rb),
+and
+[GitLab](https://gitlab.com/0x1eef/trip.rb)
+are available as sources.
 
-    gem install trip.rb
+### Gemfile
+
+```
+gem "trip.rb", git: "https://github.com/0x1eef/trip.rb.git", tag: "v0.1.0"
+```
 
 ## <a id='license'>License</a>
 
