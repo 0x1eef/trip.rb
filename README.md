@@ -190,7 +190,7 @@ event.binding.irb
 
 ## Install
 
-trip.rb is distributed as a RubyGem through its git repositories. <br>
+Trip is distributed as a RubyGem through its git repositories. <br>
 [GitHub](https://github.com/0x1eef/trip.rb),
 and
 [GitLab](https://gitlab.com/0x1eef/trip.rb)
