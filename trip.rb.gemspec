@@ -8,9 +8,7 @@ Gem::Specification.new do |g|
   g.authors	= ["0x1eef"]
   g.email = "0x1eef@protonmail.com"
   g.version = Trip::VERSION
-  g.summary = <<-SUMMARY
-    Trip is a concurrent tracer that can pause and resume the code it is tracing.
-  SUMMARY
+  g.summary = 'A concurrent tracer that can pause and resume the code it is tracing.'
   g.description = g.summary
   g.licenses = ["MIT"]
   g.files	= `git ls-files`.split($/)
