@@ -199,7 +199,7 @@ are available as sources.
 **Gemfile**
 
 ```ruby
-gem "trip.rb", github: "0x1eef/trip.rb", tag: "v0.1.0"
+gem "trip.rb", github: "0x1eef/trip.rb", tag: "v0.1.1"
 ```
 
 ## <a id='license'>License</a>
