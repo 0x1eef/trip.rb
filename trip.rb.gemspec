@@ -5,7 +5,7 @@ require "trip"
 Gem::Specification.new do |g|
   g.name = "trip.rb"
   g.homepage = "https://github.com/0x1eef/trip.rb#readme"
-  g.authors	= ["0x1eef"]
+  g.authors = ["0x1eef"]
   g.email = "0x1eef@protonmail.com"
   g.version = Trip::VERSION
   g.summary = 'A concurrent tracer that can pause and resume the code it is tracing.'
