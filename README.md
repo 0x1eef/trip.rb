@@ -8,7 +8,7 @@ code being traced has finished and exits normally. Trip is currently implemented
 using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 The [API documentation](https://0x1eef.github.io/x/trip.rb) is available as a
-complete reference. Trip is distributed as a RubyGem through its git repositories. 
+complete reference. Trip is distributed as a RubyGem through its git repositories.
 See [INSTALL](#install) for details.
 
 ## Examples
@@ -18,8 +18,8 @@ See [INSTALL](#install) for details.
 #### A concurrent tracer
 
 In the context of Trip - a concurrent tracer can be explained as a tracer that
-spawns a new Fiber to run (and trace) a piece of Ruby code. Trip then pauses the new Fiber
-when a condition is met, and yields control back to the root Fiber.
+spawns a new Fiber to run (and trace) a block of Ruby code. Trip then pauses the
+new Fiber when a condition is met, and yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
 new Fiber exits. While the new Fiber is paused, the root Fiber can examine
@@ -69,7 +69,7 @@ event = trip.resume
 Trip will listen for method call and return events from methods
 implemented in either C or Ruby by default. The first argument given
 to `Trip.new` can specify a list of event names to listen for other than
-the defaults. All events can be included by using `Trip.new('*') { ... }`. 
+the defaults. All events can be included by using `Trip.new('*') { ... }`.
 A full list of event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html).
 
 ```ruby
@@ -190,16 +190,16 @@ event.binding.irb
 
 ## Install
 
-Trip is distributed as a RubyGem through its git repositories. <br>
+trip.rb is distributed as a RubyGem through its git repositories. <br>
 [GitHub](https://github.com/0x1eef/trip.rb),
 and
 [GitLab](https://gitlab.com/0x1eef/trip.rb)
 are available as sources.
 
-### Gemfile
+**Gemfile**
 
-```
-gem "trip.rb", git: "https://github.com/0x1eef/trip.rb.git", tag: "v0.1.0"
+```ruby
+gem "trip.rb", github: "0x1eef/trip.rb", tag: "v0.1.0"
 ```
 
 ## <a id='license'>License</a>
