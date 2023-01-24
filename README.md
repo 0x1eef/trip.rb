@@ -7,10 +7,6 @@ control back and forth between the two Fibers can be repeated until the
 code being traced has finished and exits normally. Trip is currently implemented
 using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
-The [API documentation](https://0x1eef.github.io/x/trip.rb) is available as a
-complete reference. Trip is distributed as a RubyGem through its git repositories.
-See [INSTALL](#install) for details.
-
 ## Examples
 
 ### Concurrency
@@ -18,7 +14,7 @@ See [INSTALL](#install) for details.
 #### A concurrent tracer
 
 In the context of Trip - a concurrent tracer can be explained as a tracer that
-spawns a new Fiber to run (and trace) a block of Ruby code. Trip then pauses the
+spawns a new Fiber to run, and trace a block of Ruby code. Trip then pauses the
 new Fiber when a condition is met, and yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
