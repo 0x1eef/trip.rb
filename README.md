@@ -67,7 +67,10 @@ Trip will listen for method call and return events from methods
 implemented in either C or Ruby by default. The first argument given
 to `Trip.new` can specify a list of event names to listen for other than
 the defaults. All events can be included by using `Trip.new('*') { ... }`.
-A full list of event names can be found in the [Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html).
+A full list of event names can be found in the
+[Trip::Event docs](https://0x1eef.github.io/x/trip.rb/Trip/Event.html).
+The following example listens for call and returns events from Ruby methods,
+and excludes methods implemented in C:
 
 ```ruby
 require "trip"
