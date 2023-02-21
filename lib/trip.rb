@@ -92,7 +92,7 @@ class Trip
       start
     else
       e = @fiber.resume
-      e == true ? nil : e
+      (e == true) ? nil : e
     end
   end
 
