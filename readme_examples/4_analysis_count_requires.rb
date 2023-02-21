@@ -13,4 +13,4 @@ p events.size
 
 ##
 # The paths that were required
-p events.map { _1.binding.eval('path') }
+p events.map { _1.binding.eval("path") }

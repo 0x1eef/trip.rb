@@ -91,7 +91,7 @@ class Trip::Fiber
   end
 
   def events
-    @trip.events == "*" ? [] : @trip.events
+    (@trip.events == "*") ? [] : @trip.events
   end
 
   def pause_when(event)
