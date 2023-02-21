@@ -13,7 +13,7 @@ using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 #### A concurrent tracer
 
-In the context of Trip, a concurrent tracer can be explained as a tracer that
+In the context of Trip - a concurrent tracer can be explained as a tracer that
 spawns a new Fiber to run, and trace a block of Ruby code. Trip then pauses the
 new Fiber when a condition is met, and yields control back to the root Fiber.
 
