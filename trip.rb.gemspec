@@ -10,7 +10,7 @@ Gem::Specification.new do |g|
   g.version = Trip::VERSION
   g.summary = "A concurrent tracer that can pause and resume the code it is tracing."
   g.description = g.summary
-  g.licenses = ["MIT"]
+  g.licenses = ["0BSD"]
   g.files	= `git ls-files`.split($/)
   g.required_ruby_version = ">= 2.0"
 
