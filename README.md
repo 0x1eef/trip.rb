@@ -198,12 +198,6 @@ and
 [GitLab](https://gitlab.com/0x1eef/trip.rb)
 are available as sources.
 
-**Gemfile**
-
-```ruby
-gem "trip.rb", github: "0x1eef/trip.rb", tag: "v0.1.1"
-```
-
 ## <a id='license'>License</a>
 
 [BSD Zero Clause](https://choosealicense.com/licenses/0bsd/).
