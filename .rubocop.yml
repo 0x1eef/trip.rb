@@ -4,27 +4,20 @@ require:
   - standard
 
 ##
-# Defaults: standard-rb
+# Defaults (standardrb)
 inherit_gem:
   standard: config/base.yml
 
-##
-# Rubocop scope
 AllCops:
+  TargetRubyVersion: 3.1
   Include:
     - "lib/**/*.rb"
     - "test/**/*.rb"
-  TargetRubyVersion: 3.1
 
-##
-# Disabled cops
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
 Layout/MultilineOperationIndentation:
-  Enabled: false
+  Exclude:
+    - "lib/trip/fiber.rb"
+
 Layout/ArgumentAlignment:
-  Enabled: false
-Style/AndOr:
-  Enabled: false
-Style/Not:
-  Enabled: false
+  Exclude:
+    - "test/readme_examples_test.rb"

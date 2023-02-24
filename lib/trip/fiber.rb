@@ -6,8 +6,6 @@
 # class that will run and trace a piece of Ruby code. This class is not intended
 # to be used directly.
 class Trip::Fiber
-  require "fiber"
-
   RESCUABLE_EXCEPTIONS = [
     StandardError, ScriptError,
     SecurityError, SystemStackError
@@ -65,7 +63,7 @@ class Trip::Fiber
   rescue Trip::PauseError => ex
     @tracer.disable
     raise(ex)
-  rescue *RESCUABLE_EXCEPTIONS => cause
+  rescue *RESCUABLE_EXCEPTIONS
     @tracer.disable
     raise(internal_error)
   end
@@ -96,7 +94,7 @@ class Trip::Fiber
 
   def pause_when(event)
     @trip.pauser.call(event)
-  rescue *RESCUABLE_EXCEPTIONS => cause
+  rescue *RESCUABLE_EXCEPTIONS
     raise(pause_error)
   end
 end
