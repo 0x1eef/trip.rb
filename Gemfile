@@ -3,3 +3,4 @@
 source "https://rubygems.org"
 gemspec
 gem "pry", "= 0.14.1"
+gem "test-cmd.rb", github: "0x1eef/test-cmd.rb", tag: "v0.2.0"

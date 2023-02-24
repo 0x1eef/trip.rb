@@ -1,26 +1,5 @@
 require_relative "setup"
 
-module Test::Cmd
-  require "tempfile"
-  class Result
-    attr_reader :stdout, :stderr
-    def initialize(stdout, stderr)
-      @stdout = stdout.tap(&:rewind).read
-      @stderr = stderr.tap(&:rewind).read
-    end
-  end
-
-  def cmd(cmd)
-    out = Tempfile.new("cmd-stdout").tap(&:unlink)
-    err = Tempfile.new("cmd-stderr").tap(&:unlink)
-    Process.wait spawn(cmd, {err:, out:})
-    Result.new(out, err)
-  ensure
-    out.close
-    err.close
-  end
-end
-
 class Trip::ReadmeExamplesTest < Test::Unit::TestCase
   include Test::Cmd
 

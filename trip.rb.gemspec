@@ -15,6 +15,7 @@ Gem::Specification.new do |g|
   g.required_ruby_version = ">= 2.0"
 
   g.add_development_dependency "test-unit", "~> 3.5.7"
+  g.add_development_dependency "test-cmd.rb", "~> 0.2"
   g.add_development_dependency "yard", "~> 0.9"
   g.add_development_dependency "redcarpet", "~> 3.5"
   g.add_development_dependency "standardrb", "~> 1.0"
