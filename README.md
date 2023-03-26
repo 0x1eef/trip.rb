@@ -19,7 +19,7 @@ new Fiber when a condition is met, and yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
 new Fiber exits. While the new Fiber is paused, the root Fiber can examine
-event information. And evaluate code in the
+event information and evaluate code in the
 [Binding (context)](https://rubydoc.info/stdlib/core/Binding)
 of where an event occurred. The following example hopes to paint a clearer picture
 of what that means in practice:
