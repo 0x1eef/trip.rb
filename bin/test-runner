@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for file in test/*_test.rb; do
+    ruby $file || exit $?
+    echo "OK"
+done
