@@ -6,11 +6,11 @@ test-ruby31:
   image: ruby:3.1.2
   script:
     - bundle install
-    - sh bin/run-tests.sh
+    - sh bin/test-runner
 
 test-ruby32:
   stage: test
   image: ruby:3.2.0
   script:
     - bundle install
-    - sh bin/run-tests.sh
+    - sh bin/test-tunner

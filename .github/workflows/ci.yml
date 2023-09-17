@@ -20,4 +20,4 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
     - run: bundle install
-    - run: sh bin/run-tests.sh
+    - run: sh bin/test-runner
