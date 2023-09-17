@@ -36,6 +36,8 @@
 #  * `:script_compiled`:
 #     when Ruby code is compiled by `eval`, `require`, or `load`.
 class Trip::Event
+  require "json" unless {}.respond_to?(:to_json)
+
   ##
   # @param [Symbol] name
   #  The name of an event.
@@ -83,10 +85,26 @@ class Trip::Event
   end
 
   ##
+  # @return [String]
+  #  Returns the module name of self.
+  def module_name
+    (Module === @tp[:self]) ? @tp[:self].name : @tp[:self].class.name
+  end
+
+  ##
   # @return [Symbol]
   #  Returns the method id associated with an event.
   def method_id
     @tp[:method_id]
+  end
+
+  ##
+  # @return [String, nil]
+  #  Returns the type of method ("singleton_method", "instance_method"),
+  #  or nil when {Trip::Event#method_id Trip::Event#method_id} is nil.
+  def method_type
+    return nil if method_id.nil?
+    (Module === @tp[:self]) ? "singleton_method" : "instance_method"
   end
 
   ##
@@ -213,6 +231,24 @@ class Trip::Event
     @name == :line
   end
   # @endgroup
+
+  ##
+  # @return [Hash]
+  #  Returns a Hash object that can be serialized to JSON.
+  def as_json
+    {
+      "event" => name.to_s, "path" => path,
+      "lineno" => lineno, "module_name" => module_name,
+      "method_id" => method_id&.to_s, "method_type" => method_type&.to_s,
+    }
+  end
+
+  ##
+  # @return [String]
+  #  Returns a string representation of a JSON object.
+  def to_json(options = {})
+    as_json.to_json(options)
+  end
 
   ##
   # REPL support.
