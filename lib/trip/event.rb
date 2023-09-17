@@ -92,6 +92,15 @@ class Trip::Event
   end
 
   ##
+  # @return [String, nil]
+  #  Returns the type of method ("singleton_method", "instance_method"),
+  #  or nil when {Trip::Event#method_id Trip::Event#method_id} is nil.
+  def method_type
+    return nil if method_id.nil?
+    (Module === @tp[:self]) ? "singleton_method" : "instance_method"
+  end
+
+  ##
   # @return [Binding]
   #  Returns a Binding object bound to where an event occurred.
   def binding
@@ -222,8 +231,8 @@ class Trip::Event
   def as_json
     {
       "event" => name.to_s, "path" => path,
-      "lineno" => lineno, "method_id" => method_id.to_s,
-      "method_type" => (Module === @tp[:self]) ? "singleton_method" : "instance_method",
+      "lineno" => lineno, "method_id" => method_id&.to_s,
+      "method_type" => method_type&.to_s,
       "module_name" => (Module === @tp[:self]) ? @tp[:self].name : @tp[:self].class.name
     }
   end
