@@ -85,6 +85,13 @@ class Trip::Event
   end
 
   ##
+  # @return [String]
+  #  Returns the module name of self.
+  def module_name
+    (Module === @tp[:self]) ? @tp[:self].name : @tp[:self].class.name
+  end
+
+  ##
   # @return [Symbol]
   #  Returns the method id associated with an event.
   def method_id
@@ -231,9 +238,8 @@ class Trip::Event
   def as_json
     {
       "event" => name.to_s, "path" => path,
-      "lineno" => lineno, "method_id" => method_id&.to_s,
-      "method_type" => method_type&.to_s,
-      "module_name" => (Module === @tp[:self]) ? @tp[:self].name : @tp[:self].class.name
+      "lineno" => lineno, "module_name" => module_name,
+      "method_id" => method_id&.to_s, "method_type" => method_type&.to_s,
     }
   end
 
