@@ -36,6 +36,8 @@
 #  * `:script_compiled`:
 #     when Ruby code is compiled by `eval`, `require`, or `load`.
 class Trip::Event
+  require "json" unless {}.respond_to?(:to_json)
+
   ##
   # @param [Symbol] name
   #  The name of an event.
@@ -213,6 +215,25 @@ class Trip::Event
     @name == :line
   end
   # @endgroup
+
+  ##
+  # @return [Hash]
+  #  Returns a Hash object that can be serialized to JSON.
+  def as_json
+    {
+      "event" => name.to_s, "path" => path,
+      "lineno" => lineno, "method_id" => method_id.to_s,
+      "method_type" => (Module === @tp[:self]) ? "singleton_method" : "instance_method",
+      "module_name" => (Module === @tp[:self]) ? @tp[:self].name : @tp[:self].class.name
+    }
+  end
+
+  ##
+  # @return [String]
+  #  Returns a string representation of a JSON object.
+  def to_json(options = {})
+    as_json.to_json(options)
+  end
 
   ##
   # REPL support.
