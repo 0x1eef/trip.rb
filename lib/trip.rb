@@ -12,7 +12,7 @@ class Trip
   require_relative "trip/fiber"
   require_relative "trip/version"
 
-  DEFAULT_PAUSE = ->(event) { event.call? || event.return? }
+  DEFAULT_PAUSE = ->(event) { true }
   DEFAULT_EVENTS = %i[call c_call return c_return]
   private_constant :DEFAULT_PAUSE, :DEFAULT_EVENTS
 
