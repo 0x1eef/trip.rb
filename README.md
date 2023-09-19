@@ -146,8 +146,8 @@ example returns the number of files that Pry v0.14.1 requires,
 including duplicate calls to require, and without any plugins
 being used.
 
-When we exclude `require "pry"` from the count, the number is 168
-rather than 169:
+When we exclude `require "pry"` from the count, the number is 165
+rather than 166:
 
 ```ruby
 require "trip"
