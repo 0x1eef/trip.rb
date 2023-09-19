@@ -14,8 +14,18 @@ class Trip::ReadmeExamplesTest < Test::Unit::TestCase
   end
 
   def test_3_pause_when
-    assert_equal "Foo class opened\nBar class opened\nBaz class opened\n",
-                 cmd(example("3_trip_pause_when.rb")).stdout
+    stdout = cmd(example("3_trip_pause_when.rb")).stdout
+    assert_equal(<<-STDOUT, stdout.each_line.take(9).join($\))
+Event     Location       Method
+call      http.rb:470    Net::HTTP.get_response
+c_call    http.rb:480    URI::HTTPS#port
+c_return  http.rb:480    URI::HTTPS#port
+c_call    http.rb:481    URI::HTTPS#scheme
+c_return  http.rb:481    URI::HTTPS#scheme
+c_call    http.rb:481    String#==
+c_return  http.rb:481    String#==
+call      http.rb:668    Net::HTTP.start
+    STDOUT
   end
 
   private
