@@ -152,23 +152,32 @@ rather than 169:
 ```ruby
 require "trip"
 
-trip = Trip.new(%i[c_call]) { require "pry" }
+trip = Trip.new(%i[call]) { require "pry" }
 trip.pause_when { _1.method_id == :require }
 events = trip.to_a
 
 ##
 # The number of calls to require
-p events.size
+puts events.size
 
 ##
 # The paths that were required
-p events.map { _1.binding.eval('path') }
+puts events.map { _1.binding.eval('path') }
 
 ##
-# 169
-# ["pry", "pry/version", "pry/last_exception",
-#  "pry/forwardable", "forwardable",  "forwardable/impl",
-#  ...]
+# 166
+# pry
+# pry/version
+# pry/last_exception
+# pry/forwardable
+# forwardable
+# forwardable/impl
+# pry/helpers/base_helpers
+# pry/helpers/documentation_helpers
+# pry/helpers
+# pry/helpers/base_helpers
+# pry/helpers/options_helpers
+# ...
 ```
 
 ### Rescue

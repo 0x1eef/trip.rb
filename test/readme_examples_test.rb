@@ -28,6 +28,24 @@ call      http.rb:668    Net::HTTP.start
     STDOUT
   end
 
+  def test_4_analysis_count_requires
+    stdout = cmd(example("4_analysis_count_requires.rb")).stdout
+    assert_equal(<<-STDOUT, stdout.each_line.take(12).join($\))
+166
+pry
+pry/version
+pry/last_exception
+pry/forwardable
+forwardable
+forwardable/impl
+pry/helpers/base_helpers
+pry/helpers/documentation_helpers
+pry/helpers
+pry/helpers/base_helpers
+pry/helpers/options_helpers
+    STDOUT
+  end
+
   private
 
   def example(filename)
