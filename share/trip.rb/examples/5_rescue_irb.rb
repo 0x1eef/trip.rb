@@ -11,6 +11,5 @@ module Stdout
 end
 
 trip = Trip.new(%i[raise]) { Stdout.write("hello") }
-trip.pause_when(&:raise?)
 event = trip.start
 event.binding.irb
