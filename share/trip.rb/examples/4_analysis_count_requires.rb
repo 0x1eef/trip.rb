@@ -3,6 +3,7 @@
 
 require_relative "setup"
 require "trip"
+$stdout.sync = true
 
 trip = Trip.new(%i[call]) { require "pry" }
 trip.pause_when { _1.method_id == :require }

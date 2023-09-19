@@ -4,6 +4,7 @@
 require_relative "setup"
 require "trip"
 require "net/http"
+$stdout.sync = true
 
 trip = Trip.new do
   uri = URI.parse("https://www.ruby-lang.org")
