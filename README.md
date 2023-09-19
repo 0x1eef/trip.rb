@@ -13,9 +13,9 @@ using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
 
 #### A concurrent tracer
 
-In the context of Trip - a concurrent tracer can be explained as a tracer that
-spawns a new Fiber to run, and trace a block of Ruby code. Trip then pauses the
-new Fiber when a condition is met, and yields control back to the root Fiber.
+Trip can be explained as a tracer that spawns a new Fiber to run, and trace
+a block of Ruby code. Trip then pauses the new Fiber when a condition is met,
+and yields control back to the root Fiber.
 
 The root Fiber can then resume the tracer, and repeat this process until the
 new Fiber exits. While the new Fiber is paused, the root Fiber can examine
@@ -93,37 +93,47 @@ end
 #### `Trip#pause_when`
 
 In the previous example we saw how to specify what events to listen
-for. **The events specified by the first argument given to `Trip.new` decide
-what events will be made available to `Trip#pause_when`.** By default `Trip#pause_when`
-will pause the tracer on call and return events from methods implemented
-in either C or Ruby.
+for. **The events specified by the first argument given to `Trip.new`
+decide what events will be made available to `Trip#pause_when`.**
+By default, the `Trip#pause_when` method will cause the tracer to pause
+for each event it is configured to listen for, but custom logic can be
+provided to decide whether the tracer should pause or not. For example,
+you might want to pause the tracer only when an event originates from
+a certain file, class, or method.
 
-The following example demonstrates how to pause the tracer when a new
-module / class is defined with the `module Name` or `class Name` syntax:
+The following example demonstrates how to pause the tracer for every
+method call / return that originates from the filename `http.rb`:
 
 ```ruby
 require "trip"
+require "net/http"
 
-trip = Trip.new(%i[class]) do
-  class Foo
-  end
-
-  class Bar
-  end
-
-  class Baz
-  end
+trip = Trip.new do
+  uri = URI.parse("https://www.ruby-lang.org")
+  Net::HTTP.get_response(uri)
 end
+trip.pause_when { |event| File.basename(event.path) == "http.rb" }
 
-trip.pause_when(&:module_opened?)
+print "Event".ljust(10), "Location".ljust(15), "Method", "\n"
 while event = trip.resume
-  print event.self, " class opened", "\n"
+  sigil = event.method_type == "singleton_method" ? "." : "#"
+  print "#{event.name}".ljust(10),
+        "#{File.basename(event.path)}:#{event.lineno}".ljust(15),
+        event.module_name, sigil, event.method_id,
+        "\n"
 end
 
 ##
-# Foo class opened
-# Bar class opened
-# Baz class opened
+# Event     Location       Method
+# call      http.rb:470    Net::HTTP.get_response
+# c_call    http.rb:480    URI::HTTPS#port
+# c_return  http.rb:480    URI::HTTPS#port
+# c_call    http.rb:481    URI::HTTPS#scheme
+# c_return  http.rb:481    URI::HTTPS#scheme
+# c_call    http.rb:481    String#==
+# c_return  http.rb:481    String#==
+# call      http.rb:668    Net::HTTP.start
+# ...
 ```
 
 ### Analysis
@@ -166,7 +176,8 @@ p events.map { _1.binding.eval('path') }
 #### IRB
 
 Trip can listen for the `raise` event, and then pause the tracer when
-it is encountered. Afterwards, an IRB session can be started in the [Binding (context)](https://rubydoc.info/stdlib/core/Binding)
+it is encountered. Afterwards, an IRB session can be started in the
+[Binding (context)](https://rubydoc.info/stdlib/core/Binding)
 of where an exception was raised. The following example demonstrates
 how that works in practice:
 
