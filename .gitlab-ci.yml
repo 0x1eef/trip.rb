@@ -1,13 +1,6 @@
 stages:
   - test
 
-test-ruby31:
-  stage: test
-  image: ruby:3.1.2
-  script:
-    - bundle install
-    - sh bin/test-runner
-
 test-ruby32:
   stage: test
   image: ruby:3.2.0

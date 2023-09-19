@@ -12,7 +12,7 @@ Gem::Specification.new do |g|
   g.description = g.summary
   g.licenses = ["0BSD"]
   g.files	= `git ls-files`.split($/)
-  g.required_ruby_version = ">= 2.0"
+  g.required_ruby_version = ">= 3.2"
 
   g.add_development_dependency "test-unit", "~> 3.5.7"
   g.add_development_dependency "test-cmd.rb", "~> 0.2"
