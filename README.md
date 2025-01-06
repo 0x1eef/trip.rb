@@ -1,28 +1,23 @@
 ## About
 
-Trip is a concurrent tracer that can pause and resume the code
-it is tracing. Trip yields control between two Fibers - typically
-the root Fiber and a Fiber that Trip creates. The process of yielding
-control back and forth between the two Fibers can be repeated until the
-code being traced has finished and exits normally. Trip is currently implemented
-using [TracePoint](https://www.rubydoc.info/gems/tracepoint/TracePoint).
+Trip is a concurrent tracer implemented with
+[TracePoint](https://docs.ruby-lang.org/en/master/TracePoint.html)
+and
+[Fibers](https://docs.ruby-lang.org/en/master/Fiber.html).
 
 ## Examples
 
 ### Concurrency
 
-#### A concurrent tracer
+#### Fiber
 
-Trip can be explained as a tracer that spawns a new Fiber to run, and trace
-a block of Ruby code. Trip then pauses the new Fiber when a condition is met,
-and yields control back to the root Fiber.
-
-The root Fiber can then resume the tracer, and repeat this process until the
-new Fiber exits. While the new Fiber is paused, the root Fiber can examine
-event information and evaluate code in the
-[Binding (context)](https://rubydoc.info/stdlib/core/Binding)
-of where an event occurred. The following example hopes to paint a clearer picture
-of what that means in practice:
+Trip is a tracer that spawns a Fiber to execute and monitor a block
+of Ruby code. When a condition is met, it pauses the Fiber and yields
+control to the calling Fiber. The calling Fiber can resume the tracer
+and repeat this process until Trip's Fiber has no more code to execute.
+While paused, you can inspect events and evaluate code in the
+[Binding](https://rubydoc.info/stdlib/core/Binding)
+where an event occurred. Here's an example:
 
 ```ruby
 require "trip"
@@ -94,8 +89,9 @@ end
 
 In the previous example we saw how to specify what events to listen
 for. **The events specified by the first argument given to `Trip.new`
-decide what events will be made available to `Trip#pause_when`.**
-By default, the `Trip#pause_when` method will cause the tracer to pause
+decide what events will be made available to `Trip#pause_when`**.
+
+By default the `Trip#pause_when` method will cause the tracer to pause
 for each event it is configured to listen for, but custom logic can be
 provided to decide whether the tracer should pause or not. For example,
 you might want to pause the tracer only when an event originates from
@@ -138,7 +134,7 @@ end
 
 ### Analysis
 
-#### Require count
+#### Require
 
 The `Trip#to_a` method can perform a trace from start to finish,
 and then return an array of `Trip::Event` objects. The following
@@ -186,9 +182,8 @@ puts events.map { _1.binding.eval('path') }
 
 Trip can listen for the `raise` event, and then pause the tracer when
 it is encountered. Afterwards, an IRB session can be started in the
-[Binding (context)](https://rubydoc.info/stdlib/core/Binding)
-of where an exception was raised. The following example demonstrates
-how that works in practice:
+[Binding](https://rubydoc.info/stdlib/core/Binding)
+of where an exception was raised. Here's an example:
 
 ```ruby
 require "trip"
@@ -204,11 +199,6 @@ event = trip.start
 event.binding.irb
 ```
 
-## Sources
-
-* [Source code (GitHub)](https://github.com/0x1eef/trip.rb#readme)
-* [Source code (GitLab)](https://gitlab.com/0x1eef/trip.rb#about)
-
 ## Install
 
 trip.rb is distributed as a RubyGem through its git repositories. <br>
@@ -217,8 +207,13 @@ and
 [GitLab](https://gitlab.com/0x1eef/trip.rb)
 are available as sources.
 
-## <a id='license'>License</a>
+## Sources
 
-[BSD Zero Clause](https://choosealicense.com/licenses/0bsd/).
+* [GitHub](https://github.com/0x1eef/trip.rb#readme)
+* [GitLab](https://gitlab.com/0x1eef/trip.rb#about)
+
+## License
+
+[BSD Zero Clause](https://choosealicense.com/licenses/0bsd/)
 <br>
-See [LICENSE](./LICENSE).
+See [LICENSE](./LICENSE)
