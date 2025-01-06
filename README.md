@@ -3,7 +3,7 @@
 Trip is a concurrent tracer implemented with
 [TracePoint](https://docs.ruby-lang.org/en/master/TracePoint.html)
 and
-[Fibers](https://docs.ruby-lang.org/en/master/Fiber.html).
+[Fiber](https://docs.ruby-lang.org/en/master/Fiber.html).
 
 ## Examples
 
